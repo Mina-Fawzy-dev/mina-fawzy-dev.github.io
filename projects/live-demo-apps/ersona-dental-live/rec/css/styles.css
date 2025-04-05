@@ -1,0 +1,757 @@
+/* Define color variables in the :root selector for global access */
+:root {
+    --background-body: #e4f6ff;
+    --background-header: #2c8bb9;
+    --background-card: #ffffff;
+    --background-menu: #ffffff;
+    --overlay-bg: rgba(0, 0, 0, 0.5);
+    --map-placeholder-bg: #d3d3d3;
+    --text-primary: #373737;
+    --text-header: #ffffff;
+    --text-accent: #2c8bb9;
+    --text-secondary: #7f8c8d;
+    --shadow-color: rgb(0 0 0 / 53%);
+    --menu-icon-color: #ffffff;
+    --contact-icon-bg: #d3e7ff;
+    --back-arrow-color: #ffffff;
+}
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: var(--background-body);
+    position: relative;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Container constrained to mobile width, centered on desktop */
+.container {
+    max-width: 375px;
+    width: 100%;
+    padding: 0;
+    background-color: var(--background-body);
+    min-height: 100vh;
+    margin: 0 auto;
+}
+
+/* Overlay Styles */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--overlay-bg);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+    z-index: 999;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s linear 0s;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-header);
+    padding: 15px 20px;
+    color: var(--text-header);
+    position: sticky;
+    top: 0;
+    z-index: 998;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 375px;
+    margin: 0 auto;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+}
+
+.header-logo {
+    height: 40px; /* Adjust based on the actual size of devlogo.svg */
+    width: auto;
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.menu-icon span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--menu-icon-color);
+    border-radius: 2px;
+}
+
+.back-button {
+    font-size: 24px;
+    color: var(--back-arrow-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+}
+
+.back-arrow {
+    display: inline-block;
+    line-height: 1;
+}
+
+/* Burger Menu Styles */
+.burger-menu {
+    position: fixed;
+    top: 0;
+    right: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: var(--background-menu);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+
+.burger-menu.active {
+    right: 0;
+}
+
+.burger-menu-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    height: 100%;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.tooth-icon {
+    width: 80px;
+    height: 80px;
+    /*background-color: var(--contact-icon-bg);*/
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.menu-item {
+    font-size: 18px;
+    color: var(--text-primary);
+    text-decoration: none;
+    margin: 20px 0;
+    display: block;
+    text-align: center;
+}
+
+.menu-item:hover {
+    color: var(--text-accent);
+}
+
+.menu-divider {
+    width: 80%;
+    height: 2px;
+    background-color: gray;
+    border: none;
+    margin: 10px 0;
+}
+
+.version {
+    font-size: 14px;
+    color: var(--text-primary);
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+/* Welcome Section Styles */
+.welcome-section {
+    margin-top: 15px;
+    padding: 0 10px;
+}
+
+.welcome-card {
+    background-color: var(--background-card);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    position: relative;
+    overflow: visible;
+}
+
+.welcome-text {
+    flex: 1;
+}
+
+.welcome-text h2 {
+    font-size: 20px;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.about-doctor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c8bb9;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    text-decoration: none;
+    transition: transform 0.1s ease;
+}
+
+.about-doctor:active {
+    transform: scale(0.95);
+}
+
+.about-doctor-text {
+    font-size: 16px;
+    color: white;
+}
+
+.about-doctor-arrow {
+    font-size: 20px;
+    color: white;
+    padding: 10px 15px;
+}
+
+.doctor-image {
+    width: 110px;
+    height: 120px;
+    object-fit: cover;
+    object-position: top;
+    position: absolute;
+    right: 20px;
+    top: -10px;
+    border-radius: 10px;
+}
+
+/* Clinics Section Styles */
+.clinics-section {
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.clinics-section h3 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.clinic-card {
+    background-color: var(--background-card);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.1s ease;
+}
+
+.clinic-card:active {
+    transform: scale(0.95); /* Fixed syntax error */
+}
+
+.clinic-image {
+    width: 100%;
+    height: 50px;
+    object-fit: cover;
+}
+
+.clinic-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 16px;
+}
+
+.clinic-text p {
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.clinic-arrow {
+    font-size: 24px;
+    color: var(--text-accent);
+    padding: 10px 15px;
+}
+
+/* More Section Styles */
+.more-section {
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.more-section h3 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.more-card {
+    background-color: var(--background-card);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.1s ease;
+}
+
+.more-card:active {
+    transform: scale(0.95);
+}
+
+.more-image {
+    width: 100%;
+    height: 50px;
+    object-fit: cover;
+}
+
+.more-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 16px;
+}
+
+.more-text p {
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.more-arrow {
+    font-size: 24px;
+    color: var(--text-accent);
+    padding: 10px 15px;
+}
+
+/* Clinic Details Section Styles */
+.clinic-details-section {
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.clinic-details {
+    margin-bottom: 30px;
+    display: block; /* Ensure all clinics are visible, as in the image */
+}
+
+.clinic-details h2 {
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    font-weight: bold; /* Match the bold style in the image */
+}
+
+.clinic-details h3 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.opening-hours {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.opening-hours li {
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.contact-info {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.contact-info li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.contact-info li a {
+    color: var(--text-accent);
+    text-decoration: none;
+}
+
+.contact-icon {
+    width: 24px;
+    height: 24px;
+    background-color: var(--contact-icon-bg);
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.phone-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234394ff"><path d="M6.62 10.79a15.77 15.77 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21 11.36 11.36 0 003.54.56 1 1 0 011 1V20a1 1 0 01-1 1A19 19 0 013 5a1 1 0 011-1h3.14a1 1 0 011 1 11.36 11.36 0 00.56 3.54 1 1 0 01-.21 1.11l-2.2 2.2z"/></svg>');
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.whatsapp-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234394ff"><path d="M12 2a10 10 0 00-8.84 14.67l-1.5 4.5a1 1 0 001.28 1.28l4.5-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.24-1.24l-.32-.18-2.83.94.94-2.83-.18-.32A8 8 0 1112 20zm3.5-6.5l-1.44-.72a1 1 0 00-1 .13l-.72.72a1 1 0 01-1.41 0l-2-2a1 1 0 010-1.41l.72-.72a1 1 0 00.13-1l-.72-1.44a1 1 0 00-1.41 0l-1 1A4 4 0 008 14a4 4 0 004 4 4 4 0 003.5-2.06l1-1a1 1 0 000-1.41z"/></svg>');
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.location-info p {
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.location-info p strong {
+    font-weight: 600;
+}
+
+.location-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: transparent;
+    color: var(--text-accent);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px 0;
+    text-transform: uppercase;
+}
+
+.map-placeholder {
+    width: 100%;
+    height: 150px;
+    background-color: var(--map-placeholder-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* About Section Styles */
+.about-section {
+    margin: 20px 10px;
+    padding: 0 10px;
+}
+
+.about-section h2 {
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    text-align: center; /* Center the "About" title */
+}
+
+.doctor-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.doctor-placeholder {
+    width: 100px;
+    height: 100px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    flex-shrink: 0; /* Prevent the image from shrinking */
+}
+
+.doctor-profile h3 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-left: 15px; /* Space between image and name */
+    margin-top: 0;
+}
+
+.doctor-info {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.doctor-info li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.doctor-info li a {
+    color: var(--text-accent);
+    text-decoration: none;
+}
+
+.about-section h3 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.about-section p {
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+/* Developer Section Styles */
+.developer-title {
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.developer-info {
+    margin-bottom: 30px;
+}
+
+.developer-info p {
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.developer-info p strong {
+    font-weight: 600;
+}
+
+.developer-info a {
+    color: var(--text-accent);
+    text-decoration: none;
+}
+
+.developer-info a:hover {
+    text-decoration: underline;
+}
+
+.copyright {
+    font-size: 14px;
+    color: var(--text-primary);
+    text-align: left;
+    margin-left: center;
+    margin-right: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+/* Contact Section Styles */
+.contact-section {
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.contact-section h2 {
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.hotline {
+    margin-bottom: 20px;
+}
+
+.hotline h3 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.hotline p {
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.hotline a {
+    color: var(--text-accent);
+    text-decoration: none;
+}
+
+.clinic-contact {
+    margin-bottom: 30px;
+}
+
+.clinic-contact h2 {
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+/* Before & After Section Styles */
+.before-after-section {
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.before-after-section h2 {
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 150px;
+    background-color: #a0a0a0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* Appointments Section Styles */
+.appointments-section {
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.clinic-appointment {
+    margin-bottom: 30px;
+}
+
+.clinic-appointment h2 {
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.ersonalogo {
+    margin: 10px;
+    size: 50rem;
+    flex: center;
+}
+
+.clinic-appointment h3 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.about-developer-section {
+    margin: 20px;
+}
+
+/* Media Query for Desktop */
+@media (min-width: 376px) {
+    body {
+        background-color: #f0f0f0;
+    }
+    .container {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Header Styles for Alternate Header */
+.header1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 20px;
+    color: var(--text-header);
+    position: sticky;
+    top: 0;
+    z-index: 998;
+    width: 100%;
+    max-width: 375px;
+    margin: 0 auto;
+}
+
+.back-button1 {
+    font-size: 24px;
+    color: #2c8bb9; /* Use the new color variable */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+}
+
+.back-arrow1 {
+    display: inline-block;
+    line-height: 1;
+}
+
+/* Logo Section for About Developer Page */
+.ersonalogo {
+    display: flex;
+    justify-content: center; /* Center the logo horizontally */
+    align-items: center; /* Center the logo vertically */
+    margin: 20px 0; /* Adjusted margin for spacing */
+}
+
+.drplaceholder {
+    width: 100px;
+    height: 100px;
+    background-color: #e0e0e0; /* Fallback background color */
+    border-radius: 50%; /* Makes it circular */
+    flex-shrink: 0; /* Prevent shrinking */
+    display: flex; /* Use flexbox to center the image */
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+    overflow: hidden; /* Ensures the image stays within the circle */
+}
+
+.drntitle {
+    color: var(--background-header);
+}
+
+.dr-image {
+    width: 100%; /* Fills the container */
+    height: 100%; /* Fills the container */
+    object-fit: cover; /* Ensures the image scales properly while maintaining aspect ratio */
+    object-position: center; /* Centers the image within the container */
+    border-radius: 50%; /* Matches the circular shape */
+}

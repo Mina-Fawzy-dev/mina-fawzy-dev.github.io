@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - Dr. Mina Emad</title>
+    <link rel="stylesheet" href="rec/css/styles.css">
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    <div class="container">
+        <!-- Burger Menu -->
+        <div class="burger-menu" id="burgerMenu">
+            <div class="burger-menu-content">
+                <img src="rec/imgs/tooth-icon.svg" alt="Tooth Icon" class="tooth-icon">
+
+                <a href="#" class="menu-item">Share</a>
+                <hr class="menu-divider">
+                <a href="aboutdev.html" class="menu-item">About</a>
+                <hr class="menu-divider">
+                <span class="version">v1.3.4</span>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <header class="header">
+            <a href="index.html" class="back-button"><span class="back-arrow">&lt;</span></a>
+            <div class="header-title">
+                <h1>Dr. Mina Emad</h1>
+            </div>
+            <div class="menu-icon" id="menuIcon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <!-- Clinic Details Section -->
+        <section class="clinic-details-section">
+            <!-- Helwan Clinic -->
+            <div class="clinic-details" data-clinic="helwan">
+                <h2>Helwan Clinic</h2>
+                <h3>Contact</h3>
+                <ul class="contact-info">
+                    <li>
+                        Phone Number: <a href="tel:+201223456789">+20 122 345 6789</a>
+                        <span class="contact-icon phone-icon"></span>
+                    </li>
+                    <li>
+                        WhatsApp: <a href="https://wa.me/+201223456789">+20 122 345 6789</a>
+                        <span class="contact-icon whatsapp-icon"></span>
+                    </li>
+                    <li>
+                        Facebook: <a href="https://facebook.com/DrMinaEmadClinics">@DrMinaEmadClinics</a>
+                    </li>
+                    <li>
+                        Location: <a href="https://maps.google.com/?q=Shref+Street,+Helwan,+Cairo,+Egypt">location-link</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- El Ahram Clinic -->
+            <div class="clinic-details" data-clinic="elahram">
+                <h2>El Ahram Clinic</h2>
+                <h3>Contact</h3>
+                <ul class="contact-info">
+                    <li>
+                        Phone Number: <a href="tel:+201223456789">+20 122 345 6789</a>
+                        <span class="contact-icon phone-icon"></span>
+                    </li>
+                    <li>
+                        WhatsApp: <a href="https://wa.me/+201223456789">+20 122 345 6789</a>
+                        <span class="contact-icon whatsapp-icon"></span>
+                    </li>
+                    <li>
+                        Facebook: <a href="https://facebook.com/DrMinaEmadClinics">@DrMinaEmadClinics</a>
+                    </li>
+                    <li>
+                        Location: <a href="https://maps.google.com/?q=El+Ahram+Street,+Giza,+Egypt">location-link</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Maadi Clinic -->
+            <div class="clinic-details" data-clinic="maadi">
+                <h2>Maadi Clinic</h2>
+                <h3>Contact</h3>
+                <ul class="contact-info">
+                    <li>
+                        Phone Number: <a href="tel:+201223456789">+20 122 345 6789</a>
+                        <span class="contact-icon phone-icon"></span>
+                    </li>
+                    <li>
+                        WhatsApp: <a href="https://wa.me/+201223456789">+20 122 345 6789</a>
+                        <span class="contact-icon whatsapp-icon"></span>
+                    </li>
+                    <li>
+                        Facebook: <a href="https://facebook.com/DrMinaEmadClinics">@DrMinaEmadClinics</a>
+                    </li>
+                    <li>
+                        Location: <a href="https://maps.google.com/?q=Maadi+Corniche,+Cairo,+Egypt">location-link</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript to toggle the burger menu -->
+    <script>
+        const menuIcon = document.getElementById('menuIcon');
+        const burgerMenu = document.getElementById('burgerMenu');
+        const overlay = document.getElementById('overlay');
+
+        menuIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            burgerMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            burgerMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!burgerMenu.contains(e.target) && !menuIcon.contains(e.target)) {
+                burgerMenu.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Mina Emad Clinics</title>
+    <link rel="stylesheet" href="rec/css/styles.css">
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    <div class="container">
+        <!-- Burger Menu -->
+        <div class="burger-menu" id="burgerMenu">
+            <div class="burger-menu-content">
+                <img src="rec/imgs/tooth-icon.svg" alt="Tooth Icon" class="tooth-icon">
+                <a href="#" class="menu-item">Share</a>
+                <hr class="menu-divider">
+                <a href="aboutdev.html" class="menu-item">About</a>
+                <hr class="menu-divider">
+                <span class="version">v1.3.4</span>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <header class="header">
+            <h1>Dr. Mina Emad</h1>
+            <div class="menu-icon" id="menuIcon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-card">
+                <div class="welcome-text">
+                    <h2>Welcome to</h2>
+                    <h1 class="drntitle">Dr. Mina Emad</h1>
+                    <h2>Dental Clinics</h2>
+                    <a href="about.html" class="about-doctor">
+                        <span class="about-doctor-text">About the Doctor</span>
+                        <span class="about-doctor-arrow">></span>
+                    </a>
+                </div>
+                <img src="rec/imgs/drimg.png" alt="Doctor Image" class="doctor-image">
+            </div>
+        </section>
+
+        <!-- Clinics Section -->
+        <section class="clinics-section">
+            <h3>Clinics</h3>
+            <a href="clinicdetails.html?clinic=maadi" class="clinic-card">
+                <img src="rec/imgs/clinic.png" alt="Maadi Clinic" class="clinic-image">
+                <div class="clinic-text">
+                    <p>Maadi</p>
+                    <span class="clinic-arrow">></span>
+                </div>
+            </a>
+            <a href="clinicdetails.html?clinic=elahram" class="clinic-card">
+                <img src="rec/imgs/clinic.png" alt="El Ahram Clinic" class="clinic-image">
+                <div class="clinic-text">
+                    <p>El Ahram</p>
+                    <span class="clinic-arrow">></span>
+                </div>
+            </a>
+            <a href="clinicdetails.html?clinic=helwan" class="clinic-card">
+                <img src="rec/imgs/clinic.png" alt="Helwan Clinic" class="clinic-image">
+                <div class="clinic-text">
+                    <p>Helwan</p>
+                    <span class="clinic-arrow">></span>
+                </div>
+            </a>
+        </section>
+
+        <!-- More Section -->
+        <section class="more-section">
+            <h3>More</h3>
+            <a href="beforeafter.html" class="more-card">
+                <img src="rec/imgs/bfaf.jpg" alt="Before & After" class="more-image">
+                <div class="more-text">
+                    <p>Before & After</p>
+                    <span class="more-arrow">></span>
+                </div>
+            </a>
+            <a href="appointments.html" class="more-card">
+                <img src="rec/imgs/clininder.jpg" alt="Appointments" class="more-image">
+                <div class="more-text">
+                    <p>Appointments</p>
+                    <span class="more-arrow">></span>
+                </div>
+            </a>
+            <a href="contact.html" class="more-card">
+                <img src="rec/imgs/contact.webp" alt="Contact" class="more-image">
+                <div class="more-text">
+                    <p>Contact</p>
+                    <span class="more-arrow">></span>
+                </div>
+            </a>
+        </section>
+    </div>
+
+    <!-- JavaScript to toggle the burger menu -->
+    <script>
+        const menuIcon = document.getElementById('menuIcon');
+        const burgerMenu = document.getElementById('burgerMenu');
+        const overlay = document.getElementById('overlay');
+
+        menuIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            burgerMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            burgerMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!burgerMenu.contains(e.target) && !menuIcon.contains(e.target)) {
+                burgerMenu.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

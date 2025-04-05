@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - Dr. Mina Emad</title>
+    <link rel="stylesheet" href="rec/css/styles.css">
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    <div class="container">
+        <!-- Burger Menu -->
+        <div class="burger-menu" id="burgerMenu">
+            <div class="burger-menu-content">
+                <img src="rec/imgs/tooth-icon.svg" alt="Tooth Icon" class="tooth-icon">
+
+                <a href="#" class="menu-item">Share</a>
+                <hr class="menu-divider">
+                <a href="aboutdev.html" class="menu-item">About</a>
+                <hr class="menu-divider">
+                <span class="version">v1.3.4</span>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <header class="header">
+            <a href="index.html" class="back-button"><span class="back-arrow"><</span></a>
+            <h1>Dr. Mina Emad</h1>
+            <div class="menu-icon" id="menuIcon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <!-- Appointments Section -->
+        <section class="appointments-section">
+            <!-- Helwan Clinic -->
+            <div class="clinic-appointment">
+                <h2>Helwan Clinic</h2>
+                <h3>Opening Hours:</h3>
+                <ul class="opening-hours">
+                    <li>Sunday to Thursday: 11:00 AM - 7:00 PM</li>
+                    <li>Friday: Closed</li>
+                    <li>Saturday: 1:00 PM - 5:00 PM</li>
+                </ul>
+            </div>
+
+            <!-- El Ahram Clinic -->
+            <div class="clinic-appointment">
+                <h2>El Ahram Clinic</h2>
+                <h3>Opening Hours:</h3>
+                <ul class="opening-hours">
+                    <li>Sunday to Thursday: 11:00 AM - 7:00 PM</li>
+                    <li>Friday: Closed</li>
+                    <li>Saturday: 1:00 PM - 5:00 PM</li>
+                </ul>
+            </div>
+
+            <!-- Maadi Clinic -->
+            <div class="clinic-appointment">
+                <h2>Maadi Clinic</h2>
+                <h3>Opening Hours:</h3>
+                <ul class="opening-hours">
+                    <li>Sunday to Thursday: 11:00 AM - 7:00 PM</li>
+                    <li>Friday: Closed</li>
+                    <li>Saturday: 1:00 PM - 5:00 PM</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript to toggle the burger menu -->
+    <script>
+        const menuIcon = document.getElementById('menuIcon');
+        const burgerMenu = document.getElementById('burgerMenu');
+        const overlay = document.getElementById('overlay');
+
+        menuIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            burgerMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            burgerMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!burgerMenu.contains(e.target) && !menuIcon.contains(e.target)) {
+                burgerMenu.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Dr. Mina Emad</title>
+    <link rel="stylesheet" href="rec/css/styles.css">
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    <div class="container">
+        <!-- Burger Menu -->
+        <div class="burger-menu" id="burgerMenu">
+            <div class="burger-menu-content">
+                <img src="rec/imgs/tooth-icon.svg" alt="Tooth Icon" class="tooth-icon">
+
+                <a href="#" class="menu-item">Share</a>
+                <hr class="menu-divider">
+                <a href="aboutdev.html" class="menu-item">About</a>
+                <hr class="menu-divider">
+                <span class="version">v1.3.4</span>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <header class="header">
+            <a href="index.html" class="back-button"><span class="back-arrow"><</span></a>
+            <h1>Dr. Mina Emad</h1>
+            <div class="menu-icon" id="menuIcon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <section class="about-section">
+            <h2>About</h2>
+            <div class="doctor-profile">
+                <div class="drplaceholder">
+                    <img src="drimg.png" alt="Dr-Image" class="dr-image">
+                </div>
+                <h3>Dr. Mina Emad</h3>
+            </div>
+            <ul class="doctor-info">
+                <li>Name: Dr. Mina Emad</li>
+                <li>College: info</li>
+                <li>Graduation Year: 20XX</li>
+                <li>Experience: EXPE. Years</li>
+                <li>Short Bio: keep it simple</li>
+                <li>
+                    Phone Number: <a href="tel:+201223456789">+20 122 345 6789</a>
+                    <a href="tel:+201223456789" class="contact-icon phone-icon"></a>
+                </li>
+                <li>
+                    WhatsApp: <a href="https://wa.me/+201223456789">+20 122 345 6789</a>
+                    <a href="https://wa.me/+201223456789" class="contact-icon whatsapp-icon"></a>
+                </li>
+                <li>
+                    Facebook: <a href="https://facebook.com/DrMinaEmadClinics">@DrMinaEmadClinics</a>
+                </li>
+                <li>
+                    Location: <a href="#">location-link</a>
+                </li>
+            </ul>
+            <h3>Description</h3>
+            <p>- info from dr</p>
+        </section>
+    </div>
+
+    <!-- JavaScript to toggle the burger menu -->
+    <script>
+        const menuIcon = document.getElementById('menuIcon');
+        const burgerMenu = document.getElementById('burgerMenu');
+        const overlay = document.getElementById('overlay');
+
+        menuIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            burgerMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            burgerMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!burgerMenu.contains(e.target) && !menuIcon.contains(e.target)) {
+                burgerMenu.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
