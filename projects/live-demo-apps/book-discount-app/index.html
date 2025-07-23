@@ -119,6 +119,19 @@
             background-color: #e6fffa;
             animation: flash 0.3s ease;
         }
+        .price-editable {
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        .price-editable:hover {
+            background-color: #edf2f7;
+        }
+        .price-editable.editing {
+            background-color: #e6fffa;
+            border: 1px solid #2b6cb0;
+        }
         .bg-card {
             background-color: #ffffff;
             border-radius: 16px;
@@ -160,7 +173,7 @@
         .action-button:active {
             transform: scale(0.95);
         }
-        .settings-box {
+        .settings-box, .keypad-container {
             background-color: #f7fafc;
             border-radius: 12px;
             padding: 16px;
@@ -168,24 +181,25 @@
             transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
             overflow: hidden;
         }
-        .settings-box.hidden {
+        .settings-box.hidden, .keypad-container.hidden {
             max-height: 0;
             opacity: 0;
             padding: 0 16px;
             margin-bottom: 0;
         }
-        .settings-box.visible {
+        .settings-box.visible, .keypad-container.visible {
             max-height: 400px;
             opacity: 1;
         }
-        .filter-box {
+        .filter-box, .export-options {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             margin-bottom: 16px;
         }
         .filter-box select,
-        .filter-box input {
+        .filter-box input,
+        .export-options input {
             flex: 1;
             min-width: 100px;
             padding: 8px;
@@ -195,7 +209,8 @@
             transition: border-color 0.2s ease;
         }
         .filter-box select:focus,
-        .filter-box input:focus {
+        .filter-box input:focus,
+        .export-options input:focus {
             outline: none;
             border-color: #2b6cb0;
         }
@@ -203,12 +218,6 @@
             width: 100%;
             margin-top: 8px;
             accent-color: #2b6cb0;
-        }
-        .keypad-container {
-            margin: 16px 0;
-        }
-        .dark-mode .keypad-container {
-            background-color: #2d3748;
         }
         .keypad-grid {
             display: grid;
@@ -232,12 +241,6 @@
         }
         .receipt-card:hover {
             transform: translateY(-2px);
-        }
-        .export-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
         }
         .export-options label {
             display: flex;
@@ -267,19 +270,13 @@
                 font-size: 0.875rem;
                 padding: 8px;
             }
-            .settings-box {
+            .settings-box, .keypad-container {
                 max-height: 300px;
             }
             .resize-slider {
                 max-width: 200px;
             }
-            .keypad-container {
-                margin: 8px 0;
-            }
-            .keypad-grid {
-                gap: 4px;
-            }
-            .action-grid {
+            .keypad-grid, .action-grid {
                 gap: 4px;
             }
             .export-options label {
@@ -324,6 +321,7 @@
                 save_settings: 'Save',
                 toggle_theme: 'Toggle Theme',
                 toggle_settings: 'Settings',
+                toggle_keypad: 'Keypad',
                 original_price: 'Original Price',
                 discount: 'Discount',
                 final_price: 'Final Price',
@@ -351,11 +349,24 @@
                 error_invalid_prices: 'Please enter a valid price (numbers only, no letters).',
                 error_invalid_percentage: 'Please enter a valid discount percentage (0-100).',
                 error_invalid_rounding_step: 'Please enter a valid rounding step (number greater than 0).',
-                error_no_export_selected: 'Please select at least one field to export.',
-                success_settings_saved: 'Settings saved successfull
+                error_no_export_selected: 'Please select at least one field or receipt to export.',
+                success_settings_saved: 'Settings saved successfully!',
                 success_receipt_saved: 'Receipt saved successfully!',
-                success_excel_exported: 'Receipt exported as Excel successfully!',
-                about_content: 'This app was developed by mina fawzy. github.com/mina-fawzy-dev',
+                success_excel_exported: 'Receipts exported as Excel successfully!',
+                about_content: (
+                    <span>
+                        This app was developed by{' '}
+                        <a
+                            href="https://github.com/mina-fawzy-dev"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800"
+                        >
+                            Mina Fawzy
+                        </a>
+                        , a passionate programmer aiming to provide simple and effective solutions.
+                    </span>
+                ),
                 offline_mode: 'Offline Mode: The app is running without an internet connection.',
                 close: 'Close'
             }
@@ -377,11 +388,12 @@
             const [receipts, setReceipts] = useState(JSON.parse(localStorage.getItem('receipts')) || []);
             const [showAbout, setShowAbout] = useState(false);
             const [showSettings, setShowSettings] = useState(false);
+            const [showKeypad, setShowKeypad] = useState(true);
             const [sortOption, setSortOption] = useState('date_desc');
             const [filterDate, setFilterDate] = useState('');
             const [filterTotalMin, setFilterTotalMin] = useState('');
             const [filterTotalMax, setFilterTotalMax] = useState('');
-            const [selectedReceipt, setSelectedReceipt] = useState(null);
+            const [selectedReceipts, setSelectedReceipts] = useState([]);
             const [exportOptions, setExportOptions] = useState({
                 original_prices: false,
                 discounted_prices: false,
@@ -390,6 +402,8 @@
                 date: false,
                 item_count: false
             });
+            const [editingPriceIndex, setEditingPriceIndex] = useState(null);
+            const [editingPriceValue, setEditingPriceValue] = useState('');
             const [isOnline, setIsOnline] = useState(navigator.onLine);
             const displayRef = useRef(null);
             const inputRef = useRef(null);
@@ -416,9 +430,15 @@
                 window.addEventListener('offline', handleOffline);
 
                 const handleKeyDown = (e) => {
-                    if (e.key === 'Enter' && !showReceipts && !showAbout && !showSettings && !selectedReceipt) {
-                        e.preventDefault();
-                        handleAddPrice();
+                    if (!showReceipts && !showAbout && !showSettings && editingPriceIndex === null) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddPrice();
+                        } else if (/^[0-9.]$/.test(e.key)) {
+                            if (e.key === '.' && priceInput.includes('.')) return;
+                            setPriceInput(priceInput + e.key);
+                            setError('');
+                        }
                     }
                 };
                 window.addEventListener('keydown', handleKeyDown);
@@ -434,8 +454,12 @@
                 localStorage.setItem('totals', JSON.stringify(totals));
                 localStorage.setItem('receipts', JSON.stringify(receipts));
 
-                if (inputRef.current) {
+                if (inputRef.current && editingPriceIndex === null) {
                     inputRef.current.focus();
+                }
+
+                if (displayRef.current) {
+                    displayRef.current.scrollTop = displayRef.current.scrollHeight;
                 }
 
                 return () => {
@@ -443,7 +467,7 @@
                     window.removeEventListener('offline', handleOffline);
                     window.removeEventListener('keydown', handleKeyDown);
                 };
-            }, [theme, displayPrices, displayLines, displayHeight, percentage, roundingStep, results, totals, receipts, showReceipts, showAbout, showSettings, selectedReceipt]);
+            }, [theme, displayPrices, displayLines, displayHeight, percentage, roundingStep, results, totals, receipts, showReceipts, showAbout, showSettings, editingPriceIndex]);
 
             const showNotification = (message) => {
                 setNotification(message);
@@ -497,6 +521,36 @@
                     setError(t.error_invalid_prices);
                     inputRef.current.classList.add('animate-shake');
                     setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                }
+            };
+
+            const handleEditPrice = (lineIndex, priceIndex) => {
+                const flatIndex = displayLines.slice(0, lineIndex).reduce((sum, line) => sum + line.length, 0) + priceIndex;
+                setEditingPriceIndex(flatIndex);
+                setEditingPriceValue(displayLines[lineIndex][priceIndex]);
+            };
+
+            const handleSaveEditPrice = () => {
+                const price = parseFloat(editingPriceValue);
+                if (!isNaN(price) && price >= 0) {
+                    const flatPrices = displayLines.flat();
+                    flatPrices[editingPriceIndex] = editingPriceValue;
+                    let newLines = [];
+                    let currentLine = [];
+                    flatPrices.forEach((price, index) => {
+                        currentLine.push(price);
+                        if (currentLine.length === 5 || index === flatPrices.length - 1) {
+                            newLines.push([...currentLine]);
+                            currentLine = [];
+                        }
+                    });
+                    setDisplayLines(newLines);
+                    setDisplayPrices(newLines.map(line => line.join(' ')).join('\n'));
+                    setEditingPriceIndex(null);
+                    setEditingPriceValue('');
+                    setError('');
+                } else {
+                    setError(t.error_invalid_prices);
                 }
             };
 
@@ -563,36 +617,31 @@
                 showNotification(t.success_receipt_saved);
             };
 
-            const handleExportExcel = (receipt) => {
+            const handleExportExcel = () => {
                 const selected = Object.values(exportOptions).some(opt => opt);
-                if (!selected && !selectedReceipt) {
+                if (!selected || selectedReceipts.length === 0) {
                     setError(t.error_no_export_selected);
                     return;
                 }
 
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
                 const data = [];
-                if (selectedReceipt) {
+                selectedReceipts.forEach((receipt, index) => {
+                    if (index > 0) data.push(['']); // Separator between receipts
+                    data.push([`Receipt ${index + 1}`]);
                     if (exportOptions.original_prices) data.push([t.original_price, receipt.original_prices]);
                     if (exportOptions.discounted_prices) data.push([t.final_price, receipt.discounted_prices]);
                     if (exportOptions.total_original) data.push([t.total_before, receipt.total_original.toFixed(2)]);
                     if (exportOptions.total_final) data.push([t.total_after, receipt.total_final.toFixed(2)]);
                     if (exportOptions.date) data.push([t.date, receipt.date]);
                     if (exportOptions.item_count) data.push([t.sort_items_asc, receipt.item_count]);
-                } else {
-                    data.push([t.original_price, receipt.original_prices]);
-                    data.push([t.final_price, receipt.discounted_prices]);
-                    data.push([t.total_before, receipt.total_original.toFixed(2)]);
-                    data.push([t.total_after, receipt.total_final.toFixed(2)]);
-                    data.push([t.date, receipt.date]);
-                    data.push([t.sort_items_asc, receipt.item_count]);
-                }
+                });
 
                 const ws = XLSX.utils.aoa_to_sheet(data);
                 const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, 'Receipt');
-                XLSX.writeFile(wb, `Receipt_${receipt.date}_${timestamp}.xlsx`);
-                setSelectedReceipt(null);
+                XLSX.utils.book_append_sheet(wb, ws, 'Receipts');
+                XLSX.writeFile(wb, `Receipts_${timestamp}.xlsx`);
+                setSelectedReceipts([]);
                 setExportOptions({
                     original_prices: false,
                     discounted_prices: false,
@@ -722,123 +771,106 @@
                                 aria-label={t.filter_total_max}
                             />
                         </div>
+                        <div className="export-options mb-4">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={exportOptions.original_prices}
+                                    onChange={() => setExportOptions({ ...exportOptions, original_prices: !exportOptions.original_prices })}
+                                />
+                                {t.original_price}
+                            </label>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={exportOptions.discounted_prices}
+                                    onChange={() => setExportOptions({ ...exportOptions, discounted_prices: !exportOptions.discounted_prices })}
+                                />
+                                {t.final_price}
+                            </label>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={exportOptions.total_original}
+                                    onChange={() => setExportOptions({ ...exportOptions, total_original: !exportOptions.total_original })}
+                                />
+                                {t.total_before}
+                            </label>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={exportOptions.total_final}
+                                    onChange={() => setExportOptions({ ...exportOptions, total_final: !exportOptions.total_final })}
+                                />
+                                {t.total_after}
+                            </label>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={exportOptions.date}
+                                    onChange={() => setExportOptions({ ...exportOptions, date: !exportOptions.date })}
+                                />
+                                {t.date}
+                            </label>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={exportOptions.item_count}
+                                    onChange={() => setExportOptions({ ...exportOptions, item_count: !exportOptions.item_count })}
+                                />
+                                {t.sort_items_asc}
+                            </label>
+                        </div>
+                        <div className="flex gap-2 mb-4">
+                            <button
+                                className="action-button w-full py-2 text-sm"
+                                onClick={handleExportExcel}
+                                aria-label={t.export_excel}
+                            >
+                                {t.export_excel}
+                            </button>
+                            <button
+                                className="action-button w-full py-2 text-sm"
+                                onClick={() => {
+                                    setSelectedReceipts(receipts);
+                                    setExportOptions({
+                                        original_prices: true,
+                                        discounted_prices: true,
+                                        total_original: true,
+                                        total_final: true,
+                                        date: true,
+                                        item_count: true
+                                    });
+                                    handleExportExcel();
+                                }}
+                                aria-label={t.export_all}
+                            >
+                                {t.export_all}
+                            </button>
+                        </div>
                         {sortedAndFilteredReceipts().map((receipt, index) => (
                             <div key={index} className="receipt-card">
                                 <div className="flex justify-between items-center">
-                                    <div>
-                                        <p className="text-sm font-semibold">{t.date}: {receipt.date}</p>
-                                        <p className="text-sm">{t.total_before} {receipt.total_original.toFixed(2)}</p>
-                                        <p className="text-sm">{t.total_after} {receipt.total_final.toFixed(2)}</p>
-                                        <p className="text-sm">{t.sort_items_asc}: {receipt.item_count}</p>
-                                    </div>
-                                    <div className="flex gap-2 flex-wrap">
-                                        <button
-                                            className="action-button py-1 px-3 text-sm"
-                                            onClick={() => setSelectedReceipt(receipt)}
-                                            aria-label={t.export}
-                                        >
-                                            {t.export}
-                                        </button>
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedReceipts.includes(receipt)}
+                                            onChange={() => {
+                                                setSelectedReceipts(prev =>
+                                                    prev.includes(receipt)
+                                                        ? prev.filter(r => r !== receipt)
+                                                        : [...prev, receipt]
+                                                );
+                                            }}
+                                        />
+                                        <div>
+                                            <p className="text-sm font-semibold">{t.date}: {receipt.date}</p>
+                                            <p className="text-sm">{t.total_before} {receipt.total_original.toFixed(2)}</p>
+                                            <p className="text-sm">{t.total_after} {receipt.total_final.toFixed(2)}</p>
+                                            <p className="text-sm">{t.sort_items_asc}: {receipt.item_count}</p>
+                                        </div>
                                     </div>
                                 </div>
-                                {selectedReceipt && selectedReceipt.id === receipt.id && (
-                                    <div className="mt-4">
-                                        <h2 className="text-lg font-semibold mb-2 sm:text-base">{t.export}</h2>
-                                        <div className="export-options">
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.original_prices}
-                                                    onChange={() => setExportOptions({ ...exportOptions, original_prices: !exportOptions.original_prices })}
-                                                />
-                                                {t.original_price}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.discounted_prices}
-                                                    onChange={() => setExportOptions({ ...exportOptions, discounted_prices: !exportOptions.discounted_prices })}
-                                                />
-                                                {t.final_price}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.total_original}
-                                                    onChange={() => setExportOptions({ ...exportOptions, total_original: !exportOptions.total_original })}
-                                                />
-                                                {t.total_before}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.total_final}
-                                                    onChange={() => setExportOptions({ ...exportOptions, total_final: !exportOptions.total_final })}
-                                                />
-                                                {t.total_after}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.date}
-                                                    onChange={() => setExportOptions({ ...exportOptions, date: !exportOptions.date })}
-                                                />
-                                                {t.date}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.item_count}
-                                                    onChange={() => setExportOptions({ ...exportOptions, item_count: !exportOptions.item_count })}
-                                                />
-                                                {t.sort_items_asc}
-                                            </label>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <button
-                                                className="action-button w-full py-2 text-sm"
-                                                onClick={() => handleExportExcel(receipt)}
-                                                aria-label={t.export_excel}
-                                            >
-                                                {t.export_excel}
-                                            </button>
-                                            <button
-                                                className="action-button w-full py-2 text-sm"
-                                                onClick={() => {
-                                                    setSelectedReceipt(null);
-                                                    setExportOptions({
-                                                        original_prices: false,
-                                                        discounted_prices: false,
-                                                        total_original: false,
-                                                        total_final: false,
-                                                        date: false,
-                                                        item_count: false
-                                                    });
-                                                }}
-                                                aria-label="Cancel"
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                className="action-button w-full py-2 text-sm"
-                                                onClick={() => {
-                                                    setExportOptions({
-                                                        original_prices: true,
-                                                        discounted_prices: true,
-                                                        total_original: true,
-                                                        total_final: true,
-                                                        date: true,
-                                                        item_count: true
-                                                    });
-                                                    handleExportExcel(receipt);
-                                                }}
-                                                aria-label={t.export_all}
-                                            >
-                                                {t.export_all}
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                         ))}
                         <button
@@ -863,6 +895,7 @@
                                 onClick={() => {
                                     setTheme(theme === 'light' ? 'dark' : 'light');
                                     setShowSettings(false);
+                                    setShowKeypad(false);
                                 }}
                                 aria-label={t.toggle_theme}
                             >
@@ -873,6 +906,7 @@
                                 onClick={() => {
                                     setShowAbout(true);
                                     setShowSettings(false);
+                                    setShowKeypad(false);
                                 }}
                                 aria-label={t.about}
                             >
@@ -904,7 +938,49 @@
                             ref={displayRef}
                             aria-label="Entered prices"
                         >
-                            {displayPrices || t.prices_placeholder}
+                            {displayLines.length === 0 && t.prices_placeholder}
+                            {displayLines.map((line, lineIndex) => (
+                                <div key={lineIndex}>
+                                    {line.map((price, priceIndex) => {
+                                        const flatIndex = displayLines.slice(0, lineIndex).reduce((sum, l) => sum + l.length, 0) + priceIndex;
+                                        return (
+                                            <span
+                                                key={priceIndex}
+                                                className={`price-editable ${editingPriceIndex === flatIndex ? 'editing' : ''}`}
+                                                onClick={() => handleEditPrice(lineIndex, priceIndex)}
+                                            >
+                                                {editingPriceIndex === flatIndex ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editingPriceValue}
+                                                        onChange={(e) => {
+                                                            if (/^[0-9.]*$/.test(e.target.value)) {
+                                                                setEditingPriceValue(e.target.value);
+                                                                setError('');
+                                                            } else {
+                                                                setError(t.error_invalid_prices);
+                                                            }
+                                                        }}
+                                                        onBlur={handleSaveEditPrice}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                e.preventDefault();
+                                                                handleSaveEditPrice();
+                                                            }
+                                                        }}
+                                                        autoFocus
+                                                        className="w-16 p-1 text-sm border rounded"
+                                                    />
+                                                ) : (
+                                                    price
+                                                )}
+                                                {priceIndex < line.length - 1 ? ' ' : ''}
+                                            </span>
+                                        );
+                                    })}
+                                    {lineIndex < displayLines.length - 1 && <br />}
+                                </div>
+                            ))}
                         </div>
                         <label className="block mb-1 text-sm mt-2">{t.resize_display}</label>
                         <input
@@ -962,7 +1038,7 @@
                         </svg>
                     </button>
 
-                    <div className="keypad-container">
+                    <div className={`keypad-container ${showKeypad ? 'visible' : 'hidden'}`}>
                         <div className="keypad-grid">
                             {keypadLayout.map((key, index) => (
                                 <button
@@ -997,6 +1073,17 @@
                         </div>
                     </div>
 
+                    <button
+                        className="text-blue-600 hover:text-blue-800 mb-4 flex items-center text-sm font-semibold"
+                        onClick={() => setShowKeypad(!showKeypad)}
+                        aria-label={showKeypad ? 'Hide Keypad' : t.toggle_keypad}
+                    >
+                        {showKeypad ? 'Hide Keypad' : t.toggle_keypad}
+                        <svg className={`w-4 h-4 ml-1 transform ${showKeypad ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
                     <div className="grid grid-cols-2 gap-3 mt-6">
                         <button
                             className="action-button py-3 sm:py-2"
@@ -1010,6 +1097,7 @@
                             onClick={() => {
                                 setShowReceipts(true);
                                 setShowSettings(false);
+                                setShowKeypad(false);
                             }}
                             aria-label={t.receipts}
                         >
