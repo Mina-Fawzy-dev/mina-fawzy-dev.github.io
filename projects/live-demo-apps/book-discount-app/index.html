@@ -14,7 +14,6 @@
     <script src="static/js/react-dom.production.min.js"></script>
     <script src="static/js/babel.min.js"></script>
     <script src="static/js/xlsx.full.min.js"></script>
-    <script src="static/js/qrcode.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -168,7 +167,6 @@
             margin-bottom: 16px;
             transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
             overflow: hidden;
-            z-index: 10;
         }
         .settings-box.hidden {
             max-height: 0;
@@ -207,16 +205,10 @@
             accent-color: #2b6cb0;
         }
         .keypad-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #f7fafc;
-            padding: 16px;
-            z-index: 1000;
+            margin: 16px 0;
         }
         .dark-mode .keypad-container {
-            background-color: #1a202c;
+            background-color: #2d3748;
         }
         .keypad-grid {
             display: grid;
@@ -241,10 +233,22 @@
         .receipt-card:hover {
             transform: translateY(-2px);
         }
+        .export-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .export-options label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.875rem;
+        }
         @media (max-width: 640px) {
             body {
                 align-items: flex-start;
-                padding-bottom: 120px;
+                padding-bottom: 16px;
             }
             .container {
                 padding: 16px;
@@ -270,13 +274,16 @@
                 max-width: 200px;
             }
             .keypad-container {
-                padding: 8px;
+                margin: 8px 0;
             }
             .keypad-grid {
                 gap: 4px;
             }
             .action-grid {
                 gap: 4px;
+            }
+            .export-options label {
+                font-size: 0.75rem;
             }
         }
         @keyframes fadeIn {
@@ -337,22 +344,17 @@
                 filter_date: 'Filter by Date:',
                 filter_total_min: 'Min Total:',
                 filter_total_max: 'Max Total:',
-                quick_multiply: 'Quick Multiply',
-                copies: 'Number of Copies',
-                save_receipt: 'Save as New Receipt',
-                export: 'Export',
+                export: 'Export Selected',
+                export_all: 'Export All',
                 export_excel: 'Export as Excel',
-                qr_code: 'Generate QR Code',
                 resize_display: 'Display Area Size:',
                 error_invalid_prices: 'Please enter a valid price (numbers only, no letters).',
                 error_invalid_percentage: 'Please enter a valid discount percentage (0-100).',
                 error_invalid_rounding_step: 'Please enter a valid rounding step (number greater than 0).',
-                error_invalid_copies: 'Please enter a valid number of copies (1 or more).',
+                error_no_export_selected: 'Please select at least one field to export.',
                 success_settings_saved: 'Settings saved successfully!',
                 success_receipt_saved: 'Receipt saved successfully!',
-                success_receipt_exported: 'Receipt exported successfully!',
                 success_excel_exported: 'Receipt exported as Excel successfully!',
-                success_qr_generated: 'QR Code generated successfully!',
                 about_content: 'This app was developed by Mina Fawzy, a passionate programmer aiming to provide simple and effective solutions. Contact: github.com/mina-fawzy-dev',
                 offline_mode: 'Offline Mode: The app is running without an internet connection.',
                 close: 'Close'
@@ -380,7 +382,14 @@
             const [filterTotalMin, setFilterTotalMin] = useState('');
             const [filterTotalMax, setFilterTotalMax] = useState('');
             const [selectedReceipt, setSelectedReceipt] = useState(null);
-            const [multiplyCount, setMultiplyCount] = useState('');
+            const [exportOptions, setExportOptions] = useState({
+                original_prices: false,
+                discounted_prices: false,
+                total_original: false,
+                total_final: false,
+                date: false,
+                item_count: false
+            });
             const [isOnline, setIsOnline] = useState(navigator.onLine);
             const displayRef = useRef(null);
             const inputRef = useRef(null);
@@ -554,87 +563,45 @@
                 showNotification(t.success_receipt_saved);
             };
 
-            const handleQuickMultiply = () => {
-                if (!selectedReceipt || isNaN(multiplyCount) || multiplyCount < 1) {
-                    setError(t.error_invalid_copies);
+            const handleExportExcel = (receipt) => {
+                const selected = Object.values(exportOptions).some(opt => opt);
+                if (!selected && !selectedReceipt) {
+                    setError(t.error_no_export_selected);
                     return;
                 }
 
-                const originalPrices = selectedReceipt.original_prices.split(',').map(Number);
-                const multipliedPrices = Array(parseInt(multiplyCount)).fill().flatMap(() => originalPrices);
-                const discounts = multipliedPrices.map(price => price * (percentage / 100));
-                const final_prices = multipliedPrices.map(price => {
-                    const discounted_price = price - (price * (percentage / 100));
-                    return Math.round(discounted_price / roundingStep) * roundingStep;
-                });
-
-                const newReceipt = {
-                    id: Date.now(),
-                    date: new Date().toISOString().split('T')[0],
-                    total_original: selectedReceipt.total_original * multiplyCount,
-                    total_final: final_prices.reduce((sum, price) => sum + price, 0),
-                    item_count: multipliedPrices.length,
-                    original_prices: multipliedPrices.join(','),
-                    discounted_prices: final_prices.join(',')
-                };
-
-                setReceipts([newReceipt, ...receipts.slice(0, 9)]);
-                setSelectedReceipt(null);
-                setMultiplyCount('');
-                showNotification(t.success_receipt_saved);
-            };
-
-            const handleExport = (receipt) => {
-                const text = `
-${t.original_price}: ${receipt.original_prices}
-${t.final_price}: ${receipt.discounted_prices}
-${t.total_before}: ${receipt.total_original.toFixed(2)}
-${t.total_after}: ${receipt.total_final.toFixed(2)}
-${t.date}: ${receipt.date}
-${t.sort_items_asc}: ${receipt.item_count}
-`;
-                navigator.clipboard.writeText(text);
-                showNotification(t.success_receipt_exported);
-            };
-
-            const handleExportExcel = (receipt) => {
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                const data = [
-                    [t.original_price, receipt.original_prices],
-                    [t.final_price, receipt.discounted_prices],
-                    [t.total_before, receipt.total_original.toFixed(2)],
-                    [t.total_after, receipt.total_final.toFixed(2)],
-                    [t.date, receipt.date],
-                    [t.sort_items_asc, receipt.item_count]
-                ];
+                const data = [];
+                if (selectedReceipt) {
+                    if (exportOptions.original_prices) data.push([t.original_price, receipt.original_prices]);
+                    if (exportOptions.discounted_prices) data.push([t.final_price, receipt.discounted_prices]);
+                    if (exportOptions.total_original) data.push([t.total_before, receipt.total_original.toFixed(2)]);
+                    if (exportOptions.total_final) data.push([t.total_after, receipt.total_final.toFixed(2)]);
+                    if (exportOptions.date) data.push([t.date, receipt.date]);
+                    if (exportOptions.item_count) data.push([t.sort_items_asc, receipt.item_count]);
+                } else {
+                    data.push([t.original_price, receipt.original_prices]);
+                    data.push([t.final_price, receipt.discounted_prices]);
+                    data.push([t.total_before, receipt.total_original.toFixed(2)]);
+                    data.push([t.total_after, receipt.total_final.toFixed(2)]);
+                    data.push([t.date, receipt.date]);
+                    data.push([t.sort_items_asc, receipt.item_count]);
+                }
+
                 const ws = XLSX.utils.aoa_to_sheet(data);
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, 'Receipt');
                 XLSX.writeFile(wb, `Receipt_${receipt.date}_${timestamp}.xlsx`);
-                showNotification(t.success_excel_exported);
-            };
-
-            const handleQRCode = (receipt) => {
-                const text = `
-${t.original_price}: ${receipt.original_prices}
-${t.final_price}: ${receipt.discounted_prices}
-${t.total_before}: ${receipt.total_original.toFixed(2)}
-${t.total_after}: ${receipt.total_final.toFixed(2)}
-${t.date}: ${receipt.date}
-${t.sort_items_asc}: ${receipt.item_count}
-`;
-                const qrCanvas = document.createElement('canvas');
-                QRCode.toCanvas(qrCanvas, text, { width: 200, color: { dark: theme === 'dark' ? '#e2e8f0' : '#1a202c' } }, (error) => {
-                    if (error) {
-                        setError('Failed to generate QR Code');
-                        return;
-                    }
-                    const link = document.createElement('a');
-                    link.href = qrCanvas.toDataURL('image/png');
-                    link.download = `Receipt_${receipt.date}_QR.png`;
-                    link.click();
-                    showNotification(t.success_qr_generated);
+                setSelectedReceipt(null);
+                setExportOptions({
+                    original_prices: false,
+                    discounted_prices: false,
+                    total_original: false,
+                    total_final: false,
+                    date: false,
+                    item_count: false
                 });
+                showNotification(t.success_excel_exported);
             };
 
             const handleClear = () => {
@@ -768,65 +735,112 @@ ${t.sort_items_asc}: ${receipt.item_count}
                                         <button
                                             className="action-button py-1 px-3 text-sm"
                                             onClick={() => setSelectedReceipt(receipt)}
-                                            aria-label={t.quick_multiply}
-                                        >
-                                            {t.quick_multiply}
-                                        </button>
-                                        <button
-                                            className="action-button py-1 px-3 text-sm"
-                                            onClick={() => handleExport(receipt)}
                                             aria-label={t.export}
                                         >
                                             {t.export}
                                         </button>
-                                        <button
-                                            className="action-button py-1 px-3 text-sm"
-                                            onClick={() => handleExportExcel(receipt)}
-                                            aria-label={t.export_excel}
-                                        >
-                                            {t.export_excel}
-                                        </button>
-                                        <button
-                                            className="action-button py-1 px-3 text-sm"
-                                            onClick={() => handleQRCode(receipt)}
-                                            aria-label={t.qr_code}
-                                        >
-                                            {t.qr_code}
-                                        </button>
                                     </div>
                                 </div>
+                                {selectedReceipt && selectedReceipt.id === receipt.id && (
+                                    <div className="mt-4">
+                                        <h2 className="text-lg font-semibold mb-2 sm:text-base">{t.export}</h2>
+                                        <div className="export-options">
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={exportOptions.original_prices}
+                                                    onChange={() => setExportOptions({ ...exportOptions, original_prices: !exportOptions.original_prices })}
+                                                />
+                                                {t.original_price}
+                                            </label>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={exportOptions.discounted_prices}
+                                                    onChange={() => setExportOptions({ ...exportOptions, discounted_prices: !exportOptions.discounted_prices })}
+                                                />
+                                                {t.final_price}
+                                            </label>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={exportOptions.total_original}
+                                                    onChange={() => setExportOptions({ ...exportOptions, total_original: !exportOptions.total_original })}
+                                                />
+                                                {t.total_before}
+                                            </label>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={exportOptions.total_final}
+                                                    onChange={() => setExportOptions({ ...exportOptions, total_final: !exportOptions.total_final })}
+                                                />
+                                                {t.total_after}
+                                            </label>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={exportOptions.date}
+                                                    onChange={() => setExportOptions({ ...exportOptions, date: !exportOptions.date })}
+                                                />
+                                                {t.date}
+                                            </label>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={exportOptions.item_count}
+                                                    onChange={() => setExportOptions({ ...exportOptions, item_count: !exportOptions.item_count })}
+                                                />
+                                                {t.sort_items_asc}
+                                            </label>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                className="action-button w-full py-2 text-sm"
+                                                onClick={() => handleExportExcel(receipt)}
+                                                aria-label={t.export_excel}
+                                            >
+                                                {t.export_excel}
+                                            </button>
+                                            <button
+                                                className="action-button w-full py-2 text-sm"
+                                                onClick={() => {
+                                                    setSelectedReceipt(null);
+                                                    setExportOptions({
+                                                        original_prices: false,
+                                                        discounted_prices: false,
+                                                        total_original: false,
+                                                        total_final: false,
+                                                        date: false,
+                                                        item_count: false
+                                                    });
+                                                }}
+                                                aria-label="Cancel"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                className="action-button w-full py-2 text-sm"
+                                                onClick={() => {
+                                                    setExportOptions({
+                                                        original_prices: true,
+                                                        discounted_prices: true,
+                                                        total_original: true,
+                                                        total_final: true,
+                                                        date: true,
+                                                        item_count: true
+                                                    });
+                                                    handleExportExcel(receipt);
+                                                }}
+                                                aria-label={t.export_all}
+                                            >
+                                                {t.export_all}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
-                        {selectedReceipt && (
-                            <div className="receipt-card">
-                                <h2 className="text-lg font-semibold mb-2 sm:text-base">{t.quick_multiply}</h2>
-                                <input
-                                    type="number"
-                                    value={multiplyCount}
-                                    onChange={(e) => setMultiplyCount(e.target.value)}
-                                    placeholder={t.copies}
-                                    className="w-full p-2 mb-2 border rounded text-sm"
-                                    min="1"
-                                    aria-label={t.copies}
-                                />
-                                <div className="flex gap-2">
-                                    <button
-                                        className="action-button w-full py-2 text-sm"
-                                        onClick={handleQuickMultiply}
-                                        aria-label={t.save_receipt}
-                                    >
-                                        {t.save_receipt}
-                                    </button>
-                                    <button
-                                        className="action-button w-full py-2 text-sm"
-                                        onClick={() => setSelectedReceipt(null)}
-                                        aria-label="Cancel"
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        )}
                         <button
                             className="action-button w-full py-3 sm:py-2"
                             onClick={() => setShowReceipts(false)}
