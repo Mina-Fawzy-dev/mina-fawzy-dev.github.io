@@ -409,7 +409,7 @@
                 const handleKeyDown = (e) => {
                     if (e.key === 'Enter' && !showReceipts && !showAbout && !showSettings && !selectedReceipt) {
                         e.preventDefault();
-                        handleKeypadInput('Enter');
+                        handleAddPrice();
                     }
                 };
                 window.addEventListener('keydown', handleKeyDown);
@@ -441,35 +441,35 @@
                 setTimeout(() => setNotification(''), 3000);
             };
 
+            const handleAddPrice = () => {
+                const price = parseFloat(priceInput);
+                if (!isNaN(price) && price >= 0) {
+                    const lastLine = displayLines.length > 0 ? displayLines[displayLines.length - 1] : [];
+                    const newLine = lastLine.length >= 5 ? [] : lastLine;
+                    const updatedLines = lastLine.length >= 5 ? [...displayLines, [priceInput]] : [...displayLines.slice(0, -1), [...newLine, priceInput]];
+                    setDisplayLines(updatedLines);
+                    setDisplayPrices(updatedLines.map(line => line.join(' ')).join('\n'));
+                    setPriceInput('');
+                    if (displayRef.current) {
+                        displayRef.current.classList.add('added');
+                        setTimeout(() => displayRef.current.classList.remove('added'), 300);
+                        displayRef.current.scrollTop = displayRef.current.scrollHeight;
+                    }
+                    if (inputRef.current) {
+                        inputRef.current.focus();
+                    }
+                } else {
+                    setError(t.error_invalid_prices);
+                    inputRef.current.classList.add('animate-shake');
+                    setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                }
+            };
+
             const handleKeypadInput = (value) => {
-                console.log('Keypad input:', value, 'Current priceInput:', priceInput);
                 if (value === 'CE') {
                     setPriceInput(priceInput.slice(0, -1));
-                } else if (value === 'Enter' || value === t.enter_line) {
-                    const price = parseFloat(priceInput);
-                    if (!isNaN(price) && price >= 0) {
-                        console.log('Valid price:', price);
-                        const lastLine = displayLines.length > 0 ? displayLines[displayLines.length - 1] : [];
-                        const newLine = lastLine.length >= 5 ? [] : lastLine;
-                        const updatedLines = lastLine.length >= 5 ? [...displayLines, [priceInput]] : [...displayLines.slice(0, -1), [...newLine, priceInput]];
-                        console.log('Updated lines:', updatedLines);
-                        setDisplayLines(updatedLines);
-                        setDisplayPrices(updatedLines.map(line => line.join(' ')).join('\n'));
-                        setPriceInput('');
-                        if (displayRef.current) {
-                            displayRef.current.classList.add('added');
-                            setTimeout(() => displayRef.current.classList.remove('added'), 300);
-                            displayRef.current.scrollTop = displayRef.current.scrollHeight;
-                        }
-                        if (inputRef.current) {
-                            inputRef.current.focus();
-                        }
-                    } else {
-                        console.log('Invalid price:', priceInput);
-                        setError(t.error_invalid_prices);
-                        inputRef.current.classList.add('animate-shake');
-                        setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
-                    }
+                } else if (value === t.enter_line) {
+                    handleAddPrice();
                 } else if (value === '.') {
                     if (!priceInput.includes('.') && !priceInput.endsWith('.')) {
                         setPriceInput(priceInput + value);
