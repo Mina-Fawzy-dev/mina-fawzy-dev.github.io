@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+    <title>Book Discount Calculator</title>
+    <meta name="description" content="A modern app to calculate book discounts with ease">
+    <meta name="theme-color" content="#f7fafc">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="static/css/tailwind.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="static/js/react.production.min.js"></script>
+    <script src="static/js/react-dom.production.min.js"></script>
+    <script src="static/js/babel.min.js"></script>
+    <script src="static/js/xlsx.full.min.js"></script>
+    <script src="static/js/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            touch-action: manipulation;
+            overscroll-behavior: none;
+            background-color: #f7fafc;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .bg-card {
+            background-color: #2d3748;
+        }
+        .dark-mode .bg-gray-50 {
+            background-color: #1a202c;
+        }
+        .dark-mode .bg-gray-100 {
+            background-color: #4a5568;
+        }
+        .dark-mode .text-red-700 {
+            color: #fc8181;
+        }
+        .dark-mode .bg-red-100 {
+            background-color: #742a2a;
+        }
+        .dark-mode .action-button {
+            background-color: #4a5568;
+        }
+        .dark-mode .action-button:hover {
+            background-color: #718096;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background-color: #48bb78;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        .error-alert {
+            position: relative;
+            background-color: #fefcbf;
+            color: #744210;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            animation: shake 0.3s ease;
+        }
+        .error-alert button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: none;
+            border: none;
+            color: #744210;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .input-box {
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            font-size: 1.25rem;
+            line-height: 1.5;
+            padding: 12px;
+            text-align: right;
+            height: 48px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .input-box:focus {
+            outline: none;
+            border-color: #2b6cb0;
+            box-shadow: 0 0 0 4px rgba(43, 108, 176, 0.1);
+        }
+        .display-box {
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            font-size: 1rem;
+            line-height: 1.5;
+            padding: 12px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            text-align: left;
+            margin-top: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .display-box.added {
+            background-color: #e6fffa;
+            animation: flash 0.3s ease;
+        }
+        .bg-card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        .keypad-button {
+            background-color: #f7fafc;
+            color: #1a202c;
+            font-size: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            padding: 12px;
+            min-height: 44px;
+        }
+        .keypad-button:hover {
+            background-color: #edf2f7;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .keypad-button:active {
+            transform: scale(0.95);
+        }
+        .action-button {
+            background-color: #2b6cb0;
+            color: white;
+            font-size: 1rem;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            padding: 12px;
+            min-height: 44px;
+        }
+        .action-button:hover {
+            background-color: #2c5282;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .action-button:active {
+            transform: scale(0.95);
+        }
+        .settings-box {
+            background-color: #f7fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .settings-box.hidden {
+            max-height: 0;
+            opacity: 0;
+            padding: 0 16px;
+            margin-bottom: 0;
+        }
+        .settings-box.visible {
+            max-height: 400px;
+            opacity: 1;
+        }
+        .filter-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .filter-box select,
+        .filter-box input {
+            flex: 1;
+            min-width: 100px;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+        }
+        .filter-box select:focus,
+        .filter-box input:focus {
+            outline: none;
+            border-color: #2b6cb0;
+        }
+        .resize-slider {
+            width: 100%;
+            margin-top: 8px;
+            accent-color: #2b6cb0;
+        }
+        .keypad-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #f7fafc;
+            padding: 16px;
+            z-index: 1000;
+        }
+        .dark-mode .keypad-container {
+            background-color: #1a202c;
+        }
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            direction: ltr;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .receipt-card {
+            background-color: #f7fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+        .receipt-card:hover {
+            transform: translateY(-2px);
+        }
+        @media (max-width: 640px) {
+            body {
+                align-items: flex-start;
+                padding-bottom: 120px;
+            }
+            .container {
+                padding: 16px;
+            }
+            .input-box {
+                font-size: 1rem;
+            }
+            .display-box {
+                font-size: 0.875rem;
+            }
+            .keypad-button {
+                font-size: 1rem;
+                padding: 8px;
+            }
+            .action-button {
+                font-size: 0.875rem;
+                padding: 8px;
+            }
+            .settings-box {
+                max-height: 300px;
+            }
+            .resize-slider {
+                max-width: 200px;
+            }
+            .keypad-container {
+                padding: 8px;
+            }
+            .keypad-grid {
+                gap: 4px;
+            }
+            .action-grid {
+                gap: 4px;
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes flash {
+            from { background-color: #e6fffa; }
+            to { background-color: #ffffff; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root" className="container mx-auto p-4 max-w-md"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const translations = {
+            en: {
+                title: 'Book Discount Calculator',
+                enter_prices: 'Enter Prices',
+                prices_placeholder: 'Enter a single book price',
+                calculate: 'Calculate',
+                clear: 'Clear All',
+                ce: 'CE',
+                reset: 'Reset',
+                receipts: 'Receipts',
+                about: 'About the Developer',
+                percentage_label: 'Discount Percentage %:',
+                rounding_step: 'Rounding Step:',
+                save_settings: 'Save',
+                toggle_theme: 'Toggle Theme',
+                toggle_settings: 'Settings',
+                original_price: 'Original Price',
+                discount: 'Discount',
+                final_price: 'Final Price',
+                total_before: '🟡 Total Before Discount:',
+                total_discount: '🟠 Total Discount:',
+                total_after: '🟢 Total After Discount:',
+                discount_details: 'Discount Details',
+                rounded_diff: 'Rounding Difference',
+                price_before_rounding: 'Price Before Rounding',
+                enter_line: '⏎',
+                sort_by: 'Sort by:',
+                sort_date_asc: 'Date (Oldest)',
+                sort_date_desc: 'Date (Newest)',
+                sort_total_asc: 'Total (Ascending)',
+                sort_total_desc: 'Total (Descending)',
+                sort_items_asc: 'Item Count (Ascending)',
+                sort_items_desc: 'Item Count (Descending)',
+                filter_date: 'Filter by Date:',
+                filter_total_min: 'Min Total:',
+                filter_total_max: 'Max Total:',
+                quick_multiply: 'Quick Multiply',
+                copies: 'Number of Copies',
+                save_receipt: 'Save as New Receipt',
+                export: 'Export',
+                export_excel: 'Export as Excel',
+                qr_code: 'Generate QR Code',
+                resize_display: 'Display Area Size:',
+                error_invalid_prices: 'Please enter a valid price (numbers only, no letters).',
+                error_invalid_percentage: 'Please enter a valid discount percentage (0-100).',
+                error_invalid_rounding_step: 'Please enter a valid rounding step (number greater than 0).',
+                error_invalid_copies: 'Please enter a valid number of copies (1 or more).',
+                success_settings_saved: 'Settings saved successfully!',
+                success_receipt_saved: 'Receipt saved successfully!',
+                success_receipt_exported: 'Receipt exported successfully!',
+                success_excel_exported: 'Receipt exported as Excel successfully!',
+                success_qr_generated: 'QR Code generated successfully!',
+                about_content: 'This app was developed by Mina Fawzy, a passionate programmer aiming to provide simple and effective solutions. Contact: github.com/mina-fawzy-dev',
+                offline_mode: 'Offline Mode: The app is running without an internet connection.',
+                close: 'Close'
+            }
+        };
+
+        function App() {
+            const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+            const [priceInput, setPriceInput] = useState('');
+            const [displayPrices, setDisplayPrices] = useState(localStorage.getItem('displayPrices') || '');
+            const [displayLines, setDisplayLines] = useState(JSON.parse(localStorage.getItem('displayLines')) || []);
+            const [displayHeight, setDisplayHeight] = useState(localStorage.getItem('displayHeight') || 150);
+            const [percentage, setPercentage] = useState(localStorage.getItem('percentage') || 10);
+            const [roundingStep, setRoundingStep] = useState(localStorage.getItem('roundingStep') || 5);
+            const [results, setResults] = useState(JSON.parse(localStorage.getItem('results')) || { prices: [], discounts: [], final_prices: [], price_before_rounding: [], rounded_diff: [] });
+            const [totals, setTotals] = useState(JSON.parse(localStorage.getItem('totals')) || { total_original: 0, total_discount: 0, total_final: 0 });
+            const [error, setError] = useState('');
+            const [notification, setNotification] = useState('');
+            const [showReceipts, setShowReceipts] = useState(false);
+            const [receipts, setReceipts] = useState(JSON.parse(localStorage.getItem('receipts')) || []);
+            const [showAbout, setShowAbout] = useState(false);
+            const [showSettings, setShowSettings] = useState(false);
+            const [sortOption, setSortOption] = useState('date_desc');
+            const [filterDate, setFilterDate] = useState('');
+            const [filterTotalMin, setFilterTotalMin] = useState('');
+            const [filterTotalMax, setFilterTotalMax] = useState('');
+            const [selectedReceipt, setSelectedReceipt] = useState(null);
+            const [multiplyCount, setMultiplyCount] = useState('');
+            const [isOnline, setIsOnline] = useState(navigator.onLine);
+            const displayRef = useRef(null);
+            const inputRef = useRef(null);
+
+            const t = translations.en;
+            const keypadLayout = [
+                '7', '8', '9',
+                '4', '5', '6',
+                '1', '2', '3',
+                '0', '.', t.enter_line
+            ];
+            const actionLayout = [t.ce, t.clear, t.reset];
+
+            useEffect(() => {
+                const handleOnline = () => {
+                    setIsOnline(true);
+                    setNotification('');
+                };
+                const handleOffline = () => {
+                    setIsOnline(false);
+                    setNotification(t.offline_mode);
+                };
+                window.addEventListener('online', handleOnline);
+                window.addEventListener('offline', handleOffline);
+
+                const handleKeyDown = (e) => {
+                    if (e.key === 'Enter' && !showReceipts && !showAbout && !showSettings && !selectedReceipt) {
+                        e.preventDefault();
+                        handleKeypadInput('Enter');
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+
+                document.body.className = `bg-gray-50 ${theme === 'dark' ? 'dark-mode' : ''}`;
+                localStorage.setItem('theme', theme);
+                localStorage.setItem('displayPrices', displayPrices);
+                localStorage.setItem('displayLines', JSON.stringify(displayLines));
+                localStorage.setItem('displayHeight', displayHeight);
+                localStorage.setItem('percentage', percentage);
+                localStorage.setItem('roundingStep', roundingStep);
+                localStorage.setItem('results', JSON.stringify(results));
+                localStorage.setItem('totals', JSON.stringify(totals));
+                localStorage.setItem('receipts', JSON.stringify(receipts));
+
+                if (inputRef.current) {
+                    inputRef.current.focus();
+                }
+
+                return () => {
+                    window.removeEventListener('online', handleOnline);
+                    window.removeEventListener('offline', handleOffline);
+                    window.removeEventListener('keydown', handleKeyDown);
+                };
+            }, [theme, displayPrices, displayLines, displayHeight, percentage, roundingStep, results, totals, receipts, showReceipts, showAbout, showSettings, selectedReceipt]);
+
+            const showNotification = (message) => {
+                setNotification(message);
+                setTimeout(() => setNotification(''), 3000);
+            };
+
+            const handleKeypadInput = (value) => {
+                console.log('Keypad input:', value, 'Current priceInput:', priceInput);
+                if (value === 'CE') {
+                    setPriceInput(priceInput.slice(0, -1));
+                } else if (value === 'Enter' || value === t.enter_line) {
+                    const price = parseFloat(priceInput);
+                    if (!isNaN(price) && price >= 0) {
+                        console.log('Valid price:', price);
+                        const lastLine = displayLines.length > 0 ? displayLines[displayLines.length - 1] : [];
+                        const newLine = lastLine.length >= 5 ? [] : lastLine;
+                        const updatedLines = lastLine.length >= 5 ? [...displayLines, [priceInput]] : [...displayLines.slice(0, -1), [...newLine, priceInput]];
+                        console.log('Updated lines:', updatedLines);
+                        setDisplayLines(updatedLines);
+                        setDisplayPrices(updatedLines.map(line => line.join(' ')).join('\n'));
+                        setPriceInput('');
+                        if (displayRef.current) {
+                            displayRef.current.classList.add('added');
+                            setTimeout(() => displayRef.current.classList.remove('added'), 300);
+                            displayRef.current.scrollTop = displayRef.current.scrollHeight;
+                        }
+                        if (inputRef.current) {
+                            inputRef.current.focus();
+                        }
+                    } else {
+                        console.log('Invalid price:', priceInput);
+                        setError(t.error_invalid_prices);
+                        inputRef.current.classList.add('animate-shake');
+                        setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                    }
+                } else if (value === '.') {
+                    if (!priceInput.includes('.') && !priceInput.endsWith('.')) {
+                        setPriceInput(priceInput + value);
+                    }
+                } else if (/^\d$/.test(value)) {
+                    setPriceInput(priceInput + value);
+                }
+            };
+
+            const handleInputChange = (e) => {
+                const value = e.target.value;
+                if (/^[0-9.]*$/.test(value)) {
+                    setPriceInput(value);
+                    setError('');
+                } else {
+                    setError(t.error_invalid_prices);
+                    inputRef.current.classList.add('animate-shake');
+                    setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                }
+            };
+
+            const handleCalculate = () => {
+                const prices = displayLines.flat().map(Number);
+                const validPrices = prices.filter(p => !isNaN(p) && p >= 0);
+
+                if (!validPrices.length) {
+                    setError(t.error_invalid_prices);
+                    inputRef.current.classList.add('animate-shake');
+                    setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                    return;
+                }
+
+                if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+                    setError(t.error_invalid_percentage);
+                    return;
+                }
+
+                if (isNaN(roundingStep) || roundingStep <= 0) {
+                    setError(t.error_invalid_rounding_step);
+                    return;
+                }
+
+                const discounts = [];
+                const final_prices = [];
+                const price_before_rounding = [];
+                const rounded_diff = [];
+                let total_original = 0;
+                let total_discount = 0;
+                let total_final = 0;
+
+                validPrices.forEach(price => {
+                    total_original += price;
+                    const discount = price * (percentage / 100);
+                    const discounted_price = price - discount;
+                    const rounded_price = Math.round(discounted_price / roundingStep) * roundingStep;
+                    discounts.push(discount);
+                    final_prices.push(rounded_price);
+                    price_before_rounding.push(discounted_price);
+                    rounded_diff.push(rounded_price - discounted_price);
+                    total_final += rounded_price;
+                    total_discount += discount;
+                });
+
+                const newResults = { prices: validPrices, discounts, final_prices, price_before_rounding, rounded_diff };
+                setResults(newResults);
+                setTotals({ total_original, total_discount, total_final });
+                setError('');
+
+                const newReceipt = {
+                    id: Date.now(),
+                    date: new Date().toISOString().split('T')[0],
+                    total_original,
+                    total_final,
+                    item_count: validPrices.length,
+                    original_prices: validPrices.join(','),
+                    discounted_prices: final_prices.join(',')
+                };
+                const updatedReceipts = [newReceipt, ...receipts.slice(0, 9)];
+                setReceipts(updatedReceipts);
+                setDisplayPrices('');
+                setDisplayLines([]);
+                showNotification(t.success_receipt_saved);
+            };
+
+            const handleQuickMultiply = () => {
+                if (!selectedReceipt || isNaN(multiplyCount) || multiplyCount < 1) {
+                    setError(t.error_invalid_copies);
+                    return;
+                }
+
+                const originalPrices = selectedReceipt.original_prices.split(',').map(Number);
+                const multipliedPrices = Array(parseInt(multiplyCount)).fill().flatMap(() => originalPrices);
+                const discounts = multipliedPrices.map(price => price * (percentage / 100));
+                const final_prices = multipliedPrices.map(price => {
+                    const discounted_price = price - (price * (percentage / 100));
+                    return Math.round(discounted_price / roundingStep) * roundingStep;
+                });
+
+                const newReceipt = {
+                    id: Date.now(),
+                    date: new Date().toISOString().split('T')[0],
+                    total_original: selectedReceipt.total_original * multiplyCount,
+                    total_final: final_prices.reduce((sum, price) => sum + price, 0),
+                    item_count: multipliedPrices.length,
+                    original_prices: multipliedPrices.join(','),
+                    discounted_prices: final_prices.join(',')
+                };
+
+                setReceipts([newReceipt, ...receipts.slice(0, 9)]);
+                setSelectedReceipt(null);
+                setMultiplyCount('');
+                showNotification(t.success_receipt_saved);
+            };
+
+            const handleExport = (receipt) => {
+                const text = `
+${t.original_price}: ${receipt.original_prices}
+${t.final_price}: ${receipt.discounted_prices}
+${t.total_before}: ${receipt.total_original.toFixed(2)}
+${t.total_after}: ${receipt.total_final.toFixed(2)}
+${t.date}: ${receipt.date}
+${t.sort_items_asc}: ${receipt.item_count}
+`;
+                navigator.clipboard.writeText(text);
+                showNotification(t.success_receipt_exported);
+            };
+
+            const handleExportExcel = (receipt) => {
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const data = [
+                    [t.original_price, receipt.original_prices],
+                    [t.final_price, receipt.discounted_prices],
+                    [t.total_before, receipt.total_original.toFixed(2)],
+                    [t.total_after, receipt.total_final.toFixed(2)],
+                    [t.date, receipt.date],
+                    [t.sort_items_asc, receipt.item_count]
+                ];
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Receipt');
+                XLSX.writeFile(wb, `Receipt_${receipt.date}_${timestamp}.xlsx`);
+                showNotification(t.success_excel_exported);
+            };
+
+            const handleQRCode = (receipt) => {
+                const text = `
+${t.original_price}: ${receipt.original_prices}
+${t.final_price}: ${receipt.discounted_prices}
+${t.total_before}: ${receipt.total_original.toFixed(2)}
+${t.total_after}: ${receipt.total_final.toFixed(2)}
+${t.date}: ${receipt.date}
+${t.sort_items_asc}: ${receipt.item_count}
+`;
+                const qrCanvas = document.createElement('canvas');
+                QRCode.toCanvas(qrCanvas, text, { width: 200, color: { dark: theme === 'dark' ? '#e2e8f0' : '#1a202c' } }, (error) => {
+                    if (error) {
+                        setError('Failed to generate QR Code');
+                        return;
+                    }
+                    const link = document.createElement('a');
+                    link.href = qrCanvas.toDataURL('image/png');
+                    link.download = `Receipt_${receipt.date}_QR.png`;
+                    link.click();
+                    showNotification(t.success_qr_generated);
+                });
+            };
+
+            const handleClear = () => {
+                setPriceInput('');
+                setDisplayPrices('');
+                setDisplayLines([]);
+                setResults({ prices: [], discounts: [], final_prices: [], price_before_rounding: [], rounded_diff: [] });
+                setTotals({ total_original: 0, total_discount: 0, total_final: 0 });
+                setError('');
+            };
+
+            const handleReset = () => {
+                setPriceInput('');
+                setDisplayPrices('');
+                setDisplayLines([]);
+                setDisplayHeight(150);
+                setPercentage(10);
+                setRoundingStep(5);
+                setResults({ prices: [], discounts: [], final_prices: [], price_before_rounding: [], rounded_diff: [] });
+                setTotals({ total_original: 0, total_discount: 0, total_final: 0 });
+                setReceipts([]);
+                setError('');
+                localStorage.clear();
+                showNotification(t.success_settings_saved);
+            };
+
+            const handleSaveSettings = () => {
+                if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+                    setError(t.error_invalid_percentage);
+                    return;
+                }
+                if (isNaN(roundingStep) || roundingStep <= 0) {
+                    setError(t.error_invalid_rounding_step);
+                    return;
+                }
+                showNotification(t.success_settings_saved);
+                setShowSettings(false);
+            };
+
+            const sortedAndFilteredReceipts = () => {
+                let filtered = [...receipts];
+                if (filterDate) {
+                    filtered = filtered.filter(r => r.date === filterDate);
+                }
+                if (filterTotalMin) {
+                    filtered = filtered.filter(r => r.total_final >= Number(filterTotalMin));
+                }
+                if (filterTotalMax) {
+                    filtered = filtered.filter(r => r.total_final <= Number(filterTotalMax));
+                }
+                return filtered.sort((a, b) => {
+                    if (sortOption === 'date_asc') return new Date(a.date) - new Date(b.date);
+                    if (sortOption === 'date_desc') return new Date(b.date) - new Date(a.date);
+                    if (sortOption === 'total_asc') return a.total_final - b.total_final;
+                    if (sortOption === 'total_desc') return b.total_final - a.total_final;
+                    if (sortOption === 'items_asc') return a.item_count - b.item_count;
+                    if (sortOption === 'items_desc') return b.item_count - a.item_count;
+                    return 0;
+                });
+            };
+
+            if (showAbout) {
+                return (
+                    <div className="bg-card p-6 rounded-xl shadow-lg">
+                        <h1 className="text-2xl font-bold mb-4 sm:text-xl">{t.about}</h1>
+                        <p className="text-gray-600 mb-6 text-sm">{t.about_content}</p>
+                        <button
+                            className="action-button w-full py-3 sm:py-2"
+                            onClick={() => setShowAbout(false)}
+                            aria-label="Back"
+                        >
+                            Back
+                        </button>
+                    </div>
+                );
+            }
+
+            if (showReceipts) {
+                return (
+                    <div className="bg-card p-6 rounded-xl shadow-lg">
+                        <h1 className="text-2xl font-bold mb-4 sm:text-xl">{t.receipts}</h1>
+                        <div className="filter-box">
+                            <select
+                                value={sortOption}
+                                onChange={(e) => setSortOption(e.target.value)}
+                                className="text-sm"
+                                aria-label={t.sort_by}
+                            >
+                                <option value="date_desc">{t.sort_date_desc}</option>
+                                <option value="date_asc">{t.sort_date_asc}</option>
+                                <option value="total_asc">{t.sort_total_asc}</option>
+                                <option value="total_desc">{t.sort_total_desc}</option>
+                                <option value="items_asc">{t.sort_items_asc}</option>
+                                <option value="items_desc">{t.sort_items_desc}</option>
+                            </select>
+                            <input
+                                type="date"
+                                value={filterDate}
+                                onChange={(e) => setFilterDate(e.target.value)}
+                                placeholder={t.filter_date}
+                                className="text-sm"
+                                aria-label={t.filter_date}
+                            />
+                            <input
+                                type="number"
+                                value={filterTotalMin}
+                                onChange={(e) => setFilterTotalMin(e.target.value)}
+                                placeholder={t.filter_total_min}
+                                className="text-sm"
+                                aria-label={t.filter_total_min}
+                            />
+                            <input
+                                type="number"
+                                value={filterTotalMax}
+                                onChange={(e) => setFilterTotalMax(e.target.value)}
+                                placeholder={t.filter_total_max}
+                                className="text-sm"
+                                aria-label={t.filter_total_max}
+                            />
+                        </div>
+                        {sortedAndFilteredReceipts().map((receipt, index) => (
+                            <div key={index} className="receipt-card">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <p className="text-sm font-semibold">{t.date}: {receipt.date}</p>
+                                        <p className="text-sm">{t.total_before} {receipt.total_original.toFixed(2)}</p>
+                                        <p className="text-sm">{t.total_after} {receipt.total_final.toFixed(2)}</p>
+                                        <p className="text-sm">{t.sort_items_asc}: {receipt.item_count}</p>
+                                    </div>
+                                    <div className="flex gap-2 flex-wrap">
+                                        <button
+                                            className="action-button py-1 px-3 text-sm"
+                                            onClick={() => setSelectedReceipt(receipt)}
+                                            aria-label={t.quick_multiply}
+                                        >
+                                            {t.quick_multiply}
+                                        </button>
+                                        <button
+                                            className="action-button py-1 px-3 text-sm"
+                                            onClick={() => handleExport(receipt)}
+                                            aria-label={t.export}
+                                        >
+                                            {t.export}
+                                        </button>
+                                        <button
+                                            className="action-button py-1 px-3 text-sm"
+                                            onClick={() => handleExportExcel(receipt)}
+                                            aria-label={t.export_excel}
+                                        >
+                                            {t.export_excel}
+                                        </button>
+                                        <button
+                                            className="action-button py-1 px-3 text-sm"
+                                            onClick={() => handleQRCode(receipt)}
+                                            aria-label={t.qr_code}
+                                        >
+                                            {t.qr_code}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                        {selectedReceipt && (
+                            <div className="receipt-card">
+                                <h2 className="text-lg font-semibold mb-2 sm:text-base">{t.quick_multiply}</h2>
+                                <input
+                                    type="number"
+                                    value={multiplyCount}
+                                    onChange={(e) => setMultiplyCount(e.target.value)}
+                                    placeholder={t.copies}
+                                    className="w-full p-2 mb-2 border rounded text-sm"
+                                    min="1"
+                                    aria-label={t.copies}
+                                />
+                                <div className="flex gap-2">
+                                    <button
+                                        className="action-button w-full py-2 text-sm"
+                                        onClick={handleQuickMultiply}
+                                        aria-label={t.save_receipt}
+                                    >
+                                        {t.save_receipt}
+                                    </button>
+                                    <button
+                                        className="action-button w-full py-2 text-sm"
+                                        onClick={() => setSelectedReceipt(null)}
+                                        aria-label="Cancel"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        <button
+                            className="action-button w-full py-3 sm:py-2"
+                            onClick={() => setShowReceipts(false)}
+                            aria-label="Back"
+                        >
+                            Back
+                        </button>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="bg-card p-6 rounded-xl shadow-lg" dir="ltr">
+                    {notification && <div className="notification">{notification}</div>}
+                    <div className="flex justify-between items-center mb-6">
+                        <h1 className="text-2xl font-bold sm:text-xl">{t.title}</h1>
+                        <div className="flex gap-3">
+                            <button
+                                className="text-blue-600 hover:text-blue-800 text-sm font-semibold transition-colors"
+                                onClick={() => {
+                                    setTheme(theme === 'light' ? 'dark' : 'light');
+                                    setShowSettings(false);
+                                }}
+                                aria-label={t.toggle_theme}
+                            >
+                                {theme === 'light' ? '🌙' : '☀️'}
+                            </button>
+                            <button
+                                className="text-blue-600 hover:text-blue-800 text-sm font-semibold transition-colors"
+                                onClick={() => {
+                                    setShowAbout(true);
+                                    setShowSettings(false);
+                                }}
+                                aria-label={t.about}
+                            >
+                                {t.about}
+                            </button>
+                        </div>
+                    </div>
+
+                    {error && (
+                        <div className="error-alert">
+                            {error}
+                            <button onClick={() => setError('')} aria-label={t.close}>×</button>
+                        </div>
+                    )}
+
+                    <div className="mb-6">
+                        <input
+                            type="text"
+                            className="input-box w-full"
+                            value={priceInput}
+                            onChange={handleInputChange}
+                            placeholder={t.prices_placeholder}
+                            aria-label={t.enter_prices}
+                            ref={inputRef}
+                        />
+                        <div
+                            className="display-box"
+                            style={{ height: `${displayHeight}px` }}
+                            ref={displayRef}
+                            aria-label="Entered prices"
+                        >
+                            {displayPrices || t.prices_placeholder}
+                        </div>
+                        <label className="block mb-1 text-sm mt-2">{t.resize_display}</label>
+                        <input
+                            type="range"
+                            className="resize-slider"
+                            min="50"
+                            max="300"
+                            value={displayHeight}
+                            onChange={(e) => setDisplayHeight(e.target.value)}
+                            aria-label={t.resize_display}
+                        />
+                    </div>
+
+                    <div className={`settings-box ${showSettings ? 'visible' : 'hidden'}`}>
+                        <div className="mb-4">
+                            <label className="block mb-1 text-sm font-semibold">{t.percentage_label}</label>
+                            <input
+                                type="number"
+                                className="w-full p-2 border rounded-lg text-sm"
+                                value={percentage}
+                                onChange={(e) => setPercentage(e.target.value)}
+                                min="0"
+                                max="100"
+                                aria-label={t.percentage_label}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block mb-1 text-sm font-semibold">{t.rounding_step}</label>
+                            <input
+                                type="number"
+                                className="w-full p-2 border rounded-lg text-sm"
+                                value={roundingStep}
+                                onChange={(e) => setRoundingStep(e.target.value)}
+                                min="0"
+                                aria-label={t.rounding_step}
+                            />
+                        </div>
+                        <button
+                            className="action-button w-full py-2 text-sm"
+                            onClick={handleSaveSettings}
+                            aria-label={t.save_settings}
+                        >
+                            {t.save_settings}
+                        </button>
+                    </div>
+
+                    <button
+                        className="text-blue-600 hover:text-blue-800 mb-4 flex items-center text-sm font-semibold"
+                        onClick={() => setShowSettings(!showSettings)}
+                        aria-label={showSettings ? 'Hide Settings' : t.toggle_settings}
+                    >
+                        {showSettings ? 'Hide Settings' : t.toggle_settings}
+                        <svg className={`w-4 h-4 ml-1 transform ${showSettings ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div className="keypad-container">
+                        <div className="keypad-grid">
+                            {keypadLayout.map((key, index) => (
+                                <button
+                                    key={index}
+                                    className={`keypad-button py-3 sm:py-2 ${key === t.enter_line ? 'action-button' : ''}`}
+                                    onClick={() => handleKeypadInput(key)}
+                                    aria-label={key}
+                                >
+                                    {key}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="action-grid">
+                            {actionLayout.map((key, index) => (
+                                <button
+                                    key={index}
+                                    className={`action-button py-3 sm:py-2 ${key === t.clear || key === t.reset ? 'bg-gray-500 hover:bg-gray-600' : ''}`}
+                                    onClick={() => {
+                                        if (key === t.clear) {
+                                            handleClear();
+                                        } else if (key === t.reset) {
+                                            handleReset();
+                                        } else if (key === t.ce) {
+                                            handleKeypadInput('CE');
+                                        }
+                                    }}
+                                    aria-label={key}
+                                >
+                                    {key}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mt-6">
+                        <button
+                            className="action-button py-3 sm:py-2"
+                            onClick={handleCalculate}
+                            aria-label={t.calculate}
+                        >
+                            {t.calculate}
+                        </button>
+                        <button
+                            className="action-button py-3 sm:py-2"
+                            onClick={() => {
+                                setShowReceipts(true);
+                                setShowSettings(false);
+                            }}
+                            aria-label={t.receipts}
+                        >
+                            {t.receipts}
+                        </button>
+                    </div>
+
+                    {results.prices.length > 0 && (
+                        <div className="mt-6">
+                            <h2 className="text-lg font-semibold mb-4 sm:text-base">{t.title}</h2>
+                            <div className="bg-gray-100 rounded-lg p-4">
+                                <table className="w-full border-collapse">
+                                    <thead>
+                                        <tr className="bg-gray-200">
+                                            <th className="p-2 text-sm font-semibold">{t.original_price}</th>
+                                            <th className="p-2 text-sm font-semibold">{t.discount}</th>
+                                            <th className="p-2 text-sm font-semibold">{t.final_price}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {results.prices.map((price, index) => (
+                                            <tr key={index}>
+                                                <td className="p-2 text-sm">{price.toFixed(2)}</td>
+                                                <td className="p-2 text-sm">{results.discounts[index].toFixed(2)}</td>
+                                                <td className="p-2 text-sm">{results.final_prices[index].toFixed(2)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                <div className="flex flex-col gap-2 mt-4 text-sm">
+                                    <p className="font-semibold">{t.total_before} {totals.total_original.toFixed(2)}</p>
+                                    <p className="font-semibold">{t.total_discount} {totals.total_discount.toFixed(2)}</p>
+                                    <p className="font-semibold">{t.total_after} {totals.total_final.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {results.prices.length > 0 && (
+                        <div className="mt-6">
+                            <h2 className="text-lg font-semibold mb-4 sm:text-base">{t.discount_details}</h2>
+                            <div className="bg-gray-100 rounded-lg p-4">
+                                <table className="w-full border-collapse">
+                                    <thead>
+                                        <tr className="bg-gray-200">
+                                            <th className="p-2 text-sm font-semibold">{t.original_price}</th>
+                                            <th className="p-2 text-sm font-semibold">{t.price_before_rounding}</th>
+                                            <th className="p-2 text-sm font-semibold">{t.final_price}</th>
+                                            <th className="p-2 text-sm font-semibold">{t.rounded_diff}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {results.prices.map((price, index) => (
+                                            <tr key={index}>
+                                                <td className="p-2 text-sm">{price.toFixed(2)}</td>
+                                                <td className="p-2 text-sm">{results.price_before_rounding[index].toFixed(2)}</td>
+                                                <td className="p-2 text-sm">{results.final_prices[index].toFixed(2)}</td>
+                                                <td className="p-2 text-sm">{results.rounded_diff[index].toFixed(2)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
