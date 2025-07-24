@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
     <title>Book Discount Calculator</title>
     <meta name="description" content="A modern app to calculate book discounts with ease">
-    <meta name="theme-color" content="#f7fafc">
-    <script src="static/js/tailwind.css.js"></script>
-    <script src="static/css/tailwind.min.css"></script>
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="static/css/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="static/js/react.production.min.js"></script>
     <script src="static/js/react-dom.production.min.js"></script>
     <script src="static/js/babel.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <script src="static/js/xlsx.full.min.js"></script>
     <style>
         @tailwind base;
         @tailwind components;
@@ -30,14 +26,18 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7fafc;
-            color: #1a202c;
+            background-color: #ffffff;
+            color: #1e3a8a;
             transition: background-color 0.3s, color 0.3s;
         }
 
         body.dark-mode {
-            background-color: #1a202c;
-            color: #e2e8f0;
+            background-color: #1e3a8a;
+            color: #e5e7eb;
+        }
+
+        body[lang="ar"] {
+            font-family: 'Inter', sans-serif;
         }
 
         .container {
@@ -47,40 +47,40 @@
         }
 
         .bg-card {
-            background-color: #ffffff;
+            background-color: #f9fafb;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         body.dark-mode .bg-card {
-            background-color: #2d3748;
+            background-color: #2c4a9b;
         }
 
         .input-box {
             width: 100%;
             padding: 0.5rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #d1d5db;
             border-radius: 0.375rem;
-            background-color: #f7fafc;
+            background-color: #f9fafb;
             font-size: 0.875rem;
-            text-align: left;
-            transition: border-color 0.3s, background-color 0.3s;
+            text-align: start;
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
         }
 
         body.dark-mode .input-box {
-            background-color: #4a5568;
-            border-color: #718096;
-            color: #e2e8f0;
+            background-color: #374151;
+            border-color: #6b7280;
+            color: #e5e7eb;
         }
 
         .input-box:focus {
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
         }
 
         .action-button {
-            background-color: #3b82f6;
+            background-color: #2563eb;
             color: #ffffff;
             padding: 0.5rem 1rem;
             border-radius: 0.375rem;
@@ -92,78 +92,38 @@
         }
 
         .action-button:hover {
-            background-color: #2563eb;
+            background-color: #1e40af;
         }
 
         .action-button:active {
             transform: scale(0.98);
         }
 
-        .action-button.bg-green-600 { background-color: #10b981; }
-        .action-button.bg-green-600:hover { background-color: #059669; }
-        .action-button.bg-red-600 { background-color: #ef4444; }
-        .action-button.bg-red-600:hover { background-color: #dc2626; }
-        .action-button.bg-blue-600 { background-color: #3b82f6; }
-        .action-button.bg-blue-600:hover { background-color: #2563eb; }
-        .action-button.bg-orange-600 { background-color: #f59e0b; }
-        .action-button.bg-orange-600:hover { background-color: #d97706; }
-        .action-button.bg-purple-600 { background-color: #8b5cf6; }
-        .action-button.bg-purple-600:hover { background-color: #7c3aed; }
+        .action-button.bg-green-600 { background-color: #16a34a; }
+        .action-button.bg-green-600:hover { background-color: #15803d; }
+        .action-button.bg-red-600 { background-color: #dc2626; }
+        .action-button.bg-red-600:hover { background-color: #b91c1c; }
+        .action-button.bg-blue-600 { background-color: #2563eb; }
+        .action-button.bg-blue-600:hover { background-color: #1e40af; }
+        .action-button.bg-orange-600 { background-color: #ea580c; }
+        .action-button.bg-orange-600:hover { background-color: #c2410c; }
+        .action-button.bg-purple-600 { background-color: #7c3aed; }
+        .action-button.bg-purple-600:hover { background-color: #6d28d9; }
         .action-button.bg-gray-500 { background-color: #6b7280; }
         .action-button.bg-gray-500:hover { background-color: #4b5563; }
 
-        body.dark-mode .action-button.bg-green-600 { background-color: #34d399; }
-        body.dark-mode .action-button.bg-green-600:hover { background-color: #10b981; }
-        body.dark-mode .action-button.bg-red-600 { background-color: #f87171; }
-        body.dark-mode .action-button.bg-red-600:hover { background-color: #ef4444; }
-        body.dark-mode .action-button.bg-blue-600 { background-color: #60a5fa; }
-        body.dark-mode .action-button.bg-blue-600:hover { background-color: #3b82f6; }
-        body.dark-mode .action-button.bg-orange-600 { background-color: #fbbf24; }
-        body.dark-mode .action-button.bg-orange-600:hover { background-color: #f59e0b; }
-        body.dark-mode .action-button.bg-purple-600 { background-color: #a78bfa; }
-        body.dark-mode .action-button.bg-purple-600:hover { background-color: #8b5cf6; }
+        body.dark-mode .action-button.bg-green-600 { background-color: #22c55e; }
+        body.dark-mode .action-button.bg-green-600:hover { background-color: #16a34a; }
+        body.dark-mode .action-button.bg-red-600 { background-color: #ef4444; }
+        body.dark-mode .action-button.bg-red-600:hover { background-color: #dc2626; }
+        body.dark-mode .action-button.bg-blue-600 { background-color: #3b82f6; }
+        body.dark-mode .action-button.bg-blue-600:hover { background-color: #2563eb; }
+        body.dark-mode .action-button.bg-orange-600 { background-color: #f97316; }
+        body.dark-mode .action-button.bg-orange-600:hover { background-color: #ea580c; }
+        body.dark-mode .action-button.bg-purple-600 { background-color: #8b5cf6; }
+        body.dark-mode .action-button.bg-purple-600:hover { background-color: #7c3aed; }
         body.dark-mode .action-button.bg-gray-500 { background-color: #4b5563; }
         body.dark-mode .action-button.bg-gray-500:hover { background-color: #374151; }
-
-        .keypad-container {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        }
-
-        .keypad-container.visible {
-            max-height: 500px;
-            opacity: 1;
-        }
-
-        .keypad-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-        }
-
-        .keypad-button {
-            background-color: #edf2f7;
-            padding: 1rem;
-            border-radius: 0.375rem;
-            font-size: 1.25rem;
-            text-align: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .keypad-button:hover {
-            background-color: #e2e8f0;
-        }
-
-        body.dark-mode .keypad-button {
-            background-color: #4a5568;
-        }
-
-        body.dark-mode .keypad-button:hover {
-            background-color: #718096;
-        }
 
         .action-grid {
             display: grid;
@@ -173,18 +133,18 @@
         }
 
         .display-box {
-            max-height: 150px;
+            max-height: 500px;
             overflow-y: auto;
-            background-color: #f7fafc;
-            border: 1px solid #e2e8f0;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
             border-radius: 0.375rem;
             padding: 0.5rem;
             margin-top: 0.5rem;
         }
 
         body.dark-mode .display-box {
-            background-color: #4a5568;
-            border-color: #718096;
+            background-color: #374151;
+            border-color: #6b7280;
         }
 
         .price-item {
@@ -195,26 +155,26 @@
         }
 
         .price-item input[type="checkbox"] {
-            margin-right: 0.5rem;
+            margin-inline-end: 0.5rem;
         }
 
-        .price-item input[type="text"] {
+        .price-item input[type="number"] {
             width: 60%;
             padding: 0.25rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #d1d5db;
             border-radius: 0.25rem;
-            text-align: left;
+            text-align: start;
             font-size: 0.875rem;
         }
 
-        body.dark-mode .price-item input[type="text"] {
-            background-color: #2d3748;
-            border-color: #718096;
-            color: #e2e8f0;
+        body.dark-mode .price-item input[type="number"] {
+            background-color: #374151;
+            border-color: #6b7280;
+            color: #e5e7eb;
         }
 
         .delete-btn {
-            background-color: #ef4444;
+            background-color: #dc2626;
             color: #ffffff;
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
@@ -223,7 +183,15 @@
             transition: background-color 0.3s;
         }
 
+        body.dark-mode .delete-btn {
+            background-color: #ef4444;
+        }
+
         .delete-btn:hover {
+            background-color: #b91c1c;
+        }
+
+        body.dark-mode .delete-btn:hover {
             background-color: #dc2626;
         }
 
@@ -238,12 +206,12 @@
         }
 
         .settings-box input {
-            background-color: #f7fafc;
+            background-color: #f9fafb;
         }
 
         body.dark-mode .settings-box input {
-            background-color: #4a5568;
-            color: #e2e8f0;
+            background-color: #374151;
+            color: #e5e7eb;
         }
 
         .notification {
@@ -251,7 +219,7 @@
             top: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #10b981;
+            background-color: #16a34a;
             color: #ffffff;
             padding: 0.75rem 1.5rem;
             border-radius: 0.375rem;
@@ -261,7 +229,7 @@
         }
 
         body.dark-mode .notification {
-            background-color: #34d399;
+            background-color: #22c55e;
         }
 
         @keyframes slideIn {
@@ -278,8 +246,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #fed7d7;
-            color: #c53030;
+            background-color: #fee2e2;
+            color: #b91c1c;
             padding: 0.75rem;
             border-radius: 0.375rem;
             margin-bottom: 1rem;
@@ -287,31 +255,31 @@
         }
 
         body.dark-mode .error-alert {
-            background-color: #742a2a;
-            color: #feb2b2;
+            background-color: #7f1d1d;
+            color: #f87171;
         }
 
         .error-alert button {
             background: none;
             border: none;
-            color: #c53030;
+            color: #b91c1c;
             font-size: 1rem;
             cursor: pointer;
         }
 
         body.dark-mode .error-alert button {
-            color: #feb2b2;
+            color: #f87171;
         }
 
         .receipt-card {
-            background-color: #f7fafc;
+            background-color: #f9fafb;
             padding: 0.75rem;
             border-radius: 0.375rem;
             margin-bottom: 0.5rem;
         }
 
         body.dark-mode .receipt-card {
-            background-color: #4a5568;
+            background-color: #374151;
         }
 
         .filter-box {
@@ -324,16 +292,16 @@
         .filter-box select,
         .filter-box input {
             padding: 0.5rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #d1d5db;
             border-radius: 0.375rem;
             font-size: 0.875rem;
         }
 
         body.dark-mode .filter-box select,
         body.dark-mode .filter-box input {
-            background-color: #4a5568;
-            border-color: #718096;
-            color: #e2e8f0;
+            background-color: #374151;
+            border-color: #6b7280;
+            color: #e5e7eb;
         }
 
         table {
@@ -343,24 +311,24 @@
 
         th, td {
             padding: 0.5rem;
-            text-align: left;
+            text-align: start;
             font-size: 0.875rem;
         }
 
         thead tr {
-            background-color: #edf2f7;
+            background-color: #e5e7eb;
         }
 
         body.dark-mode thead tr {
-            background-color: #4a5568;
+            background-color: #4b5563;
         }
 
         tbody tr:nth-child(even) {
-            background-color: #f7fafc;
+            background-color: #f9fafb;
         }
 
         body.dark-mode tbody tr:nth-child(even) {
-            background-color: #2d3748;
+            background-color: #374151;
         }
 
         .animate-shake {
@@ -376,18 +344,23 @@
         .fab-container {
             position: fixed;
             bottom: 2rem;
-            right: 2rem;
+            inset-inline-end: 2rem;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
             gap: 0.5rem;
         }
 
+        body[lang="ar"] .fab-container {
+            inset-inline-end: unset;
+            inset-inline-start: 2rem;
+        }
+
         .fab-main {
             width: 3.5rem;
             height: 3.5rem;
             border-radius: 50%;
-            background-color: #3b82f6;
+            background-color: #2563eb;
             color: white;
             display: flex;
             justify-content: center;
@@ -395,6 +368,10 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s;
+        }
+
+        body.dark-mode .fab-main {
+            background-color: #3b82f6;
         }
 
         .fab-main:hover {
@@ -418,17 +395,45 @@
             pointer-events: none;
         }
 
+        body.dark-mode .fab-option {
+            background-color: #4b5563;
+        }
+
         .fab-option.visible {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
 
+        .fab-option.bg-blue-600 {
+            background-color: #2563eb;
+        }
+
+        .fab-option.bg-blue-600:hover {
+            background-color: #1e40af;
+        }
+
+        body.dark-mode .fab-option.bg-blue-600 {
+            background-color: #3b82f6;
+        }
+
+        body.dark-mode .fab-option.bg-blue-600:hover {
+            background-color: #2563eb;
+        }
+
         .fab-option.bg-red-600 {
-            background-color: #ef4444;
+            background-color: #dc2626;
         }
 
         .fab-option.bg-red-600:hover {
+            background-color: #b91c1c;
+        }
+
+        body.dark-mode .fab-option.bg-red-600 {
+            background-color: #ef4444;
+        }
+
+        body.dark-mode .fab-option.bg-red-600:hover {
             background-color: #dc2626;
         }
 
@@ -438,6 +443,14 @@
 
         .fab-option.bg-gray-500:hover {
             background-color: #4b5563;
+        }
+
+        body.dark-mode .fab-option.bg-gray-500 {
+            background-color: #4b5563;
+        }
+
+        body.dark-mode .fab-option.bg-gray-500:hover {
+            background-color: #374151;
         }
 
         .confirmation-modal {
@@ -454,7 +467,7 @@
         }
 
         .confirmation-content {
-            background-color: white;
+            background-color: #f9fafb;
             padding: 2rem;
             border-radius: 0.5rem;
             max-width: 400px;
@@ -463,7 +476,7 @@
         }
 
         body.dark-mode .confirmation-content {
-            background-color: #2d3748;
+            background-color: #2c4a9b;
         }
 
         .confirmation-buttons {
@@ -478,14 +491,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            background-color: #3b82f6;
+            background-color: #2563eb;
             color: white;
             border-radius: 0.5rem;
             margin-bottom: 1rem;
         }
 
         body.dark-mode .header {
-            background-color: #2563eb;
+            background-color: #1e40af;
         }
 
         .header-title {
@@ -511,12 +524,8 @@
             .header-title {
                 font-size: 1rem;
             }
-            .action-button,
-            .keypad-button {
+            .action-button {
                 padding: 0.5rem;
-            }
-            .keypad-button {
-                font-size: 0.875rem;
             }
         }
     </style>
@@ -547,6 +556,13 @@
             </svg>
         );
 
+        const SettingsIcon = ({ size = 20 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l-.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+        );
+
         const translations = {
             en: {
                 title: 'Book Discount Calculator',
@@ -554,7 +570,6 @@
                 prices_placeholder: 'Enter a book price',
                 calculate: 'Calculate',
                 clear: 'Clear All',
-                ce: 'CE',
                 reset: 'Reset',
                 receipts: 'Receipts',
                 about: 'About the Developer',
@@ -562,6 +577,7 @@
                 rounding_step: 'Rounding Step:',
                 save_settings: 'Save',
                 toggle_theme: 'Toggle Theme',
+                toggle_language: 'ar',
                 toggle_settings: 'Settings',
                 original_price: 'Original Price',
                 discount: 'Discount',
@@ -572,7 +588,6 @@
                 discount_details: 'Discount Details',
                 rounded_diff: 'Rounding Difference',
                 price_before_rounding: 'Price Before Rounding',
-                enter_line: '⏎',
                 sort_by: 'Sort by:',
                 sort_date_asc: 'Date (Oldest)',
                 sort_date_desc: 'Date (Newest)',
@@ -595,29 +610,85 @@
                 error_invalid_prices: 'Please enter a valid price (numbers only, no letters).',
                 error_invalid_percentage: 'Please enter a valid discount percentage (0-100).',
                 error_invalid_rounding_step: 'Please enter a valid rounding step (number greater than 0).',
+                error_empty_prices: 'No valid prices to calculate. Please add at least one valid price.',
                 success_settings_saved: 'Settings saved successfully!',
                 success_receipt_saved: 'Receipt saved successfully!',
                 success_receipt_exported: 'Receipt exported successfully!',
                 success_excel_exported: 'Receipts exported as Excel successfully!',
                 about_content: 'This app was developed by Mina Fawzy, a passionate programmer aiming to provide simple and effective solutions. Contact: github.com/mina-fawzy-dev',
-                offline_mode: 'Offline Mode: The app is running without an internet connection.',
                 close: 'Close',
-                show_keypad: 'Show Keypad',
-                hide_keypad: 'Hide Keypad',
-                add_price: 'Add Price',
                 delete: 'Delete',
                 reset_confirmation: 'Are you sure you want to reset everything? This will delete all receipts and data permanently and cannot be undone.',
                 confirm: 'Confirm',
                 cancel: 'Cancel'
+            },
+            ar: {
+                title: 'حاسبة خصم الكتب',
+                enter_prices: 'أدخل الأسعار',
+                prices_placeholder: 'أدخل سعر كتاب',
+                calculate: 'احسب',
+                clear: 'مسح الكل',
+                reset: 'إعادة تعيين',
+                receipts: 'الإيصالات',
+                about: 'عن المطور',
+                percentage_label: 'نسبة الخصم %:',
+                rounding_step: 'خطوة التقريب:',
+                save_settings: 'حفظ',
+                toggle_theme: 'تبديل السمة',
+                toggle_language: 'en',
+                toggle_settings: 'الإعدادات',
+                original_price: 'السعر الأصلي',
+                discount: 'الخصم',
+                final_price: 'السعر النهائي',
+                total_before: '🟡 الإجمالي قبل الخصم:',
+                total_discount: '🟠 إجمالي الخصم:',
+                total_after: '🟢 الإجمالي بعد الخصم:',
+                discount_details: 'تفاصيل الخصم',
+                rounded_diff: 'فرق التقريب',
+                price_before_rounding: 'السعر قبل التقريب',
+                sort_by: 'ترتيب حسب:',
+                sort_date_asc: 'التاريخ (الأقدم)',
+                sort_date_desc: 'التاريخ (الأحدث)',
+                sort_total_asc: 'الإجمالي (تصاعدي)',
+                sort_total_desc: 'الإجمالي (تنازلي)',
+                sort_items_asc: 'عدد العناصر (تصاعدي)',
+                sort_items_desc: 'عدد العناصر (تنازلي)',
+                filter_date: 'تصفية حسب التاريخ:',
+                filter_total_min: 'الإجمالي الأدنى:',
+                filter_total_max: 'الإجمالي الأقصى:',
+                save_receipt: 'حفظ كإيصال جديد',
+                export: 'تصدير',
+                export_all_excel: 'تصدير الكل إلى Excel',
+                select_all: 'تحديد الكل',
+                deselect_all: 'إلغاء تحديد الكل',
+                export_selected: 'تصدير المحدد',
+                delete_selected: 'حذف المحدد',
+                delete_selected_prices: 'حذف الأسعار المحددة',
+                resize_display: 'حجم منطقة العرض:',
+                error_invalid_prices: 'يرجى إدخال سعر صالح (أرقام فقط، بدون حروف).',
+                error_invalid_percentage: 'يرجى إدخال نسبة خصم صالحة (0-100).',
+                error_invalid_rounding_step: 'يرجى إدخال خطوة تقريب صالحة (رقم أكبر من 0).',
+                error_empty_prices: 'لا توجد أسعار صالحة للحساب. يرجى إضافة سعر صالح واحد على الأقل.',
+                success_settings_saved: 'تم حفظ الإعدادات بنجاح!',
+                success_receipt_saved: 'تم حفظ الإيصال بنجاح!',
+                success_receipt_exported: 'تم تصدير الإيصال بنجاح!',
+                success_excel_exported: 'تم تصدير الإيصالات إلى Excel بنجاح!',
+                about_content: 'تم تطوير هذا التطبيق بواسطة مينا فوزي، مبرمج شغوف يهدف إلى تقديم حلول بسيطة وفعالة. التواصل: github.com/mina-fawzy-dev',
+                close: 'إغلاق',
+                delete: 'حذف',
+                reset_confirmation: 'هل أنت متأكد من إعادة تعيين كل شيء؟ سيؤدي هذا إلى حذف جميع الإيصالات والبيانات بشكل دائم ولا يمكن التراجع عنه.',
+                confirm: 'تأكيد',
+                cancel: 'إلغاء'
             }
         };
 
         function App() {
             const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+            const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
             const [priceInput, setPriceInput] = useState('');
             const [prices, setPrices] = useState(JSON.parse(localStorage.getItem('prices')) || []);
             const [selectedPrices, setSelectedPrices] = useState([]);
-            const [displayHeight, setDisplayHeight] = useState(localStorage.getItem('displayHeight') || 150);
+            const [displayHeight, setDisplayHeight] = useState(localStorage.getItem('displayHeight') || 500);
             const [percentage, setPercentage] = useState(localStorage.getItem('percentage') || 10);
             const [roundingStep, setRoundingStep] = useState(localStorage.getItem('roundingStep') || 5);
             const [results, setResults] = useState(JSON.parse(localStorage.getItem('results')) || { prices: [], discounts: [], final_prices: [], price_before_rounding: [], rounded_diff: [] });
@@ -633,16 +704,30 @@
             const [filterTotalMin, setFilterTotalMin] = useState('');
             const [filterTotalMax, setFilterTotalMax] = useState('');
             const [selectedReceipts, setSelectedReceipts] = useState([]);
-            const [isOnline, setIsOnline] = useState(navigator.onLine);
-            const [showKeypad, setShowKeypad] = useState(false);
             const [showFabOptions, setShowFabOptions] = useState(false);
             const [showResetConfirmation, setShowResetConfirmation] = useState(false);
             const displayRef = useRef(null);
             const inputRef = useRef(null);
 
-            const t = translations.en;
-            const keypadLayout = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', '.', t.enter_line];
-            const actionLayout = [t.ce];
+            const t = translations[language];
+
+            useEffect(() => {
+                document.body.className = theme === 'dark' ? 'dark-mode' : '';
+                document.documentElement.lang = language;
+                document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+                localStorage.setItem('language', language);
+            }, [theme, language]);
+
+            const toggleTheme = () => {
+                const newTheme = theme === 'light' ? 'dark' : 'light';
+                setTheme(newTheme);
+                localStorage.setItem('theme', newTheme);
+            };
+
+            const toggleLanguage = () => {
+                const newLanguage = language === 'en' ? 'ar' : 'en';
+                setLanguage(newLanguage);
+            };
 
             const handleInputChange = (e) => {
                 const value = e.target.value;
@@ -664,8 +749,11 @@
                     setError('');
                 } else {
                     setError(t.error_invalid_prices);
-                    inputRef.current.classList.add('animate-shake');
-                    setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                    const input = document.querySelector(`#price-input-${index}`);
+                    if (input) {
+                        input.classList.add('animate-shake');
+                        setTimeout(() => input.classList.remove('animate-shake'), 300);
+                    }
                 }
             };
 
@@ -725,21 +813,10 @@
                 }
             };
 
-            const handleKeypadInput = (value) => {
-                if (value === t.ce) {
-                    setPriceInput('');
-                } else if (value === t.enter_line) {
-                    handleAddPrice();
-                } else if (value === '.' && !priceInput.includes('.')) {
-                    setPriceInput(prev => prev + value);
-                } else if (/^\d$/.test(value)) {
-                    setPriceInput(prev => prev + value);
-                }
-            };
-
             const handleCalculate = () => {
-                if (!prices.length || prices.some(p => p === '' || isNaN(p))) {
-                    setError(t.error_invalid_prices);
+                const validPrices = prices.filter(p => p !== '' && !isNaN(p) && p >= 0);
+                if (!validPrices.length) {
+                    setError(t.error_empty_prices);
                     inputRef.current.classList.add('animate-shake');
                     setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
                     return;
@@ -765,7 +842,7 @@
                 let total_discount = 0;
                 let total_final = 0;
 
-                prices.forEach(price => {
+                validPrices.forEach(price => {
                     const discount = price * (parsedPercentage / 100);
                     const price_before_rounding = price - discount;
                     const final_price = Math.round(price_before_rounding / parsedRoundingStep) * parsedRoundingStep;
@@ -790,7 +867,7 @@
                 const newReceipt = {
                     id: Date.now(),
                     timestamp,
-                    prices: [...prices],
+                    prices: [...validPrices],
                     results: newResults,
                     totals: { total_original, total_discount, total_final }
                 };
@@ -828,7 +905,7 @@
                 localStorage.removeItem('receipts');
                 setError('');
                 setShowResetConfirmation(false);
-                setNotification('All data has been reset');
+                setNotification(t.reset_confirmation);
                 setTimeout(() => setNotification(''), 3000);
             };
 
@@ -901,14 +978,8 @@
                 setReceipts(newReceipts);
                 localStorage.setItem('receipts', JSON.stringify(newReceipts));
                 setSelectedReceipts([]);
-                setNotification('Selected receipts deleted');
+                setNotification(t.delete_selected);
                 setTimeout(() => setNotification(''), 3000);
-            };
-
-            const toggleTheme = () => {
-                const newTheme = theme === 'light' ? 'dark' : 'light';
-                setTheme(newTheme);
-                localStorage.setItem('theme', newTheme);
             };
 
             const handleSaveSettings = () => {
@@ -926,8 +997,8 @@
                     return;
                 }
                 
-                if (isNaN(parsedDisplayHeight) || parsedDisplayHeight < 100 || parsedDisplayHeight > 1000) {
-                    setError('Display height must be between 100 and 1000px');
+                if (isNaN(parsedDisplayHeight) || parsedDisplayHeight < 100 || parsedDisplayHeight > 1500) {
+                    setError(t.resize_display + ' must be between 100 and 1500px');
                     return;
                 }
                 
@@ -939,10 +1010,27 @@
                 setTimeout(() => setNotification(''), 3000);
             };
 
-            const handleKeyDown = (e) => {
-                if (e.key === 'Enter') {
+            const handleKeyDown = (e, index = null) => {
+                if (e.key === 'Enter' || e.key === 'Done' || e.key === 'Go' || e.key === 'Next') {
                     e.preventDefault();
-                    handleAddPrice();
+                    if (index === null) {
+                        handleAddPrice();
+                    } else {
+                        const newPrices = [...prices];
+                        const value = e.target.value;
+                        if (/^[0-9]+(\.[0-9]{1,2})?$/.test(value)) {
+                            newPrices[index] = parseFloat(value);
+                            setPrices(newPrices);
+                            setError('');
+                            if (inputRef.current) {
+                                inputRef.current.focus();
+                            }
+                        } else {
+                            setError(t.error_invalid_prices);
+                            e.target.classList.add('animate-shake');
+                            setTimeout(() => e.target.classList.remove('animate-shake'), 300);
+                        }
+                    }
                 } else if (e.key === 'Escape') {
                     setPriceInput('');
                 } else if (!/[0-9]|\.|Backspace|Delete|ArrowLeft|ArrowRight|Tab/.test(e.key)) {
@@ -951,7 +1039,7 @@
             };
 
             const formatPrice = (price) => {
-                return parseFloat(price).toLocaleString(undefined, {
+                return parseFloat(price).toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 });
@@ -967,7 +1055,7 @@
                 
                 if (priceValues.length > 0) {
                     setPrices([...prices, ...priceValues]);
-                    setNotification(`Added ${priceValues.length} prices`);
+                    setNotification(`${t.select_all} ${priceValues.length} prices`);
                     setTimeout(() => setNotification(''), 3000);
                     e.target.value = '';
                 }
@@ -1009,13 +1097,13 @@
                 const handleBeforeUnload = (e) => {
                     if (prices.length > 0) {
                         e.preventDefault();
-                        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                        e.returnValue = t.reset_confirmation;
                     }
                 };
                 
                 window.addEventListener('beforeunload', handleBeforeUnload);
                 return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-            }, [prices]);
+            }, [prices, t]);
 
             const sortedFilteredReceipts = receipts
                 .filter(receipt => {
@@ -1035,24 +1123,6 @@
                     return 0;
                 });
 
-            useEffect(() => {
-                localStorage.setItem('prices', JSON.stringify(prices));
-            }, [prices]);
-
-            useEffect(() => {
-                document.body.className = theme === 'dark' ? 'dark-mode' : '';
-            }, [theme]);
-
-            useEffect(() => {
-                const onlineStatus = () => setIsOnline(navigator.onLine);
-                window.addEventListener('online', onlineStatus);
-                window.addEventListener('offline', onlineStatus);
-                return () => {
-                    window.removeEventListener('online', onlineStatus);
-                    window.removeEventListener('offline', onlineStatus);
-                };
-            }, []);
-
             return (
                 <div className="min-h-screen">
                     <div className="container">
@@ -1065,57 +1135,91 @@
                                 >
                                     {theme === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
                                 </button>
+                                <button
+                                    onClick={toggleLanguage}
+                                    className="action-button bg-purple-600 hover:bg-purple-700"
+                                >
+                                    {t.toggle_language}
+                                </button>
                             </div>
                         </div>
 
-                        {isOnline ? null : <div className="error-alert">{t.offline_mode}</div>}
-                        {error && <div className="error-alert">{error}</div>}
+                        {error && (
+                            <div className="error-alert">
+                                {error}
+                                <button onClick={() => setError('')}>✕</button>
+                            </div>
+                        )}
                         {notification && <div className="notification">{notification}</div>}
 
                         <div className="mb-4 bg-card p-4 rounded-xl shadow-lg">
                             <label className="block mb-1">{t.enter_prices}</label>
                             <input
                                 ref={inputRef}
-                                type="text"
+                                type="number"
+                                inputMode="decimal"
+                                pattern="[0-9]*\.?[0-9]*"
                                 value={priceInput}
                                 onChange={handleInputChange}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === '+') {
-                                        e.preventDefault();
-                                        handleAddPrice();
-                                    } else if (!/[0-9]|\.|Backspace|Delete|ArrowLeft|ArrowRight/.test(e.key)) {
-                                        e.preventDefault();
-                                    }
-                                }}
+                                onKeyDown={(e) => handleKeyDown(e)}
                                 placeholder={t.prices_placeholder}
                                 className="input-box"
                             />
                         </div>
 
-                        <div className="mb-4">
-
-                            <div className={`keypad-container ${showKeypad ? 'visible' : ''}`}>
-                                <div className="keypad-grid mt-4">
-                                    {keypadLayout.map((key, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => handleKeypadInput(key)}
-                                            className="keypad-button"
-                                        >
-                                            {key}
-                                        </button>
-                                    ))}
-                                    {actionLayout.map((action, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => handleKeypadInput(action)}
-                                            className="keypad-button bg-red-600 hover:bg-red-700 text-white"
-                                        >
-                                            {action}
-                                        </button>
-                                    ))}
+                        <div
+                            ref={displayRef}
+                            className="display-box"
+                            style={{ maxHeight: `${displayHeight}px` }}
+                        >
+                            {prices.length > 0 && (
+                                <div className="price-item">
+                                    <div className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedPrices.length === prices.length}
+                                            onChange={handleSelectAllPrices}
+                                            className="mr-2"
+                                        />
+                                        <span className="text-sm">{selectedPrices.length} {t.select_all}</span>
+                                    </div>
+                                    <button
+                                        onClick={handleDeleteSelectedPrices}
+                                        className="delete-btn"
+                                        disabled={selectedPrices.length === 0}
+                                    >
+                                        {t.delete_selected_prices}
+                                    </button>
                                 </div>
-                            </div>
+                            )}
+                            {prices.map((price, index) => (
+                                <div key={index} className="price-item">
+                                    <div className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedPrices.includes(index)}
+                                            onChange={() => handleSelectPrice(index)}
+                                            className="mr-2"
+                                        />
+                                        <input
+                                            type="number"
+                                            inputMode="decimal"
+                                            pattern="[0-9]*\.?[0-9]*"
+                                            id={`price-input-${index}`}
+                                            value={price}
+                                            onChange={(e) => handlePriceChange(index, e.target.value)}
+                                            onKeyDown={(e) => handleKeyDown(e, index)}
+                                            className="input-box"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={() => handleDeletePrice(index)}
+                                        className="delete-btn"
+                                    >
+                                        {t.delete}
+                                    </button>
+                                </div>
+                            ))}
                         </div>
 
                         <div className="action-grid">
@@ -1139,133 +1243,38 @@
                             </button>
                         </div>
 
-                        <div
-                            ref={displayRef}
-                            className="display-box"
-                            style={{ maxHeight: `${displayHeight}px` }}
-                        >
-                            {prices.length > 0 && (
-                                <div className="price-item">
-                                    <div className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedPrices.length === prices.length}
-                                            onChange={handleSelectAllPrices}
-                                            className="mr-2"
-                                        />
-                                        <span className="text-sm">{selectedPrices.length} selected</span>
-                                    </div>
-                                    <button
-                                        onClick={handleDeleteSelectedPrices}
-                                        className="delete-btn"
-                                        disabled={selectedPrices.length === 0}
-                                    >
-                                        {t.delete_selected_prices}
-                                    </button>
-                                </div>
-                            )}
-                            {prices.map((price, index) => (
-                                <div key={index} className="price-item">
-                                    <div className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedPrices.includes(index)}
-                                            onChange={() => handleSelectPrice(index)}
-                                            className="mr-2"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={price}
-                                            onChange={(e) => handlePriceChange(index, e.target.value)}
-                                            className="input-box"
-                                        />
-                                    </div>
-                                    <button
-                                        onClick={() => handleDeletePrice(index)}
-                                        className="delete-btn"
-                                    >
-                                        {t.delete}
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-
                         {results.prices.length > 0 && (
                             <div className="mb-4 bg-card p-4 rounded-xl shadow-lg">
                                 <h2 className="text-xl font-bold mb-2">{t.discount_details}</h2>
                                 <table className="w-full">
                                     <thead>
                                         <tr>
-                                            <th className="text-left p-2">{t.original_price}</th>
-                                            <th className="text-left p-2">{t.discount}</th>
-                                            <th className="text-left p-2">{t.price_before_rounding}</th>
-                                            <th className="text-left p-2">{t.rounded_diff}</th>
-                                            <th className="text-left p-2">{t.final_price}</th>
+                                            <th className="text-start p-2">{t.original_price}</th>
+                                            <th className="text-start p-2">{t.discount}</th>
+                                            <th className="text-start p-2">{t.price_before_rounding}</th>
+                                            <th className="text-start p-2">{t.rounded_diff}</th>
+                                            <th className="text-start p-2">{t.final_price}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {results.prices.map((price, index) => (
                                             <tr key={index}>
-                                                <td className="p-2">{price.toFixed(2)}</td>
-                                                <td className="p-2">{results.discounts[index].toFixed(2)}</td>
-                                                <td className="p-2">{results.price_before_rounding[index].toFixed(2)}</td>
-                                                <td className="p-2">{results.rounded_diff[index].toFixed(2)}</td>
-                                                <td className="p-2">{results.final_prices[index].toFixed(2)}</td>
+                                                <td className="p-2">{formatPrice(price)}</td>
+                                                <td className="p-2">{formatPrice(results.discounts[index])}</td>
+                                                <td className="p-2">{formatPrice(results.price_before_rounding[index])}</td>
+                                                <td className="p-2">{formatPrice(results.rounded_diff[index])}</td>
+                                                <td className="p-2">{formatPrice(results.final_prices[index])}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                                 <div className="mt-4">
-                                    <p>{t.total_before} {totals.total_original.toFixed(2)}</p>
-                                    <p>{t.total_discount} {totals.total_discount.toFixed(2)}</p>
-                                    <p>{t.total_after} {totals.total_final.toFixed(2)}</p>
+                                    <p>{t.total_before} {formatPrice(totals.total_original)}</p>
+                                    <p>{t.total_discount} {formatPrice(totals.total_discount)}</p>
+                                    <p>{t.total_after} {formatPrice(totals.total_final)}</p>
                                 </div>
                             </div>
                         )}
-
-                        <div className="mb-4">
-                            <button
-                                onClick={() => setShowSettings(!showSettings)}
-                                className="action-button bg-blue-600 hover:bg-blue-700 w-full"
-                            >
-                                {showSettings ? t.close : t.toggle_settings}
-                            </button>
-                            <div className={`settings-box ${showSettings ? 'visible' : ''}`}>
-                                <div className="mb-4">
-                                    <label className="block mb-1">{t.percentage_label}</label>
-                                    <input
-                                        type="number"
-                                        value={percentage}
-                                        onChange={(e) => setPercentage(e.target.value)}
-                                        className="input-box"
-                                    />
-                                </div>
-                                <div className="mb-4">
-                                    <label className="block mb-1">{t.rounding_step}</label>
-                                    <input
-                                        type="number"
-                                        value={roundingStep}
-                                        onChange={(e) => setRoundingStep(e.target.value)}
-                                        className="input-box"
-                                    />
-                                </div>
-                                <div className="mb-4">
-                                    <label className="block mb-1">{t.resize_display}</label>
-                                    <input
-                                        type="number"
-                                        value={displayHeight}
-                                        onChange={(e) => setDisplayHeight(e.target.value)}
-                                        className="input-box"
-                                    />
-                                </div>
-                                <button
-                                    onClick={handleSaveSettings}
-                                    className="action-button bg-green-600 hover:bg-green-700 w-full"
-                                >
-                                    {t.save_settings}
-                                </button>
-                            </div>
-                        </div>
 
                         {showReceipts && (
                             <div className="mb-4 bg-card p-4 rounded-xl shadow-lg">
@@ -1298,6 +1307,7 @@
                                     <label className="block mb-1">{t.filter_total_min}</label>
                                     <input
                                         type="number"
+                                        inputMode="decimal"
                                         value={filterTotalMin}
                                         onChange={(e) => setFilterTotalMin(e.target.value)}
                                         className="input-box"
@@ -1307,6 +1317,7 @@
                                     <label className="block mb-1">{t.filter_total_max}</label>
                                     <input
                                         type="number"
+                                        inputMode="decimal"
                                         value={filterTotalMax}
                                         onChange={(e) => setFilterTotalMax(e.target.value)}
                                         className="input-box"
@@ -1325,7 +1336,7 @@
                                                 onClick={() => handleExportReceipt(receipt)}
                                                 className="action-button bg-blue-600 hover:bg-blue-700 text-sm"
                                             >
-                                                {receipt.timestamp} ({receipt.prices.length} items, ${receipt.totals.total_final.toFixed(2)})
+                                                {receipt.timestamp} ({receipt.prices.length} {t.sort_items_asc}, ${formatPrice(receipt.totals.total_final)})
                                             </button>
                                         </div>
                                     ))}
@@ -1360,29 +1371,29 @@
                                         <table className="w-full mb-4">
                                             <thead>
                                                 <tr>
-                                                    <th className="text-left p-2">{t.original_price}</th>
-                                                    <th className="text-left p-2">{t.discount}</th>
-                                                    <th className="text-left p-2">{t.price_before_rounding}</th>
-                                                    <th className="text-left p-2">{t.rounded_diff}</th>
-                                                    <th className="text-left p-2">{t.final_price}</th>
+                                                    <th className="text-start p-2">{t.original_price}</th>
+                                                    <th className="text-start p-2">{t.discount}</th>
+                                                    <th className="text-start p-2">{t.price_before_rounding}</th>
+                                                    <th className="text-start p-2">{t.rounded_diff}</th>
+                                                    <th className="text-start p-2">{t.final_price}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {receipt.results.prices.map((price, index) => (
                                                     <tr key={index}>
-                                                        <td className="p-2">{price.toFixed(2)}</td>
-                                                        <td className="p-2">{receipt.results.discounts[index].toFixed(2)}</td>
-                                                        <td className="p-2">{receipt.results.price_before_rounding[index].toFixed(2)}</td>
-                                                        <td className="p-2">{receipt.results.rounded_diff[index].toFixed(2)}</td>
-                                                        <td className="p-2">{receipt.results.final_prices[index].toFixed(2)}</td>
+                                                        <td className="p-2">{formatPrice(price)}</td>
+                                                        <td className="p-2">{formatPrice(receipt.results.discounts[index])}</td>
+                                                        <td className="p-2">{formatPrice(receipt.results.price_before_rounding[index])}</td>
+                                                        <td className="p-2">{formatPrice(receipt.results.rounded_diff[index])}</td>
+                                                        <td className="p-2">{formatPrice(receipt.results.final_prices[index])}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                         <div className="mb-4">
-                                            <p>{t.total_before} {receipt.totals.total_original.toFixed(2)}</p>
-                                            <p>{t.total_discount} {receipt.totals.total_discount.toFixed(2)}</p>
-                                            <p>{t.total_after} {receipt.totals.total_final.toFixed(2)}</p>
+                                            <p>{t.total_before} {formatPrice(receipt.totals.total_original)}</p>
+                                            <p>{t.total_discount} {formatPrice(receipt.totals.total_discount)}</p>
+                                            <p>{t.total_after} {formatPrice(receipt.totals.total_final)}</p>
                                         </div>
                                         <button
                                             onClick={() => handleExportReceipt(receipt)}
@@ -1402,6 +1413,15 @@
                         )}
 
                         <div className="fab-container">
+                            <button
+                                className={`fab-option bg-blue-600 ${showFabOptions ? 'visible' : ''}`}
+                                onClick={() => {
+                                    setShowSettings(true);
+                                    setShowFabOptions(false);
+                                }}
+                            >
+                                <SettingsIcon />
+                            </button>
                             <button
                                 className={`fab-option bg-gray-500 ${showFabOptions ? 'visible' : ''}`}
                                 onClick={() => {
@@ -1443,6 +1463,56 @@
                             </div>
                         )}
 
+                        {showSettings && (
+                            <div className={`fixed inset-0 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} bg-opacity-75 flex items-center justify-center`}>
+                                <div className="bg-card p-6 rounded-xl shadow-lg max-w-md w-full">
+                                    <h2 className="text-xl font-bold mb-4">{t.toggle_settings}</h2>
+                                    <div className="mb-4">
+                                        <label className="block mb-1">{t.percentage_label}</label>
+                                        <input
+                                            type="number"
+                                            inputMode="decimal"
+                                            value={percentage}
+                                            onChange={(e) => setPercentage(e.target.value)}
+                                            className="input-box"
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block mb-1">{t.rounding_step}</label>
+                                        <input
+                                            type="number"
+                                            inputMode="decimal"
+                                            value={roundingStep}
+                                            onChange={(e) => setRoundingStep(e.target.value)}
+                                            className="input-box"
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block mb-1">{t.resize_display}</label>
+                                        <input
+                                            type="number"
+                                            inputMode="decimal"
+                                            value={displayHeight}
+                                            onChange={(e) => setDisplayHeight(e.target.value)}
+                                            className="input-box"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={handleSaveSettings}
+                                        className="action-button bg-green-600 hover:bg-green-700 w-full"
+                                    >
+                                        {t.save_settings}
+                                    </button>
+                                    <button
+                                        onClick={() => setShowSettings(false)}
+                                        className="action-button bg-red-600 hover:bg-red-700 w-full mt-2"
+                                    >
+                                        {t.close}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         {showResetConfirmation && (
                             <div className="confirmation-modal">
                                 <div className="confirmation-content">
@@ -1468,8 +1538,7 @@
                     </div>
                 </div>
             );
-        }
-        
+        } 
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
