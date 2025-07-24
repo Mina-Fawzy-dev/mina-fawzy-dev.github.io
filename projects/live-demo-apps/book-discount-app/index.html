@@ -6,13 +6,13 @@
     <title>Book Discount Calculator</title>
     <meta name="description" content="A modern app to calculate book discounts with ease">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" href="static/css/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <script src="static/js/react.production.min.js"></script>
-    <script src="static/js/react-dom.production.min.js"></script>
-    <script src="static/js/babel.min.js"></script>
-    <script src="static/js/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.5/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         @tailwind base;
         @tailwind components;
@@ -26,18 +26,14 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #ffffff;
-            color: #1e3a8a;
+            background-color: #f7fafc;
+            color: #1a202c;
             transition: background-color 0.3s, color 0.3s;
         }
 
         body.dark-mode {
-            background-color: #1e3a8a;
-            color: #e5e7eb;
-        }
-
-        body[lang="ar"] {
-            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
         }
 
         .container {
@@ -47,40 +43,40 @@
         }
 
         .bg-card {
-            background-color: #f9fafb;
+            background-color: #ffffff;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         body.dark-mode .bg-card {
-            background-color: #2c4a9b;
+            background-color: #2d3748;
         }
 
         .input-box {
             width: 100%;
             padding: 0.5rem;
-            border: 1px solid #d1d5db;
+            border: 1px solid #e2e8f0;
             border-radius: 0.375rem;
-            background-color: #f9fafb;
+            background-color: #f7fafc;
             font-size: 0.875rem;
-            text-align: start;
-            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+            text-align: left;
+            transition: border-color 0.3s, background-color 0.3s;
         }
 
         body.dark-mode .input-box {
-            background-color: #374151;
-            border-color: #6b7280;
-            color: #e5e7eb;
+            background-color: #4a5568;
+            border-color: #718096;
+            color: #e2e8f0;
         }
 
         .input-box:focus {
             outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
         }
 
         .action-button {
-            background-color: #2563eb;
+            background-color: #3b82f6;
             color: #ffffff;
             padding: 0.5rem 1rem;
             border-radius: 0.375rem;
@@ -92,38 +88,78 @@
         }
 
         .action-button:hover {
-            background-color: #1e40af;
+            background-color: #2563eb;
         }
 
         .action-button:active {
             transform: scale(0.98);
         }
 
-        .action-button.bg-green-600 { background-color: #16a34a; }
-        .action-button.bg-green-600:hover { background-color: #15803d; }
-        .action-button.bg-red-600 { background-color: #dc2626; }
-        .action-button.bg-red-600:hover { background-color: #b91c1c; }
-        .action-button.bg-blue-600 { background-color: #2563eb; }
-        .action-button.bg-blue-600:hover { background-color: #1e40af; }
-        .action-button.bg-orange-600 { background-color: #ea580c; }
-        .action-button.bg-orange-600:hover { background-color: #c2410c; }
-        .action-button.bg-purple-600 { background-color: #7c3aed; }
-        .action-button.bg-purple-600:hover { background-color: #6d28d9; }
+        .action-button.bg-green-600 { background-color: #10b981; }
+        .action-button.bg-green-600:hover { background-color: #059669; }
+        .action-button.bg-red-600 { background-color: #ef4444; }
+        .action-button.bg-red-600:hover { background-color: #dc2626; }
+        .action-button.bg-blue-600 { background-color: #3b82f6; }
+        .action-button.bg-blue-600:hover { background-color: #2563eb; }
+        .action-button.bg-orange-600 { background-color: #f59e0b; }
+        .action-button.bg-orange-600:hover { background-color: #d97706; }
+        .action-button.bg-purple-600 { background-color: #8b5cf6; }
+        .action-button.bg-purple-600:hover { background-color: #7c3aed; }
         .action-button.bg-gray-500 { background-color: #6b7280; }
         .action-button.bg-gray-500:hover { background-color: #4b5563; }
 
-        body.dark-mode .action-button.bg-green-600 { background-color: #22c55e; }
-        body.dark-mode .action-button.bg-green-600:hover { background-color: #16a34a; }
-        body.dark-mode .action-button.bg-red-600 { background-color: #ef4444; }
-        body.dark-mode .action-button.bg-red-600:hover { background-color: #dc2626; }
-        body.dark-mode .action-button.bg-blue-600 { background-color: #3b82f6; }
-        body.dark-mode .action-button.bg-blue-600:hover { background-color: #2563eb; }
-        body.dark-mode .action-button.bg-orange-600 { background-color: #f97316; }
-        body.dark-mode .action-button.bg-orange-600:hover { background-color: #ea580c; }
-        body.dark-mode .action-button.bg-purple-600 { background-color: #8b5cf6; }
-        body.dark-mode .action-button.bg-purple-600:hover { background-color: #7c3aed; }
+        body.dark-mode .action-button.bg-green-600 { background-color: #34d399; }
+        body.dark-mode .action-button.bg-green-600:hover { background-color: #10b981; }
+        body.dark-mode .action-button.bg-red-600 { background-color: #f87171; }
+        body.dark-mode .action-button.bg-red-600:hover { background-color: #ef4444; }
+        body.dark-mode .action-button.bg-blue-600 { background-color: #60a5fa; }
+        body.dark-mode .action-button.bg-blue-600:hover { background-color: #3b82f6; }
+        body.dark-mode .action-button.bg-orange-600 { background-color: #fbbf24; }
+        body.dark-mode .action-button.bg-orange-600:hover { background-color: #f59e0b; }
+        body.dark-mode .action-button.bg-purple-600 { background-color: #a78bfa; }
+        body.dark-mode .action-button.bg-purple-600:hover { background-color: #8b5cf6; }
         body.dark-mode .action-button.bg-gray-500 { background-color: #4b5563; }
         body.dark-mode .action-button.bg-gray-500:hover { background-color: #374151; }
+
+        .keypad-container {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        .keypad-container.visible {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .keypad-button {
+            background-color: #edf2f7;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            font-size: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .keypad-button:hover {
+            background-color: #e2e8f0;
+        }
+
+        body.dark-mode .keypad-button {
+            background-color: #4a5568;
+        }
+
+        body.dark-mode .keypad-button:hover {
+            background-color: #718096;
+        }
 
         .action-grid {
             display: grid;
@@ -133,18 +169,18 @@
         }
 
         .display-box {
-            max-height: 500px;
+            max-height: 150px;
             overflow-y: auto;
-            background-color: #f9fafb;
-            border: 1px solid #d1d5db;
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 0.375rem;
             padding: 0.5rem;
             margin-top: 0.5rem;
         }
 
         body.dark-mode .display-box {
-            background-color: #374151;
-            border-color: #6b7280;
+            background-color: #4a5568;
+            border-color: #718096;
         }
 
         .price-item {
@@ -155,26 +191,26 @@
         }
 
         .price-item input[type="checkbox"] {
-            margin-inline-end: 0.5rem;
+            margin-right: 0.5rem;
         }
 
-        .price-item input[type="number"] {
+        .price-item input[type="text"] {
             width: 60%;
             padding: 0.25rem;
-            border: 1px solid #d1d5db;
+            border: 1px solid #e2e8f0;
             border-radius: 0.25rem;
-            text-align: start;
+            text-align: left;
             font-size: 0.875rem;
         }
 
-        body.dark-mode .price-item input[type="number"] {
-            background-color: #374151;
-            border-color: #6b7280;
-            color: #e5e7eb;
+        body.dark-mode .price-item input[type="text"] {
+            background-color: #2d3748;
+            border-color: #718096;
+            color: #e2e8f0;
         }
 
         .delete-btn {
-            background-color: #dc2626;
+            background-color: #ef4444;
             color: #ffffff;
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
@@ -183,15 +219,7 @@
             transition: background-color 0.3s;
         }
 
-        body.dark-mode .delete-btn {
-            background-color: #ef4444;
-        }
-
         .delete-btn:hover {
-            background-color: #b91c1c;
-        }
-
-        body.dark-mode .delete-btn:hover {
             background-color: #dc2626;
         }
 
@@ -206,12 +234,12 @@
         }
 
         .settings-box input {
-            background-color: #f9fafb;
+            background-color: #f7fafc;
         }
 
         body.dark-mode .settings-box input {
-            background-color: #374151;
-            color: #e5e7eb;
+            background-color: #4a5568;
+            color: #e2e8f0;
         }
 
         .notification {
@@ -219,7 +247,7 @@
             top: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #16a34a;
+            background-color: #10b981;
             color: #ffffff;
             padding: 0.75rem 1.5rem;
             border-radius: 0.375rem;
@@ -229,7 +257,7 @@
         }
 
         body.dark-mode .notification {
-            background-color: #22c55e;
+            background-color: #34d399;
         }
 
         @keyframes slideIn {
@@ -246,8 +274,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #fee2e2;
-            color: #b91c1c;
+            background-color: #fed7d7;
+            color: #c53030;
             padding: 0.75rem;
             border-radius: 0.375rem;
             margin-bottom: 1rem;
@@ -255,31 +283,31 @@
         }
 
         body.dark-mode .error-alert {
-            background-color: #7f1d1d;
-            color: #f87171;
+            background-color: #742a2a;
+            color: #feb2b2;
         }
 
         .error-alert button {
             background: none;
             border: none;
-            color: #b91c1c;
+            color: #c53030;
             font-size: 1rem;
             cursor: pointer;
         }
 
         body.dark-mode .error-alert button {
-            color: #f87171;
+            color: #feb2b2;
         }
 
         .receipt-card {
-            background-color: #f9fafb;
+            background-color: #f7fafc;
             padding: 0.75rem;
             border-radius: 0.375rem;
             margin-bottom: 0.5rem;
         }
 
         body.dark-mode .receipt-card {
-            background-color: #374151;
+            background-color: #4a5568;
         }
 
         .filter-box {
@@ -292,16 +320,16 @@
         .filter-box select,
         .filter-box input {
             padding: 0.5rem;
-            border: 1px solid #d1d5db;
+            border: 1px solid #e2e8f0;
             border-radius: 0.375rem;
             font-size: 0.875rem;
         }
 
         body.dark-mode .filter-box select,
         body.dark-mode .filter-box input {
-            background-color: #374151;
-            border-color: #6b7280;
-            color: #e5e7eb;
+            background-color: #4a5568;
+            border-color: #718096;
+            color: #e2e8f0;
         }
 
         table {
@@ -311,24 +339,24 @@
 
         th, td {
             padding: 0.5rem;
-            text-align: start;
+            text-align: left;
             font-size: 0.875rem;
         }
 
         thead tr {
-            background-color: #e5e7eb;
+            background-color: #edf2f7;
         }
 
         body.dark-mode thead tr {
-            background-color: #4b5563;
+            background-color: #4a5568;
         }
 
         tbody tr:nth-child(even) {
-            background-color: #f9fafb;
+            background-color: #f7fafc;
         }
 
         body.dark-mode tbody tr:nth-child(even) {
-            background-color: #374151;
+            background-color: #2d3748;
         }
 
         .animate-shake {
@@ -344,23 +372,18 @@
         .fab-container {
             position: fixed;
             bottom: 2rem;
-            inset-inline-end: 2rem;
+            right: 2rem;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
             gap: 0.5rem;
         }
 
-        body[lang="ar"] .fab-container {
-            inset-inline-end: unset;
-            inset-inline-start: 2rem;
-        }
-
         .fab-main {
             width: 3.5rem;
             height: 3.5rem;
             border-radius: 50%;
-            background-color: #2563eb;
+            background-color: #3b82f6;
             color: white;
             display: flex;
             justify-content: center;
@@ -368,10 +391,6 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s;
-        }
-
-        body.dark-mode .fab-main {
-            background-color: #3b82f6;
         }
 
         .fab-main:hover {
@@ -395,45 +414,17 @@
             pointer-events: none;
         }
 
-        body.dark-mode .fab-option {
-            background-color: #4b5563;
-        }
-
         .fab-option.visible {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
 
-        .fab-option.bg-blue-600 {
-            background-color: #2563eb;
-        }
-
-        .fab-option.bg-blue-600:hover {
-            background-color: #1e40af;
-        }
-
-        body.dark-mode .fab-option.bg-blue-600 {
-            background-color: #3b82f6;
-        }
-
-        body.dark-mode .fab-option.bg-blue-600:hover {
-            background-color: #2563eb;
-        }
-
         .fab-option.bg-red-600 {
-            background-color: #dc2626;
-        }
-
-        .fab-option.bg-red-600:hover {
-            background-color: #b91c1c;
-        }
-
-        body.dark-mode .fab-option.bg-red-600 {
             background-color: #ef4444;
         }
 
-        body.dark-mode .fab-option.bg-red-600:hover {
+        .fab-option.bg-red-600:hover {
             background-color: #dc2626;
         }
 
@@ -443,14 +434,6 @@
 
         .fab-option.bg-gray-500:hover {
             background-color: #4b5563;
-        }
-
-        body.dark-mode .fab-option.bg-gray-500 {
-            background-color: #4b5563;
-        }
-
-        body.dark-mode .fab-option.bg-gray-500:hover {
-            background-color: #374151;
         }
 
         .confirmation-modal {
@@ -467,7 +450,7 @@
         }
 
         .confirmation-content {
-            background-color: #f9fafb;
+            background-color: white;
             padding: 2rem;
             border-radius: 0.5rem;
             max-width: 400px;
@@ -476,7 +459,7 @@
         }
 
         body.dark-mode .confirmation-content {
-            background-color: #2c4a9b;
+            background-color: #2d3748;
         }
 
         .confirmation-buttons {
@@ -491,14 +474,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            background-color: #2563eb;
+            background-color: #3b82f6;
             color: white;
             border-radius: 0.5rem;
             margin-bottom: 1rem;
         }
 
         body.dark-mode .header {
-            background-color: #1e40af;
+            background-color: #2563eb;
         }
 
         .header-title {
@@ -524,8 +507,12 @@
             .header-title {
                 font-size: 1rem;
             }
-            .action-button {
+            .action-button,
+            .keypad-button {
                 padding: 0.5rem;
+            }
+            .keypad-button {
+                font-size: 0.875rem;
             }
         }
     </style>
@@ -575,6 +562,9 @@
                 about: 'About the Developer',
                 percentage_label: 'Discount Percentage %:',
                 rounding_step: 'Rounding Step:',
+                time_format: 'Time Format:',
+                time_format_12: '12-hour (AM/PM)',
+                time_format_24: '24-hour',
                 save_settings: 'Save',
                 toggle_theme: 'Toggle Theme',
                 toggle_language: 'ar',
@@ -611,6 +601,7 @@
                 error_invalid_percentage: 'Please enter a valid discount percentage (0-100).',
                 error_invalid_rounding_step: 'Please enter a valid rounding step (number greater than 0).',
                 error_empty_prices: 'No valid prices to calculate. Please add at least one valid price.',
+                error_invalid_time_format: 'Please select a valid time format.',
                 success_settings_saved: 'Settings saved successfully!',
                 success_receipt_saved: 'Receipt saved successfully!',
                 success_receipt_exported: 'Receipt exported successfully!',
@@ -633,6 +624,9 @@
                 about: 'عن المطور',
                 percentage_label: 'نسبة الخصم %:',
                 rounding_step: 'خطوة التقريب:',
+                time_format: 'تنسيق الوقت:',
+                time_format_12: '12 ساعة (صباحًا/مساءً)',
+                time_format_24: '24 ساعة',
                 save_settings: 'حفظ',
                 toggle_theme: 'تبديل السمة',
                 toggle_language: 'en',
@@ -669,6 +663,7 @@
                 error_invalid_percentage: 'يرجى إدخال نسبة خصم صالحة (0-100).',
                 error_invalid_rounding_step: 'يرجى إدخال خطوة تقريب صالحة (رقم أكبر من 0).',
                 error_empty_prices: 'لا توجد أسعار صالحة للحساب. يرجى إضافة سعر صالح واحد على الأقل.',
+                error_invalid_time_format: 'يرجى اختيار تنسيق وقت صالح.',
                 success_settings_saved: 'تم حفظ الإعدادات بنجاح!',
                 success_receipt_saved: 'تم حفظ الإيصال بنجاح!',
                 success_receipt_exported: 'تم تصدير الإيصال بنجاح!',
@@ -691,6 +686,7 @@
             const [displayHeight, setDisplayHeight] = useState(localStorage.getItem('displayHeight') || 500);
             const [percentage, setPercentage] = useState(localStorage.getItem('percentage') || 10);
             const [roundingStep, setRoundingStep] = useState(localStorage.getItem('roundingStep') || 5);
+            const [timeFormat, setTimeFormat] = useState(localStorage.getItem('timeFormat') || '24');
             const [results, setResults] = useState(JSON.parse(localStorage.getItem('results')) || { prices: [], discounts: [], final_prices: [], price_before_rounding: [], rounded_diff: [] });
             const [totals, setTotals] = useState(JSON.parse(localStorage.getItem('totals')) || { total_original: 0, total_discount: 0, total_final: 0 });
             const [error, setError] = useState('');
@@ -813,6 +809,31 @@
                 }
             };
 
+            const formatTimestamp = (timestamp) => {
+                const date = new Date(timestamp);
+                if (timeFormat === '12') {
+                    return date.toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true
+                    });
+                } else {
+                    return date.toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    });
+                }
+            };
+
             const handleCalculate = () => {
                 const validPrices = prices.filter(p => p !== '' && !isNaN(p) && p >= 0);
                 if (!validPrices.length) {
@@ -863,7 +884,7 @@
                 localStorage.setItem('totals', JSON.stringify({ total_original, total_discount, total_final }));
                 localStorage.setItem('prices', JSON.stringify(prices));
                 
-                const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                const timestamp = new Date().toISOString();
                 const newReceipt = {
                     id: Date.now(),
                     timestamp,
@@ -913,7 +934,7 @@
                 if (!receipt.results || !receipt.results.prices) return;
                 const ws = XLSX.utils.json_to_sheet(
                     receipt.results.prices.map((price, index) => ({
-                        Timestamp: receipt.timestamp,
+                        Timestamp: formatTimestamp(receipt.timestamp),
                         [t.original_price]: price,
                         [t.discount]: receipt.results.discounts[index],
                         [t.price_before_rounding]: receipt.results.price_before_rounding[index],
@@ -932,7 +953,7 @@
                 const ws = XLSX.utils.json_to_sheet(
                     receipts.filter(receipt => receipt.results && receipt.results.prices).flatMap(receipt =>
                         receipt.results.prices.map((price, index) => ({
-                            Timestamp: receipt.timestamp,
+                            Timestamp: formatTimestamp(receipt.timestamp),
                             [t.original_price]: price,
                             [t.discount]: receipt.results.discounts[index],
                             [t.price_before_rounding]: receipt.results.price_before_rounding[index],
@@ -957,7 +978,7 @@
                     .filter(receipt => selectedReceipts.includes(receipt.id) && receipt.results && receipt.results.prices)
                     .flatMap(receipt =>
                         receipt.results.prices.map((price, index) => ({
-                            Timestamp: receipt.timestamp,
+                            Timestamp: formatTimestamp(receipt.timestamp),
                             [t.original_price]: price,
                             [t.discount]: receipt.results.discounts[index],
                             [t.price_before_rounding]: receipt.results.price_before_rounding[index],
@@ -1001,17 +1022,23 @@
                     setError(t.resize_display + ' must be between 100 and 1500px');
                     return;
                 }
+
+                if (!['12', '24'].includes(timeFormat)) {
+                    setError(t.error_invalid_time_format);
+                    return;
+                }
                 
                 localStorage.setItem('percentage', percentage);
                 localStorage.setItem('roundingStep', roundingStep);
                 localStorage.setItem('displayHeight', displayHeight);
+                localStorage.setItem('timeFormat', timeFormat);
                 
                 setNotification(t.success_settings_saved);
                 setTimeout(() => setNotification(''), 3000);
             };
 
             const handleKeyDown = (e, index = null) => {
-                if (e.key === 'Enter' || e.key === 'Done' || e.key === 'Go' || e.key === 'Next') {
+                if (e.key === 'Enter' || e.key === 'Done' || e.key === 'Go') {
                     e.preventDefault();
                     if (index === null) {
                         handleAddPrice();
@@ -1033,8 +1060,17 @@
                     }
                 } else if (e.key === 'Escape') {
                     setPriceInput('');
+                    if (inputRef.current) {
+                        inputRef.current.focus();
+                    }
                 } else if (!/[0-9]|\.|Backspace|Delete|ArrowLeft|ArrowRight|Tab/.test(e.key)) {
                     e.preventDefault();
+                }
+            };
+
+            const handleInputFocus = () => {
+                if (inputRef.current) {
+                    inputRef.current.select();
                 }
             };
 
@@ -1162,6 +1198,7 @@
                                 value={priceInput}
                                 onChange={handleInputChange}
                                 onKeyDown={(e) => handleKeyDown(e)}
+                                onFocus={handleInputFocus}
                                 placeholder={t.prices_placeholder}
                                 className="input-box"
                             />
@@ -1209,6 +1246,7 @@
                                             value={price}
                                             onChange={(e) => handlePriceChange(index, e.target.value)}
                                             onKeyDown={(e) => handleKeyDown(e, index)}
+                                            onFocus={handleInputFocus}
                                             className="input-box"
                                         />
                                     </div>
@@ -1336,7 +1374,7 @@
                                                 onClick={() => handleExportReceipt(receipt)}
                                                 className="action-button bg-blue-600 hover:bg-blue-700 text-sm"
                                             >
-                                                {receipt.timestamp} ({receipt.prices.length} {t.sort_items_asc}, ${formatPrice(receipt.totals.total_final)})
+                                                {formatTimestamp(receipt.timestamp)} ({receipt.prices.length} {t.sort_items_asc}, ${formatPrice(receipt.totals.total_final)})
                                             </button>
                                         </div>
                                     ))}
@@ -1367,7 +1405,7 @@
                                 </button>
                                 {sortedFilteredReceipts.map(receipt => (
                                     <div key={receipt.id} className="receipt-card mb-4">
-                                        <h3 className="text-lg font-bold mb-2">{t.receipts} - {receipt.timestamp}</h3>
+                                        <h3 className="text-lg font-bold mb-2">{t.receipts} - {formatTimestamp(receipt.timestamp)}</h3>
                                         <table className="w-full mb-4">
                                             <thead>
                                                 <tr>
@@ -1474,6 +1512,7 @@
                                             inputMode="decimal"
                                             value={percentage}
                                             onChange={(e) => setPercentage(e.target.value)}
+                                            onFocus={handleInputFocus}
                                             className="input-box"
                                         />
                                     </div>
@@ -1484,6 +1523,7 @@
                                             inputMode="decimal"
                                             value={roundingStep}
                                             onChange={(e) => setRoundingStep(e.target.value)}
+                                            onFocus={handleInputFocus}
                                             className="input-box"
                                         />
                                     </div>
@@ -1494,8 +1534,20 @@
                                             inputMode="decimal"
                                             value={displayHeight}
                                             onChange={(e) => setDisplayHeight(e.target.value)}
+                                            onFocus={handleInputFocus}
                                             className="input-box"
                                         />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block mb-1">{t.time_format}</label>
+                                        <select
+                                            value={timeFormat}
+                                            onChange={(e) => setTimeFormat(e.target.value)}
+                                            className="input-box"
+                                        >
+                                            <option value="24">{t.time_format_24}</option>
+                                            <option value="12">{t.time_format_12}</option>
+                                        </select>
                                     </div>
                                     <button
                                         onClick={handleSaveSettings}
