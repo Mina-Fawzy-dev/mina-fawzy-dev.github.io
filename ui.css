@@ -131,9 +131,7 @@ body {
 }
 
 .theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+
   background-color: var(--mint);
   color: #000;
   border: none;
