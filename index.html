@@ -5,151 +5,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mina Fawzy Portfolio</title>
     <link rel="stylesheet" href="ui.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth,wght@115.1,417&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-    />
-    <script
-      src="https://unpkg.com/react@18/umd/react.production.min.js"
-      crossorigin
-    ></script>
-    <script
-      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
-      crossorigin
-    ></script>
-    <script type="module">
-      import {
-        BsSun,
-        BsMoon,
-        BsGear,
-        BsTextParagraph,
-      } from "https://cdn.jsdelivr.net/npm/react-icons@4.12.0/bs/index.esm.min.js";
-
-      const root = document.getElementById("react-root");
-      const toggleTheme = () => {
-        document.body.classList.toggle("light-theme");
-        const isLight = document.body.classList.contains("light-theme");
-        localStorage.setItem("theme", isLight ? "light" : "dark");
-      };
-
-      const changeFontSize = (size) => {
-        document.documentElement.style.fontSize = size + "px";
-        localStorage.setItem("fontSize", size);
-      };
-
-      const Sidebar = () => {
-        const [open, setOpen] = React.useState(false);
-        const [fontSize, setFontSize] = React.useState(
-          parseInt(localStorage.getItem("fontSize")) || 16
-        );
-
-        return React.createElement(
-          "div",
-          {
-            className: "floating-settings" + (open ? " open" : ""),
-          },
-          React.createElement(
-            "button",
-            {
-              className: "settings-toggle",
-              onClick: () => setOpen(!open),
-              title: "Settings",
-            },
-            React.createElement(BsGear, null)
-          ),
-          open &&
-            React.createElement(
-              "div",
-              { className: "settings-panel" },
-              React.createElement(
-                "button",
-                { onClick: toggleTheme, title: "Toggle Theme" },
-                document.body.classList.contains("light-theme")
-                  ? React.createElement(BsMoon, null)
-                  : React.createElement(BsSun, null)
-              ),
-              React.createElement(
-                "button",
-                {
-                  onClick: () => {
-                    const newSize = fontSize + 1;
-                    setFontSize(newSize);
-                    changeFontSize(newSize);
-                  },
-                  title: "Increase Font Size",
-                },
-                "+A"
-              ),
-              React.createElement(
-                "button",
-                {
-                  onClick: () => {
-                    const newSize = fontSize - 1;
-                    setFontSize(newSize);
-                    changeFontSize(newSize);
-                  },
-                  title: "Decrease Font Size",
-                },
-                "-A"
-              )
-            )
-        );
-      };
-
-      ReactDOM.render(React.createElement(Sidebar), root);
-
-      // On load: apply saved theme
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "light") {
-        document.body.classList.add("light-theme");
-      }
-      const savedFontSize = localStorage.getItem("fontSize");
-      if (savedFontSize) {
-        document.documentElement.style.fontSize = savedFontSize + "px";
-      }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth,wght@115.1,417&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <style>
+            .copyright-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        margin-top: 20px;
+        font-size: 14px;
+        color: var(--text-color);
+        border-top: 1px solid var(--accent);
+      }
+      
+      .copyright-footer a {
+        color: var(--accent);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: color 0.3s;
+      }
+      
+      .copyright-footer a:hover {
+        color: var(--highlight);
+      }
+      
+      .copyright-text {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      /* Floating Settings Container */
       .floating-settings {
         position: fixed;
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: var(--card-color);
-        border-radius: 20px;
-        padding: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        right: 20px;
+        bottom: 20px;
         z-index: 999;
-        transition: all 0.3s;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        gap: 10px;
       }
-      .floating-settings .settings-toggle {
-        background: transparent;
+      
+      /* Main Settings Toggle Button */
+      .settings-toggle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--card-color);
         border: none;
         color: var(--text-color);
         font-size: 24px;
         cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
+      
+      .floating-settings.open .settings-toggle {
+        transform: rotate(60deg);
+      }
+      
+      .settings-toggle:hover {
+        transform: scale(1.1);
+      }
+      
+      .floating-settings.open .settings-toggle:hover {
+        transform: rotate(60deg) scale(1.1);
+      }
+      
+      /* Settings Panel */
       .settings-panel {
         display: flex;
         flex-direction: column;
-        margin-top: 10px;
-        gap: 8px;
+        gap: 12px;
+        transform: translateY(20px);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
-      .settings-panel button {
-        background: transparent;
+      
+      .floating-settings.open .settings-panel {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+      
+      /* Theme Toggle Button */
+      .theme-toggle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--card-color);
         border: none;
         color: var(--text-color);
         font-size: 20px;
         cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s ease;
+      }
+      
+      .theme-toggle:hover {
+        transform: translateY(-2px);
+      }
+      
+      /* Font Size Controls */
+      .font-controls {
+        background: var(--card-color);
+        border-radius: 24px;
+        padding: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      
+      .font-sizes {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      
+      .font-sizes button {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: transparent;
+        border: 2px solid var(--accent);
+        color: var(--text-color);
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s ease;
+      }
+      
+      .font-sizes button:hover {
+        background-color: var(--accent);
+        color: #000;
+      }
+      
+      .font-sizes button.active {
+        background-color: var(--accent);
+        color: #000;
+      }
+      
+      /* Animation Delays */
+      .floating-settings.open .theme-toggle {
+        transition-delay: 0.1s;
+      }
+      
+      .floating-settings.open .font-controls {
+        transition-delay: 0.2s;
       }
     </style>
   </head>
   <body>
     <div id="react-root"></div>
     <div class="main-card">
+      <!-- Your existing content remains the same -->
       <div class="profile-card inner-card">
         <img src="profile.png" alt="Mina Fawzy" />
         <div class="name-title">
@@ -169,16 +194,127 @@
       </div>
       <div class="inner-card">
         <h3>About me</h3>
-        <div class="content-box">Short intro about yourself...</div>
+        <div class="content-box">Soon..</div>
       </div>
       <div class="inner-card">
         <h3>Programming Skills</h3>
-        <div class="content-box">React, JavaScript, Node.js, etc.</div>
+        <div class="content-box">Soon..</div>
       </div>
       <div class="inner-card">
         <h3>3D & Graphic Design skills</h3>
-        <div class="content-box">Blender, Photoshop, 3ds Max...</div>
+        <div class="content-box">Soon..</div>
+      </div>
+      <div class="copyright-footer">
+        <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer">
+          <i class="bi bi-github"></i> Mina Fawzy
+        </a>
+        <span class="copyright-text">
+          <i class="bi bi-c-circle"></i> 2025
+        </span>
       </div>
     </div>
+
+    <script type="text/javascript">
+      // Initialize theme and font size from localStorage
+      const initializeSettings = () => {
+        // Theme initialization
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === "light" || (!savedTheme && !prefersDark)) {
+          document.body.classList.add("light-theme");
+        }
+        
+        // Font size initialization
+        const savedFontSize = localStorage.getItem("fontSize");
+        const defaultFontSize = 16;
+        const fontSize = savedFontSize ? parseInt(savedFontSize) : defaultFontSize;
+        document.documentElement.style.fontSize = fontSize + "px";
+        
+        return fontSize;
+      };
+
+      const initialFontSize = initializeSettings();
+
+      const toggleTheme = () => {
+        document.body.classList.toggle("light-theme");
+        const isLight = document.body.classList.contains("light-theme");
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+      };
+
+      const changeFontSize = (size) => {
+        document.documentElement.style.fontSize = size + "px";
+        localStorage.setItem("fontSize", size);
+      };
+
+      const Sidebar = () => {
+        const [open, setOpen] = React.useState(false);
+        const [fontSize, setFontSize] = React.useState(initialFontSize);
+        const [isLightTheme, setIsLightTheme] = React.useState(document.body.classList.contains("light-theme"));
+        
+        const sizes = [14, 16, 18, 22];
+        
+        const handleThemeToggle = () => {
+          toggleTheme();
+          setIsLightTheme(!isLightTheme);
+        };
+
+        return React.createElement(
+          "div",
+          { className: `floating-settings ${open ? "open" : ""}` },
+          React.createElement(
+            "button",
+            {
+              className: "settings-toggle",
+              onClick: () => setOpen(!open),
+              title: "Settings"
+            },
+            "\u2699"
+          ),
+          React.createElement(
+            "div",
+            { className: "settings-panel" },
+            React.createElement(
+              "div",
+              { className: "font-controls" },
+              React.createElement(
+                "div",
+                { className: "font-sizes" },
+                sizes.map((size) =>
+                  React.createElement(
+                    "button",
+                    {
+                      key: size,
+                      onClick: () => {
+                        setFontSize(size);
+                        changeFontSize(size);
+                      },
+                      title: `Font size ${size}px`,
+                      className: fontSize === size ? "active" : ""
+                    },
+                    React.createElement(
+                      "span",
+                      { style: { fontSize: size - 2 + "px" } },
+                      "A"
+                    )
+                  )
+                )
+              )
+            ),
+            React.createElement(
+              "button",
+              {
+                className: "theme-toggle",
+                onClick: handleThemeToggle,
+                title: "Toggle Theme"
+              },
+              isLightTheme ? "\u263D" : "\u2600"
+            )
+          )
+        );
+      };
+
+      ReactDOM.render(React.createElement(Sidebar), document.getElementById("react-root"));
+    </script>
   </body>
 </html>
