@@ -6,313 +6,552 @@
     <title>Book Discount Calculator</title>
     <meta name="description" content="A modern app to calculate book discounts with ease">
     <meta name="theme-color" content="#f7fafc">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="icon.png">
-    <link rel="stylesheet" href="static/css/tailwind.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="static/js/tailwind.css.js"></script>
+    <script src="static/css/tailwind.min.css"></script>
     <script src="static/js/react.production.min.js"></script>
     <script src="static/js/react-dom.production.min.js"></script>
     <script src="static/js/babel.min.js"></script>
-    <script src="static/js/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            user-select: none;
-            touch-action: manipulation;
-            overscroll-behavior: none;
-            background-color: #f7fafc;
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        * {
             margin: 0;
             padding: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            box-sizing: border-box;
         }
-        .dark-mode {
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+            color: #1a202c;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
             background-color: #1a202c;
             color: #e2e8f0;
         }
-        .dark-mode .bg-card {
-            background-color: #2d3748;
+
+        .container {
+            max-width: 28rem;
+            margin: 0 auto;
+            padding: 1rem;
         }
-        .dark-mode .bg-gray-50 {
-            background-color: #1a202c;
-        }
-        .dark-mode .bg-gray-100 {
-            background-color: #4a5568;
-        }
-        .dark-mode .text-red-700 {
-            color: #fc8181;
-        }
-        .dark-mode .bg-red-100 {
-            background-color: #742a2a;
-        }
-        .dark-mode .action-button {
-            background-color: #4a5568;
-        }
-        .dark-mode .action-button:hover {
-            background-color: #718096;
-        }
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 24px;
-            background-color: #48bb78;
-            color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-        .error-alert {
-            position: relative;
-            background-color: #fefcbf;
-            color: #744210;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            animation: shake 0.3s ease;
-        }
-        .error-alert button {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: none;
-            border: none;
-            color: #744210;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        .input-box {
-            background-color: #ffffff;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            font-size: 1.25rem;
-            line-height: 1.5;
-            padding: 12px;
-            text-align: right;
-            height: 48px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .input-box:focus {
-            outline: none;
-            border-color: #2b6cb0;
-            box-shadow: 0 0 0 4px rgba(43, 108, 176, 0.1);
-        }
-        .display-box {
-            background-color: #ffffff;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            font-size: 1rem;
-            line-height: 1.5;
-            padding: 12px;
-            white-space: pre-wrap;
-            overflow-y: auto;
-            text-align: left;
-            margin-top: 16px;
-            transition: background-color 0.3s ease;
-        }
-        .display-box.added {
-            background-color: #e6fffa;
-            animation: flash 0.3s ease;
-        }
+
         .bg-card {
             background-color: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        .keypad-button {
-            background-color: #f7fafc;
-            color: #1a202c;
-            font-size: 1.25rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-            padding: 12px;
-            min-height: 44px;
-        }
-        .keypad-button:hover {
-            background-color: #edf2f7;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .keypad-button:active {
-            transform: scale(0.95);
-        }
-        .action-button {
-            background-color: #2b6cb0;
-            color: white;
-            font-size: 1rem;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-            padding: 12px;
-            min-height: 44px;
-        }
-        .action-button:hover {
-            background-color: #2c5282;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        .action-button:active {
-            transform: scale(0.95);
-        }
-        .settings-box {
-            background-color: #f7fafc;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            overflow: hidden;
-        }
-        .settings-box.hidden {
-            max-height: 0;
-            opacity: 0;
-            padding: 0 16px;
-            margin-bottom: 0;
-        }
-        .settings-box.visible {
-            max-height: 400px;
-            opacity: 1;
-        }
-        .filter-box {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .filter-box select,
-        .filter-box input {
-            flex: 1;
-            min-width: 100px;
-            padding: 8px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            transition: border-color 0.2s ease;
-        }
-        .filter-box select:focus,
-        .filter-box input:focus {
-            outline: none;
-            border-color: #2b6cb0;
-        }
-        .resize-slider {
-            width: 100%;
-            margin-top: 8px;
-            accent-color: #2b6cb0;
-        }
-        .keypad-container {
-            margin: 16px 0;
-        }
-        .dark-mode .keypad-container {
+
+        body.dark-mode .bg-card {
             background-color: #2d3748;
         }
+
+        .input-box {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            background-color: #f7fafc;
+            font-size: 0.875rem;
+            text-align: left;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        body.dark-mode .input-box {
+            background-color: #4a5568;
+            border-color: #718096;
+            color: #e2e8f0;
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .action-button {
+            background-color: #3b82f6;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .action-button:hover {
+            background-color: #2563eb;
+        }
+
+        .action-button:active {
+            transform: scale(0.98);
+        }
+
+        .action-button.bg-green-600 { background-color: #10b981; }
+        .action-button.bg-green-600:hover { background-color: #059669; }
+        .action-button.bg-red-600 { background-color: #ef4444; }
+        .action-button.bg-red-600:hover { background-color: #dc2626; }
+        .action-button.bg-blue-600 { background-color: #3b82f6; }
+        .action-button.bg-blue-600:hover { background-color: #2563eb; }
+        .action-button.bg-orange-600 { background-color: #f59e0b; }
+        .action-button.bg-orange-600:hover { background-color: #d97706; }
+        .action-button.bg-purple-600 { background-color: #8b5cf6; }
+        .action-button.bg-purple-600:hover { background-color: #7c3aed; }
+        .action-button.bg-gray-500 { background-color: #6b7280; }
+        .action-button.bg-gray-500:hover { background-color: #4b5563; }
+
+        body.dark-mode .action-button.bg-green-600 { background-color: #34d399; }
+        body.dark-mode .action-button.bg-green-600:hover { background-color: #10b981; }
+        body.dark-mode .action-button.bg-red-600 { background-color: #f87171; }
+        body.dark-mode .action-button.bg-red-600:hover { background-color: #ef4444; }
+        body.dark-mode .action-button.bg-blue-600 { background-color: #60a5fa; }
+        body.dark-mode .action-button.bg-blue-600:hover { background-color: #3b82f6; }
+        body.dark-mode .action-button.bg-orange-600 { background-color: #fbbf24; }
+        body.dark-mode .action-button.bg-orange-600:hover { background-color: #f59e0b; }
+        body.dark-mode .action-button.bg-purple-600 { background-color: #a78bfa; }
+        body.dark-mode .action-button.bg-purple-600:hover { background-color: #8b5cf6; }
+        body.dark-mode .action-button.bg-gray-500 { background-color: #4b5563; }
+        body.dark-mode .action-button.bg-gray-500:hover { background-color: #374151; }
+
+        .keypad-container {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        .keypad-container.visible {
+            max-height: 500px;
+            opacity: 1;
+        }
+
         .keypad-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            direction: ltr;
+            gap: 0.5rem;
         }
+
+        .keypad-button {
+            background-color: #edf2f7;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            font-size: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .keypad-button:hover {
+            background-color: #e2e8f0;
+        }
+
+        body.dark-mode .keypad-button {
+            background-color: #4a5568;
+        }
+
+        body.dark-mode .keypad-button:hover {
+            background-color: #718096;
+        }
+
         .action-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 8px;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
         }
-        .receipt-card {
+
+        .display-box {
+            max-height: 150px;
+            overflow-y: auto;
             background-color: #f7fafc;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
         }
-        .receipt-card:hover {
-            transform: translateY(-2px);
+
+        body.dark-mode .display-box {
+            background-color: #4a5568;
+            border-color: #718096;
         }
-        .export-options {
+
+        .price-item {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .export-options label {
-            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 4px;
+            padding: 0.5rem 0;
+        }
+
+        .price-item input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+
+        .price-item input[type="text"] {
+            width: 60%;
+            padding: 0.25rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+            text-align: left;
             font-size: 0.875rem;
         }
-        @media (max-width: 640px) {
-            body {
-                align-items: flex-start;
-                padding-bottom: 16px;
-            }
-            .container {
-                padding: 16px;
-            }
-            .input-box {
-                font-size: 1rem;
-            }
-            .display-box {
-                font-size: 0.875rem;
-            }
-            .keypad-button {
-                font-size: 1rem;
-                padding: 8px;
-            }
-            .action-button {
-                font-size: 0.875rem;
-                padding: 8px;
-            }
-            .settings-box {
-                max-height: 300px;
-            }
-            .resize-slider {
-                max-width: 200px;
-            }
-            .keypad-container {
-                margin: 8px 0;
-            }
-            .keypad-grid {
-                gap: 4px;
-            }
-            .action-grid {
-                gap: 4px;
-            }
-            .export-options label {
-                font-size: 0.75rem;
-            }
+
+        body.dark-mode .price-item input[type="text"] {
+            background-color: #2d3748;
+            border-color: #718096;
+            color: #e2e8f0;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .delete-btn {
+            background-color: #ef4444;
+            color: #ffffff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        @keyframes flash {
-            from { background-color: #e6fffa; }
-            to { background-color: #ffffff; }
+
+        .delete-btn:hover {
+            background-color: #dc2626;
         }
+
+        .settings-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        .settings-box.visible {
+            max-height: 500px;
+        }
+
+        .settings-box input {
+            background-color: #f7fafc;
+        }
+
+        body.dark-mode .settings-box input {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .notification {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #10b981;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 0.875rem;
+            animation: slideIn 0.3s ease-in-out, slideOut 0.3s ease-in-out 2.7s;
+        }
+
+        body.dark-mode .notification {
+            background-color: #34d399;
+        }
+
+        @keyframes slideIn {
+            from { transform: translate(-50%, -100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translate(-50%, 0); opacity: 1; }
+            to { transform: translate(-50%, -100%); opacity: 0; }
+        }
+
+        .error-alert {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fed7d7;
+            color: #c53030;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        body.dark-mode .error-alert {
+            background-color: #742a2a;
+            color: #feb2b2;
+        }
+
+        .error-alert button {
+            background: none;
+            border: none;
+            color: #c53030;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        body.dark-mode .error-alert button {
+            color: #feb2b2;
+        }
+
+        .receipt-card {
+            background-color: #f7fafc;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+        }
+
+        body.dark-mode .receipt-card {
+            background-color: #4a5568;
+        }
+
+        .filter-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-box select,
+        .filter-box input {
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        body.dark-mode .filter-box select,
+        body.dark-mode .filter-box input {
+            background-color: #4a5568;
+            border-color: #718096;
+            color: #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        thead tr {
+            background-color: #edf2f7;
+        }
+
+        body.dark-mode thead tr {
+            background-color: #4a5568;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+
+        body.dark-mode tbody tr:nth-child(even) {
+            background-color: #2d3748;
+        }
+
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        .fab-main {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .fab-main:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-option {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: #6b7280;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, opacity 0.2s;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        .fab-option.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .fab-option.bg-red-600 {
+            background-color: #ef4444;
+        }
+
+        .fab-option.bg-red-600:hover {
+            background-color: #dc2626;
+        }
+
+        .fab-option.bg-gray-500 {
+            background-color: #6b7280;
+        }
+
+        .fab-option.bg-gray-500:hover {
+            background-color: #4b5563;
+        }
+
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .confirmation-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        body.dark-mode .confirmation-content {
+            background-color: #2d3748;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        body.dark-mode .header {
+            background-color: #2563eb;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 400px) {
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0.5rem;
+            }
+            .header-title {
+                font-size: 1rem;
+            }
+            .action-button,
+            .keypad-button {
+                padding: 0.5rem;
+            }
+            .keypad-button {
+                font-size: 0.875rem;
+            }
         }
     </style>
 </head>
 <body>
     <div id="root" className="container mx-auto p-4 max-w-md"></div>
 
-    <script type="text/babel">
+    <script type="text/babel" data-presets="react,env">
         const { useState, useEffect, useRef } = React;
+
+        const LightModeIcon = ({ size = 20 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+        );
+
+        const DarkModeIcon = ({ size = 20 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        );
 
         const translations = {
             en: {
                 title: 'Book Discount Calculator',
                 enter_prices: 'Enter Prices',
-                prices_placeholder: 'Enter a single book price',
+                prices_placeholder: 'Enter a book price',
                 calculate: 'Calculate',
                 clear: 'Clear All',
                 ce: 'CE',
@@ -344,28 +583,40 @@
                 filter_date: 'Filter by Date:',
                 filter_total_min: 'Min Total:',
                 filter_total_max: 'Max Total:',
-                export: 'Export Selected',
-                export_all: 'Export All',
-                export_excel: 'Export as Excel',
+                save_receipt: 'Save as New Receipt',
+                export: 'Export',
+                export_all_excel: 'Export All to Excel',
+                select_all: 'Select All',
+                deselect_all: 'Deselect All',
+                export_selected: 'Export Selected',
+                delete_selected: 'Delete Selected',
+                delete_selected_prices: 'Delete Selected Prices',
                 resize_display: 'Display Area Size:',
                 error_invalid_prices: 'Please enter a valid price (numbers only, no letters).',
                 error_invalid_percentage: 'Please enter a valid discount percentage (0-100).',
                 error_invalid_rounding_step: 'Please enter a valid rounding step (number greater than 0).',
-                error_no_export_selected: 'Please select at least one field to export.',
                 success_settings_saved: 'Settings saved successfully!',
                 success_receipt_saved: 'Receipt saved successfully!',
-                success_excel_exported: 'Receipt exported as Excel successfully!',
+                success_receipt_exported: 'Receipt exported successfully!',
+                success_excel_exported: 'Receipts exported as Excel successfully!',
                 about_content: 'This app was developed by Mina Fawzy, a passionate programmer aiming to provide simple and effective solutions. Contact: github.com/mina-fawzy-dev',
                 offline_mode: 'Offline Mode: The app is running without an internet connection.',
-                close: 'Close'
+                close: 'Close',
+                show_keypad: 'Show Keypad',
+                hide_keypad: 'Hide Keypad',
+                add_price: 'Add Price',
+                delete: 'Delete',
+                reset_confirmation: 'Are you sure you want to reset everything? This will delete all receipts and data permanently and cannot be undone.',
+                confirm: 'Confirm',
+                cancel: 'Cancel'
             }
         };
 
         function App() {
             const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
             const [priceInput, setPriceInput] = useState('');
-            const [displayPrices, setDisplayPrices] = useState(localStorage.getItem('displayPrices') || '');
-            const [displayLines, setDisplayLines] = useState(JSON.parse(localStorage.getItem('displayLines')) || []);
+            const [prices, setPrices] = useState(JSON.parse(localStorage.getItem('prices')) || []);
+            const [selectedPrices, setSelectedPrices] = useState([]);
             const [displayHeight, setDisplayHeight] = useState(localStorage.getItem('displayHeight') || 150);
             const [percentage, setPercentage] = useState(localStorage.getItem('percentage') || 10);
             const [roundingStep, setRoundingStep] = useState(localStorage.getItem('roundingStep') || 5);
@@ -381,116 +632,21 @@
             const [filterDate, setFilterDate] = useState('');
             const [filterTotalMin, setFilterTotalMin] = useState('');
             const [filterTotalMax, setFilterTotalMax] = useState('');
-            const [selectedReceipt, setSelectedReceipt] = useState(null);
-            const [exportOptions, setExportOptions] = useState({
-                original_prices: false,
-                discounted_prices: false,
-                total_original: false,
-                total_final: false,
-                date: false,
-                item_count: false
-            });
+            const [selectedReceipts, setSelectedReceipts] = useState([]);
             const [isOnline, setIsOnline] = useState(navigator.onLine);
+            const [showKeypad, setShowKeypad] = useState(false);
+            const [showFabOptions, setShowFabOptions] = useState(false);
+            const [showResetConfirmation, setShowResetConfirmation] = useState(false);
             const displayRef = useRef(null);
             const inputRef = useRef(null);
 
             const t = translations.en;
-            const keypadLayout = [
-                '7', '8', '9',
-                '4', '5', '6',
-                '1', '2', '3',
-                '0', '.', t.enter_line
-            ];
-            const actionLayout = [t.ce, t.clear, t.reset];
-
-            useEffect(() => {
-                const handleOnline = () => {
-                    setIsOnline(true);
-                    setNotification('');
-                };
-                const handleOffline = () => {
-                    setIsOnline(false);
-                    setNotification(t.offline_mode);
-                };
-                window.addEventListener('online', handleOnline);
-                window.addEventListener('offline', handleOffline);
-
-                const handleKeyDown = (e) => {
-                    if (e.key === 'Enter' && !showReceipts && !showAbout && !showSettings && !selectedReceipt) {
-                        e.preventDefault();
-                        handleAddPrice();
-                    }
-                };
-                window.addEventListener('keydown', handleKeyDown);
-
-                document.body.className = `bg-gray-50 ${theme === 'dark' ? 'dark-mode' : ''}`;
-                localStorage.setItem('theme', theme);
-                localStorage.setItem('displayPrices', displayPrices);
-                localStorage.setItem('displayLines', JSON.stringify(displayLines));
-                localStorage.setItem('displayHeight', displayHeight);
-                localStorage.setItem('percentage', percentage);
-                localStorage.setItem('roundingStep', roundingStep);
-                localStorage.setItem('results', JSON.stringify(results));
-                localStorage.setItem('totals', JSON.stringify(totals));
-                localStorage.setItem('receipts', JSON.stringify(receipts));
-
-                if (inputRef.current) {
-                    inputRef.current.focus();
-                }
-
-                return () => {
-                    window.removeEventListener('online', handleOnline);
-                    window.removeEventListener('offline', handleOffline);
-                    window.removeEventListener('keydown', handleKeyDown);
-                };
-            }, [theme, displayPrices, displayLines, displayHeight, percentage, roundingStep, results, totals, receipts, showReceipts, showAbout, showSettings, selectedReceipt]);
-
-            const showNotification = (message) => {
-                setNotification(message);
-                setTimeout(() => setNotification(''), 3000);
-            };
-
-            const handleAddPrice = () => {
-                const price = parseFloat(priceInput);
-                if (!isNaN(price) && price >= 0) {
-                    const lastLine = displayLines.length > 0 ? displayLines[displayLines.length - 1] : [];
-                    const newLine = lastLine.length >= 5 ? [] : lastLine;
-                    const updatedLines = lastLine.length >= 5 ? [...displayLines, [priceInput]] : [...displayLines.slice(0, -1), [...newLine, priceInput]];
-                    setDisplayLines(updatedLines);
-                    setDisplayPrices(updatedLines.map(line => line.join(' ')).join('\n'));
-                    setPriceInput('');
-                    if (displayRef.current) {
-                        displayRef.current.classList.add('added');
-                        setTimeout(() => displayRef.current.classList.remove('added'), 300);
-                        displayRef.current.scrollTop = displayRef.current.scrollHeight;
-                    }
-                    if (inputRef.current) {
-                        inputRef.current.focus();
-                    }
-                } else {
-                    setError(t.error_invalid_prices);
-                    inputRef.current.classList.add('animate-shake');
-                    setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
-                }
-            };
-
-            const handleKeypadInput = (value) => {
-                if (value === 'CE') {
-                    setPriceInput(priceInput.slice(0, -1));
-                } else if (value === t.enter_line) {
-                    handleAddPrice();
-                } else if (value === '.') {
-                    if (!priceInput.includes('.') && !priceInput.endsWith('.')) {
-                        setPriceInput(priceInput + value);
-                    }
-                } else if (/^\d$/.test(value)) {
-                    setPriceInput(priceInput + value);
-                }
-            };
+            const keypadLayout = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', '.', t.enter_line];
+            const actionLayout = [t.ce];
 
             const handleInputChange = (e) => {
                 const value = e.target.value;
-                if (/^[0-9.]*$/.test(value)) {
+                if (/^[0-9]*\.?[0-9]*$/.test(value)) {
                     setPriceInput(value);
                     setError('');
                 } else {
@@ -500,585 +656,820 @@
                 }
             };
 
-            const handleCalculate = () => {
-                const prices = displayLines.flat().map(Number);
-                const validPrices = prices.filter(p => !isNaN(p) && p >= 0);
+            const handlePriceChange = (index, value) => {
+                const newPrices = [...prices];
+                if (value === '' || /^[0-9]*\.?[0-9]*$/.test(value)) {
+                    newPrices[index] = value === '' ? '' : parseFloat(value);
+                    setPrices(newPrices);
+                    setError('');
+                } else {
+                    setError(t.error_invalid_prices);
+                    inputRef.current.classList.add('animate-shake');
+                    setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                }
+            };
 
-                if (!validPrices.length) {
+            const handleAddPrice = () => {
+                if (/^[0-9]+(\.[0-9]{1,2})?$/.test(priceInput)) {
+                    const price = parseFloat(priceInput);
+                    if (!isNaN(price) && price >= 0) {
+                        setPrices([...prices, price]);
+                        setPriceInput('');
+                        setError('');
+                        if (displayRef.current) {
+                            displayRef.current.scrollTop = displayRef.current.scrollHeight;
+                        }
+                        setTimeout(() => {
+                            if (inputRef.current) {
+                                inputRef.current.focus();
+                            }
+                        }, 0);
+                    } else {
+                        setError(t.error_invalid_prices);
+                        inputRef.current.classList.add('animate-shake');
+                        setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                    }
+                } else {
+                    setError(t.error_invalid_prices);
+                    inputRef.current.classList.add('animate-shake');
+                    setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                }
+            };
+
+            const handleDeletePrice = (index) => {
+                const newPrices = [...prices];
+                newPrices.splice(index, 1);
+                setPrices(newPrices);
+                setSelectedPrices(selectedPrices.filter(i => i !== index).map(i => i > index ? i - 1 : i));
+            };
+
+            const handleDeleteSelectedPrices = () => {
+                const newPrices = prices.filter((_, index) => !selectedPrices.includes(index));
+                setPrices(newPrices);
+                setSelectedPrices([]);
+            };
+
+            const handleSelectPrice = (index) => {
+                setSelectedPrices(prev => 
+                    prev.includes(index) 
+                        ? prev.filter(i => i !== index) 
+                        : [...prev, index]
+                );
+            };
+
+            const handleSelectAllPrices = () => {
+                if (selectedPrices.length === prices.length) {
+                    setSelectedPrices([]);
+                } else {
+                    setSelectedPrices(prices.map((_, index) => index));
+                }
+            };
+
+            const handleKeypadInput = (value) => {
+                if (value === t.ce) {
+                    setPriceInput('');
+                } else if (value === t.enter_line) {
+                    handleAddPrice();
+                } else if (value === '.' && !priceInput.includes('.')) {
+                    setPriceInput(prev => prev + value);
+                } else if (/^\d$/.test(value)) {
+                    setPriceInput(prev => prev + value);
+                }
+            };
+
+            const handleCalculate = () => {
+                if (!prices.length || prices.some(p => p === '' || isNaN(p))) {
                     setError(t.error_invalid_prices);
                     inputRef.current.classList.add('animate-shake');
                     setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
                     return;
                 }
-
-                if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+                const parsedPercentage = parseFloat(percentage);
+                const parsedRoundingStep = parseFloat(roundingStep);
+                if (isNaN(parsedPercentage) || parsedPercentage < 0 || parsedPercentage > 100) {
                     setError(t.error_invalid_percentage);
                     return;
                 }
-
-                if (isNaN(roundingStep) || roundingStep <= 0) {
+                if (isNaN(parsedRoundingStep) || parsedRoundingStep <= 0) {
                     setError(t.error_invalid_rounding_step);
                     return;
                 }
-
-                const discounts = [];
-                const final_prices = [];
-                const price_before_rounding = [];
-                const rounded_diff = [];
+                const newResults = {
+                    prices: [],
+                    discounts: [],
+                    final_prices: [],
+                    price_before_rounding: [],
+                    rounded_diff: []
+                };
                 let total_original = 0;
                 let total_discount = 0;
                 let total_final = 0;
 
-                validPrices.forEach(price => {
+                prices.forEach(price => {
+                    const discount = price * (parsedPercentage / 100);
+                    const price_before_rounding = price - discount;
+                    const final_price = Math.round(price_before_rounding / parsedRoundingStep) * parsedRoundingStep;
+                    const rounded_diff = final_price - price_before_rounding;
+                    newResults.prices.push(price);
+                    newResults.discounts.push(discount);
+                    newResults.final_prices.push(final_price);
+                    newResults.price_before_rounding.push(price_before_rounding);
+                    newResults.rounded_diff.push(rounded_diff);
                     total_original += price;
-                    const discount = price * (percentage / 100);
-                    const discounted_price = price - discount;
-                    const rounded_price = Math.round(discounted_price / roundingStep) * roundingStep;
-                    discounts.push(discount);
-                    final_prices.push(rounded_price);
-                    price_before_rounding.push(discounted_price);
-                    rounded_diff.push(rounded_price - discounted_price);
-                    total_final += rounded_price;
                     total_discount += discount;
+                    total_final += final_price;
                 });
 
-                const newResults = { prices: validPrices, discounts, final_prices, price_before_rounding, rounded_diff };
                 setResults(newResults);
                 setTotals({ total_original, total_discount, total_final });
-                setError('');
-
+                localStorage.setItem('results', JSON.stringify(newResults));
+                localStorage.setItem('totals', JSON.stringify({ total_original, total_discount, total_final }));
+                localStorage.setItem('prices', JSON.stringify(prices));
+                
+                const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
                 const newReceipt = {
                     id: Date.now(),
-                    date: new Date().toISOString().split('T')[0],
-                    total_original,
-                    total_final,
-                    item_count: validPrices.length,
-                    original_prices: validPrices.join(','),
-                    discounted_prices: final_prices.join(',')
+                    timestamp,
+                    prices: [...prices],
+                    results: newResults,
+                    totals: { total_original, total_discount, total_final }
                 };
-                const updatedReceipts = [newReceipt, ...receipts.slice(0, 9)];
-                setReceipts(updatedReceipts);
-                setDisplayPrices('');
-                setDisplayLines([]);
-                showNotification(t.success_receipt_saved);
+                const newReceipts = [...receipts, newReceipt];
+                setReceipts(newReceipts);
+                localStorage.setItem('receipts', JSON.stringify(newReceipts));
+                
+                setNotification(t.success_receipt_saved);
+                setTimeout(() => setNotification(''), 3000);
             };
 
-            const handleExportExcel = (receipt) => {
-                const selected = Object.values(exportOptions).some(opt => opt);
-                if (!selected && !selectedReceipt) {
-                    setError(t.error_no_export_selected);
-                    return;
-                }
-
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                const data = [];
-                if (selectedReceipt) {
-                    if (exportOptions.original_prices) data.push([t.original_price, receipt.original_prices]);
-                    if (exportOptions.discounted_prices) data.push([t.final_price, receipt.discounted_prices]);
-                    if (exportOptions.total_original) data.push([t.total_before, receipt.total_original.toFixed(2)]);
-                    if (exportOptions.total_final) data.push([t.total_after, receipt.total_final.toFixed(2)]);
-                    if (exportOptions.date) data.push([t.date, receipt.date]);
-                    if (exportOptions.item_count) data.push([t.sort_items_asc, receipt.item_count]);
-                } else {
-                    data.push([t.original_price, receipt.original_prices]);
-                    data.push([t.final_price, receipt.discounted_prices]);
-                    data.push([t.total_before, receipt.total_original.toFixed(2)]);
-                    data.push([t.total_after, receipt.total_final.toFixed(2)]);
-                    data.push([t.date, receipt.date]);
-                    data.push([t.sort_items_asc, receipt.item_count]);
-                }
-
-                const ws = XLSX.utils.aoa_to_sheet(data);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, 'Receipt');
-                XLSX.writeFile(wb, `Receipt_${receipt.date}_${timestamp}.xlsx`);
-                setSelectedReceipt(null);
-                setExportOptions({
-                    original_prices: false,
-                    discounted_prices: false,
-                    total_original: false,
-                    total_final: false,
-                    date: false,
-                    item_count: false
-                });
-                showNotification(t.success_excel_exported);
-            };
-
-            const handleClear = () => {
+            const handleClearAll = () => {
+                setPrices([]);
                 setPriceInput('');
-                setDisplayPrices('');
-                setDisplayLines([]);
                 setResults({ prices: [], discounts: [], final_prices: [], price_before_rounding: [], rounded_diff: [] });
                 setTotals({ total_original: 0, total_discount: 0, total_final: 0 });
+                localStorage.removeItem('prices');
+                localStorage.removeItem('results');
+                localStorage.removeItem('totals');
                 setError('');
+                setSelectedPrices([]);
             };
 
-            const handleReset = () => {
+            const handleResetAll = () => {
+                setPrices([]);
                 setPriceInput('');
-                setDisplayPrices('');
-                setDisplayLines([]);
-                setDisplayHeight(150);
-                setPercentage(10);
-                setRoundingStep(5);
                 setResults({ prices: [], discounts: [], final_prices: [], price_before_rounding: [], rounded_diff: [] });
                 setTotals({ total_original: 0, total_discount: 0, total_final: 0 });
                 setReceipts([]);
+                setSelectedPrices([]);
+                setSelectedReceipts([]);
+                localStorage.removeItem('prices');
+                localStorage.removeItem('results');
+                localStorage.removeItem('totals');
+                localStorage.removeItem('receipts');
                 setError('');
-                localStorage.clear();
-                showNotification(t.success_settings_saved);
+                setShowResetConfirmation(false);
+                setNotification('All data has been reset');
+                setTimeout(() => setNotification(''), 3000);
+            };
+
+            const handleExportReceipt = (receipt) => {
+                if (!receipt.results || !receipt.results.prices) return;
+                const ws = XLSX.utils.json_to_sheet(
+                    receipt.results.prices.map((price, index) => ({
+                        Timestamp: receipt.timestamp,
+                        [t.original_price]: price,
+                        [t.discount]: receipt.results.discounts[index],
+                        [t.price_before_rounding]: receipt.results.price_before_rounding[index],
+                        [t.rounded_diff]: receipt.results.rounded_diff[index],
+                        [t.final_price]: receipt.results.final_prices[index]
+                    }))
+                );
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Receipt');
+                XLSX.writeFile(wb, `receipt_${receipt.id}.xlsx`);
+                setNotification(t.success_receipt_exported);
+                setTimeout(() => setNotification(''), 3000);
+            };
+
+            const handleExportAll = () => {
+                const ws = XLSX.utils.json_to_sheet(
+                    receipts.filter(receipt => receipt.results && receipt.results.prices).flatMap(receipt =>
+                        receipt.results.prices.map((price, index) => ({
+                            Timestamp: receipt.timestamp,
+                            [t.original_price]: price,
+                            [t.discount]: receipt.results.discounts[index],
+                            [t.price_before_rounding]: receipt.results.price_before_rounding[index],
+                            [t.rounded_diff]: receipt.results.rounded_diff[index],
+                            [t.final_price]: receipt.results.final_prices[index]
+                        }))
+                    )
+                );
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'All Receipts');
+                XLSX.writeFile(wb, 'all_receipts.xlsx');
+                setNotification(t.success_excel_exported);
+                setTimeout(() => setNotification(''), 3000);
+            };
+
+            const handleSelectReceipt = (id) => {
+                setSelectedReceipts(prev => prev.includes(id) ? prev.filter(rid => rid !== id) : [...prev, id]);
+            };
+
+            const handleExportSelected = () => {
+                const selectedData = receipts
+                    .filter(receipt => selectedReceipts.includes(receipt.id) && receipt.results && receipt.results.prices)
+                    .flatMap(receipt =>
+                        receipt.results.prices.map((price, index) => ({
+                            Timestamp: receipt.timestamp,
+                            [t.original_price]: price,
+                            [t.discount]: receipt.results.discounts[index],
+                            [t.price_before_rounding]: receipt.results.price_before_rounding[index],
+                            [t.rounded_diff]: receipt.results.rounded_diff[index],
+                            [t.final_price]: receipt.results.final_prices[index]
+                        }))
+                    );
+                const ws = XLSX.utils.json_to_sheet(selectedData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Selected Receipts');
+                XLSX.writeFile(wb, 'selected_receipts.xlsx');
+                setNotification(t.success_excel_exported);
+                setTimeout(() => setNotification(''), 3000);
+            };
+
+            const handleDeleteSelected = () => {
+                const newReceipts = receipts.filter(receipt => !selectedReceipts.includes(receipt.id));
+                setReceipts(newReceipts);
+                localStorage.setItem('receipts', JSON.stringify(newReceipts));
+                setSelectedReceipts([]);
+                setNotification('Selected receipts deleted');
+                setTimeout(() => setNotification(''), 3000);
+            };
+
+            const toggleTheme = () => {
+                const newTheme = theme === 'light' ? 'dark' : 'light';
+                setTheme(newTheme);
+                localStorage.setItem('theme', newTheme);
             };
 
             const handleSaveSettings = () => {
-                if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+                const parsedPercentage = parseFloat(percentage);
+                const parsedRoundingStep = parseFloat(roundingStep);
+                const parsedDisplayHeight = parseFloat(displayHeight);
+                
+                if (isNaN(parsedPercentage) || parsedPercentage < 0 || parsedPercentage > 100) {
                     setError(t.error_invalid_percentage);
                     return;
                 }
-                if (isNaN(roundingStep) || roundingStep <= 0) {
+                
+                if (isNaN(parsedRoundingStep) || parsedRoundingStep <= 0) {
                     setError(t.error_invalid_rounding_step);
                     return;
                 }
-                showNotification(t.success_settings_saved);
-                setShowSettings(false);
+                
+                if (isNaN(parsedDisplayHeight) || parsedDisplayHeight < 100 || parsedDisplayHeight > 1000) {
+                    setError('Display height must be between 100 and 1000px');
+                    return;
+                }
+                
+                localStorage.setItem('percentage', percentage);
+                localStorage.setItem('roundingStep', roundingStep);
+                localStorage.setItem('displayHeight', displayHeight);
+                
+                setNotification(t.success_settings_saved);
+                setTimeout(() => setNotification(''), 3000);
             };
 
-            const sortedAndFilteredReceipts = () => {
-                let filtered = [...receipts];
-                if (filterDate) {
-                    filtered = filtered.filter(r => r.date === filterDate);
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddPrice();
+                } else if (e.key === 'Escape') {
+                    setPriceInput('');
+                } else if (!/[0-9]|\.|Backspace|Delete|ArrowLeft|ArrowRight|Tab/.test(e.key)) {
+                    e.preventDefault();
                 }
-                if (filterTotalMin) {
-                    filtered = filtered.filter(r => r.total_final >= Number(filterTotalMin));
-                }
-                if (filterTotalMax) {
-                    filtered = filtered.filter(r => r.total_final <= Number(filterTotalMax));
-                }
-                return filtered.sort((a, b) => {
-                    if (sortOption === 'date_asc') return new Date(a.date) - new Date(b.date);
-                    if (sortOption === 'date_desc') return new Date(b.date) - new Date(a.date);
-                    if (sortOption === 'total_asc') return a.total_final - b.total_final;
-                    if (sortOption === 'total_desc') return b.total_final - a.total_final;
-                    if (sortOption === 'items_asc') return a.item_count - b.item_count;
-                    if (sortOption === 'items_desc') return b.item_count - a.item_count;
-                    return 0;
+            };
+
+            const formatPrice = (price) => {
+                return parseFloat(price).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
                 });
             };
 
-            if (showAbout) {
-                return (
-                    <div className="bg-card p-6 rounded-xl shadow-lg">
-                        <h1 className="text-2xl font-bold mb-4 sm:text-xl">{t.about}</h1>
-                        <p className="text-gray-600 mb-6 text-sm">{t.about_content}</p>
-                        <button
-                            className="action-button w-full py-3 sm:py-2"
-                            onClick={() => setShowAbout(false)}
-                            aria-label="Back"
-                        >
-                            Back
-                        </button>
-                    </div>
-                );
-            }
+            const handleBulkImport = (e) => {
+                const text = e.target.value;
+                const priceValues = text.split(/[\n,;]/)
+                    .map(val => val.trim())
+                    .filter(val => val !== '')
+                    .map(val => parseFloat(val))
+                    .filter(val => !isNaN(val) && val > 0);
+                
+                if (priceValues.length > 0) {
+                    setPrices([...prices, ...priceValues]);
+                    setNotification(`Added ${priceValues.length} prices`);
+                    setTimeout(() => setNotification(''), 3000);
+                    e.target.value = '';
+                }
+            };
 
-            if (showReceipts) {
-                return (
-                    <div className="bg-card p-6 rounded-xl shadow-lg">
-                        <h1 className="text-2xl font-bold mb-4 sm:text-xl">{t.receipts}</h1>
-                        <div className="filter-box">
-                            <select
-                                value={sortOption}
-                                onChange={(e) => setSortOption(e.target.value)}
-                                className="text-sm"
-                                aria-label={t.sort_by}
-                            >
-                                <option value="date_desc">{t.sort_date_desc}</option>
-                                <option value="date_asc">{t.sort_date_asc}</option>
-                                <option value="total_asc">{t.sort_total_asc}</option>
-                                <option value="total_desc">{t.sort_total_desc}</option>
-                                <option value="items_asc">{t.sort_items_asc}</option>
-                                <option value="items_desc">{t.sort_items_desc}</option>
-                            </select>
+            const copyResultsToClipboard = () => {
+                if (!results.prices.length) return;
+                
+                let text = `${t.original_price}\t${t.discount}\t${t.final_price}\n`;
+                results.prices.forEach((price, index) => {
+                    text += `${formatPrice(price)}\t${formatPrice(results.discounts[index])}\t${formatPrice(results.final_prices[index])}\n`;
+                });
+                text += `\n${t.total_before} ${formatPrice(totals.total_original)}\n`;
+                text += `${t.total_discount} ${formatPrice(totals.total_discount)}\n`;
+                text += `${t.total_after} ${formatPrice(totals.total_final)}`;
+                
+                navigator.clipboard.writeText(text);
+                setNotification('Results copied to clipboard');
+                setTimeout(() => setNotification(''), 3000);
+            };
+
+            useEffect(() => {
+                if (inputRef.current) {
+                    inputRef.current.focus();
+                }
+            }, []);
+
+            useEffect(() => {
+                const saveData = setTimeout(() => {
+                    localStorage.setItem('prices', JSON.stringify(prices));
+                    localStorage.setItem('results', JSON.stringify(results));
+                    localStorage.setItem('totals', JSON.stringify(totals));
+                }, 500);
+                
+                return () => clearTimeout(saveData);
+            }, [prices, results, totals]);
+
+            useEffect(() => {
+                const handleBeforeUnload = (e) => {
+                    if (prices.length > 0) {
+                        e.preventDefault();
+                        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                    }
+                };
+                
+                window.addEventListener('beforeunload', handleBeforeUnload);
+                return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+            }, [prices]);
+
+            const sortedFilteredReceipts = receipts
+                .filter(receipt => {
+                    if (!receipt.results || !receipt.results.prices) return false;
+                    if (filterDate && !receipt.timestamp.startsWith(filterDate)) return false;
+                    if (filterTotalMin && receipt.totals.total_final < parseFloat(filterTotalMin)) return false;
+                    if (filterTotalMax && receipt.totals.total_final > parseFloat(filterTotalMax)) return false;
+                    return true;
+                })
+                .sort((a, b) => {
+                    if (sortOption === 'date_asc') return new Date(a.timestamp) - new Date(b.timestamp);
+                    if (sortOption === 'date_desc') return new Date(b.timestamp) - new Date(a.timestamp);
+                    if (sortOption === 'total_asc') return a.totals.total_final - b.totals.total_final;
+                    if (sortOption === 'total_desc') return b.totals.total_final - a.totals.total_final;
+                    if (sortOption === 'items_asc') return a.prices.length - b.prices.length;
+                    if (sortOption === 'items_desc') return b.prices.length - a.prices.length;
+                    return 0;
+                });
+
+            useEffect(() => {
+                localStorage.setItem('prices', JSON.stringify(prices));
+            }, [prices]);
+
+            useEffect(() => {
+                document.body.className = theme === 'dark' ? 'dark-mode' : '';
+            }, [theme]);
+
+            useEffect(() => {
+                const onlineStatus = () => setIsOnline(navigator.onLine);
+                window.addEventListener('online', onlineStatus);
+                window.addEventListener('offline', onlineStatus);
+                return () => {
+                    window.removeEventListener('online', onlineStatus);
+                    window.removeEventListener('offline', onlineStatus);
+                };
+            }, []);
+
+            return (
+                <div className="min-h-screen">
+                    <div className="container">
+                        <div className="header">
+                            <div className="header-title">{t.title}</div>
+                            <div className="header-actions">
+                                <button
+                                    onClick={toggleTheme}
+                                    className="action-button bg-purple-600 hover:bg-purple-700"
+                                >
+                                    {theme === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {isOnline ? null : <div className="error-alert">{t.offline_mode}</div>}
+                        {error && <div className="error-alert">{error}</div>}
+                        {notification && <div className="notification">{notification}</div>}
+
+                        <div className="mb-4 bg-card p-4 rounded-xl shadow-lg">
+                            <label className="block mb-1">{t.enter_prices}</label>
                             <input
-                                type="date"
-                                value={filterDate}
-                                onChange={(e) => setFilterDate(e.target.value)}
-                                placeholder={t.filter_date}
-                                className="text-sm"
-                                aria-label={t.filter_date}
-                            />
-                            <input
-                                type="number"
-                                value={filterTotalMin}
-                                onChange={(e) => setFilterTotalMin(e.target.value)}
-                                placeholder={t.filter_total_min}
-                                className="text-sm"
-                                aria-label={t.filter_total_min}
-                            />
-                            <input
-                                type="number"
-                                value={filterTotalMax}
-                                onChange={(e) => setFilterTotalMax(e.target.value)}
-                                placeholder={t.filter_total_max}
-                                className="text-sm"
-                                aria-label={t.filter_total_max}
+                                ref={inputRef}
+                                type="text"
+                                value={priceInput}
+                                onChange={handleInputChange}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === '+') {
+                                        e.preventDefault();
+                                        handleAddPrice();
+                                    } else if (!/[0-9]|\.|Backspace|Delete|ArrowLeft|ArrowRight/.test(e.key)) {
+                                        e.preventDefault();
+                                    }
+                                }}
+                                placeholder={t.prices_placeholder}
+                                className="input-box"
                             />
                         </div>
-                        {sortedAndFilteredReceipts().map((receipt, index) => (
-                            <div key={index} className="receipt-card">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <p className="text-sm font-semibold">{t.date}: {receipt.date}</p>
-                                        <p className="text-sm">{t.total_before} {receipt.total_original.toFixed(2)}</p>
-                                        <p className="text-sm">{t.total_after} {receipt.total_final.toFixed(2)}</p>
-                                        <p className="text-sm">{t.sort_items_asc}: {receipt.item_count}</p>
-                                    </div>
-                                    <div className="flex gap-2 flex-wrap">
+
+                        <div className="mb-4">
+
+                            <div className={`keypad-container ${showKeypad ? 'visible' : ''}`}>
+                                <div className="keypad-grid mt-4">
+                                    {keypadLayout.map((key, index) => (
                                         <button
-                                            className="action-button py-1 px-3 text-sm"
-                                            onClick={() => setSelectedReceipt(receipt)}
-                                            aria-label={t.export}
+                                            key={index}
+                                            onClick={() => handleKeypadInput(key)}
+                                            className="keypad-button"
+                                        >
+                                            {key}
+                                        </button>
+                                    ))}
+                                    {actionLayout.map((action, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleKeypadInput(action)}
+                                            className="keypad-button bg-red-600 hover:bg-red-700 text-white"
+                                        >
+                                            {action}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="action-grid">
+                            <button
+                                onClick={handleCalculate}
+                                className="action-button bg-green-600 hover:bg-green-700"
+                            >
+                                {t.calculate}
+                            </button>
+                            <button
+                                onClick={handleClearAll}
+                                className="action-button bg-red-600 hover:bg-red-700 max-[400px]:col-span-2"
+                            >
+                                {t.clear}
+                            </button>
+                            <button
+                                onClick={() => setShowReceipts(!showReceipts)}
+                                className="action-button bg-blue-600 hover:bg-blue-700"
+                            >
+                                {showReceipts ? t.close : t.receipts}
+                            </button>
+                        </div>
+
+                        <div
+                            ref={displayRef}
+                            className="display-box"
+                            style={{ maxHeight: `${displayHeight}px` }}
+                        >
+                            {prices.length > 0 && (
+                                <div className="price-item">
+                                    <div className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedPrices.length === prices.length}
+                                            onChange={handleSelectAllPrices}
+                                            className="mr-2"
+                                        />
+                                        <span className="text-sm">{selectedPrices.length} selected</span>
+                                    </div>
+                                    <button
+                                        onClick={handleDeleteSelectedPrices}
+                                        className="delete-btn"
+                                        disabled={selectedPrices.length === 0}
+                                    >
+                                        {t.delete_selected_prices}
+                                    </button>
+                                </div>
+                            )}
+                            {prices.map((price, index) => (
+                                <div key={index} className="price-item">
+                                    <div className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedPrices.includes(index)}
+                                            onChange={() => handleSelectPrice(index)}
+                                            className="mr-2"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={price}
+                                            onChange={(e) => handlePriceChange(index, e.target.value)}
+                                            className="input-box"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={() => handleDeletePrice(index)}
+                                        className="delete-btn"
+                                    >
+                                        {t.delete}
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        {results.prices.length > 0 && (
+                            <div className="mb-4 bg-card p-4 rounded-xl shadow-lg">
+                                <h2 className="text-xl font-bold mb-2">{t.discount_details}</h2>
+                                <table className="w-full">
+                                    <thead>
+                                        <tr>
+                                            <th className="text-left p-2">{t.original_price}</th>
+                                            <th className="text-left p-2">{t.discount}</th>
+                                            <th className="text-left p-2">{t.price_before_rounding}</th>
+                                            <th className="text-left p-2">{t.rounded_diff}</th>
+                                            <th className="text-left p-2">{t.final_price}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {results.prices.map((price, index) => (
+                                            <tr key={index}>
+                                                <td className="p-2">{price.toFixed(2)}</td>
+                                                <td className="p-2">{results.discounts[index].toFixed(2)}</td>
+                                                <td className="p-2">{results.price_before_rounding[index].toFixed(2)}</td>
+                                                <td className="p-2">{results.rounded_diff[index].toFixed(2)}</td>
+                                                <td className="p-2">{results.final_prices[index].toFixed(2)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                <div className="mt-4">
+                                    <p>{t.total_before} {totals.total_original.toFixed(2)}</p>
+                                    <p>{t.total_discount} {totals.total_discount.toFixed(2)}</p>
+                                    <p>{t.total_after} {totals.total_final.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="mb-4">
+                            <button
+                                onClick={() => setShowSettings(!showSettings)}
+                                className="action-button bg-blue-600 hover:bg-blue-700 w-full"
+                            >
+                                {showSettings ? t.close : t.toggle_settings}
+                            </button>
+                            <div className={`settings-box ${showSettings ? 'visible' : ''}`}>
+                                <div className="mb-4">
+                                    <label className="block mb-1">{t.percentage_label}</label>
+                                    <input
+                                        type="number"
+                                        value={percentage}
+                                        onChange={(e) => setPercentage(e.target.value)}
+                                        className="input-box"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block mb-1">{t.rounding_step}</label>
+                                    <input
+                                        type="number"
+                                        value={roundingStep}
+                                        onChange={(e) => setRoundingStep(e.target.value)}
+                                        className="input-box"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block mb-1">{t.resize_display}</label>
+                                    <input
+                                        type="number"
+                                        value={displayHeight}
+                                        onChange={(e) => setDisplayHeight(e.target.value)}
+                                        className="input-box"
+                                    />
+                                </div>
+                                <button
+                                    onClick={handleSaveSettings}
+                                    className="action-button bg-green-600 hover:bg-green-700 w-full"
+                                >
+                                    {t.save_settings}
+                                </button>
+                            </div>
+                        </div>
+
+                        {showReceipts && (
+                            <div className="mb-4 bg-card p-4 rounded-xl shadow-lg">
+                                <h2 className="text-xl font-bold mb-2">{t.receipts}</h2>
+                                <div className="filter-box">
+                                    <label className="block mb-1">{t.sort_by}</label>
+                                    <select
+                                        value={sortOption}
+                                        onChange={(e) => setSortOption(e.target.value)}
+                                        className="input-box"
+                                    >
+                                        <option value="date_asc">{t.sort_date_asc}</option>
+                                        <option value="date_desc">{t.sort_date_desc}</option>
+                                        <option value="total_asc">{t.sort_total_asc}</option>
+                                        <option value="total_desc">{t.sort_total_desc}</option>
+                                        <option value="items_asc">{t.sort_items_asc}</option>
+                                        <option value="items_desc">{t.sort_items_desc}</option>
+                                    </select>
+                                </div>
+                                <div className="filter-box">
+                                    <label className="block mb-1">{t.filter_date}</label>
+                                    <input
+                                        type="date"
+                                        value={filterDate}
+                                        onChange={(e) => setFilterDate(e.target.value)}
+                                        className="input-box"
+                                    />
+                                </div>
+                                <div className="filter-box">
+                                    <label className="block mb-1">{t.filter_total_min}</label>
+                                    <input
+                                        type="number"
+                                        value={filterTotalMin}
+                                        onChange={(e) => setFilterTotalMin(e.target.value)}
+                                        className="input-box"
+                                    />
+                                </div>
+                                <div className="filter-box">
+                                    <label className="block mb-1">{t.filter_total_max}</label>
+                                    <input
+                                        type="number"
+                                        value={filterTotalMax}
+                                        onChange={(e) => setFilterTotalMax(e.target.value)}
+                                        className="input-box"
+                                    />
+                                </div>
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {sortedFilteredReceipts.map(receipt => (
+                                        <div key={receipt.id} className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedReceipts.includes(receipt.id)}
+                                                onChange={() => handleSelectReceipt(receipt.id)}
+                                                className="mr-2"
+                                            />
+                                            <button
+                                                onClick={() => handleExportReceipt(receipt)}
+                                                className="action-button bg-blue-600 hover:bg-blue-700 text-sm"
+                                            >
+                                                {receipt.timestamp} ({receipt.prices.length} items, ${receipt.totals.total_final.toFixed(2)})
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button
+                                    onClick={() => setSelectedReceipts(sortedFilteredReceipts.map(r => r.id))}
+                                    className="action-button bg-gray-500 hover:bg-gray-600 w-full mb-2"
+                                >
+                                    {t.select_all}
+                                </button>
+                                <button
+                                    onClick={() => setSelectedReceipts([])}
+                                    className="action-button bg-gray-500 hover:bg-gray-600 w-full mb-2"
+                                >
+                                    {t.deselect_all}
+                                </button>
+                                <button
+                                    onClick={handleExportSelected}
+                                    className="action-button bg-orange-600 hover:bg-orange-700 w-full mb-2"
+                                >
+                                    {t.export_selected}
+                                </button>
+                                <button
+                                    onClick={handleDeleteSelected}
+                                    className="action-button bg-red-600 hover:bg-red-700 w-full mb-2"
+                                >
+                                    {t.delete_selected}
+                                </button>
+                                {sortedFilteredReceipts.map(receipt => (
+                                    <div key={receipt.id} className="receipt-card mb-4">
+                                        <h3 className="text-lg font-bold mb-2">{t.receipts} - {receipt.timestamp}</h3>
+                                        <table className="w-full mb-4">
+                                            <thead>
+                                                <tr>
+                                                    <th className="text-left p-2">{t.original_price}</th>
+                                                    <th className="text-left p-2">{t.discount}</th>
+                                                    <th className="text-left p-2">{t.price_before_rounding}</th>
+                                                    <th className="text-left p-2">{t.rounded_diff}</th>
+                                                    <th className="text-left p-2">{t.final_price}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {receipt.results.prices.map((price, index) => (
+                                                    <tr key={index}>
+                                                        <td className="p-2">{price.toFixed(2)}</td>
+                                                        <td className="p-2">{receipt.results.discounts[index].toFixed(2)}</td>
+                                                        <td className="p-2">{receipt.results.price_before_rounding[index].toFixed(2)}</td>
+                                                        <td className="p-2">{receipt.results.rounded_diff[index].toFixed(2)}</td>
+                                                        <td className="p-2">{receipt.results.final_prices[index].toFixed(2)}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                        <div className="mb-4">
+                                            <p>{t.total_before} {receipt.totals.total_original.toFixed(2)}</p>
+                                            <p>{t.total_discount} {receipt.totals.total_discount.toFixed(2)}</p>
+                                            <p>{t.total_after} {receipt.totals.total_final.toFixed(2)}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => handleExportReceipt(receipt)}
+                                            className="action-button bg-orange-600 hover:bg-orange-700 w-full"
                                         >
                                             {t.export}
                                         </button>
                                     </div>
-                                </div>
-                                {selectedReceipt && selectedReceipt.id === receipt.id && (
-                                    <div className="mt-4">
-                                        <h2 className="text-lg font-semibold mb-2 sm:text-base">{t.export}</h2>
-                                        <div className="export-options">
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.original_prices}
-                                                    onChange={() => setExportOptions({ ...exportOptions, original_prices: !exportOptions.original_prices })}
-                                                />
-                                                {t.original_price}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.discounted_prices}
-                                                    onChange={() => setExportOptions({ ...exportOptions, discounted_prices: !exportOptions.discounted_prices })}
-                                                />
-                                                {t.final_price}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.total_original}
-                                                    onChange={() => setExportOptions({ ...exportOptions, total_original: !exportOptions.total_original })}
-                                                />
-                                                {t.total_before}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.total_final}
-                                                    onChange={() => setExportOptions({ ...exportOptions, total_final: !exportOptions.total_final })}
-                                                />
-                                                {t.total_after}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.date}
-                                                    onChange={() => setExportOptions({ ...exportOptions, date: !exportOptions.date })}
-                                                />
-                                                {t.date}
-                                            </label>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={exportOptions.item_count}
-                                                    onChange={() => setExportOptions({ ...exportOptions, item_count: !exportOptions.item_count })}
-                                                />
-                                                {t.sort_items_asc}
-                                            </label>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <button
-                                                className="action-button w-full py-2 text-sm"
-                                                onClick={() => handleExportExcel(receipt)}
-                                                aria-label={t.export_excel}
-                                            >
-                                                {t.export_excel}
-                                            </button>
-                                            <button
-                                                className="action-button w-full py-2 text-sm"
-                                                onClick={() => {
-                                                    setSelectedReceipt(null);
-                                                    setExportOptions({
-                                                        original_prices: false,
-                                                        discounted_prices: false,
-                                                        total_original: false,
-                                                        total_final: false,
-                                                        date: false,
-                                                        item_count: false
-                                                    });
-                                                }}
-                                                aria-label="Cancel"
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                className="action-button w-full py-2 text-sm"
-                                                onClick={() => {
-                                                    setExportOptions({
-                                                        original_prices: true,
-                                                        discounted_prices: true,
-                                                        total_original: true,
-                                                        total_final: true,
-                                                        date: true,
-                                                        item_count: true
-                                                    });
-                                                    handleExportExcel(receipt);
-                                                }}
-                                                aria-label={t.export_all}
-                                            >
-                                                {t.export_all}
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
+                                ))}
+                                <button
+                                    onClick={handleExportAll}
+                                    className="action-button bg-orange-600 hover:bg-orange-700 w-full mb-2"
+                                >
+                                    {t.export_all_excel}
+                                </button>
                             </div>
-                        ))}
-                        <button
-                            className="action-button w-full py-3 sm:py-2"
-                            onClick={() => setShowReceipts(false)}
-                            aria-label="Back"
-                        >
-                            Back
-                        </button>
-                    </div>
-                );
-            }
+                        )}
 
-            return (
-                <div className="bg-card p-6 rounded-xl shadow-lg" dir="ltr">
-                    {notification && <div className="notification">{notification}</div>}
-                    <div className="flex justify-between items-center mb-6">
-                        <h1 className="text-2xl font-bold sm:text-xl">{t.title}</h1>
-                        <div className="flex gap-3">
+                        <div className="fab-container">
                             <button
-                                className="text-blue-600 hover:text-blue-800 text-sm font-semibold transition-colors"
-                                onClick={() => {
-                                    setTheme(theme === 'light' ? 'dark' : 'light');
-                                    setShowSettings(false);
-                                }}
-                                aria-label={t.toggle_theme}
-                            >
-                                {theme === 'light' ? '🌙' : '☀️'}
-                            </button>
-                            <button
-                                className="text-blue-600 hover:text-blue-800 text-sm font-semibold transition-colors"
+                                className={`fab-option bg-gray-500 ${showFabOptions ? 'visible' : ''}`}
                                 onClick={() => {
                                     setShowAbout(true);
-                                    setShowSettings(false);
+                                    setShowFabOptions(false);
                                 }}
-                                aria-label={t.about}
                             >
-                                {t.about}
+                                <i className="fas fa-info"></i>
+                            </button>
+                            <button
+                                className={`fab-option bg-red-600 ${showFabOptions ? 'visible' : ''}`}
+                                onClick={() => {
+                                    setShowResetConfirmation(true);
+                                    setShowFabOptions(false);
+                                }}
+                            >
+                                <i className="fas fa-trash"></i>
+                            </button>
+                            <button
+                                className="fab-main"
+                                onClick={() => setShowFabOptions(!showFabOptions)}
+                            >
+                                <i className={`fas ${showFabOptions ? 'fa-times' : 'fa-ellipsis-v'}`}></i>
                             </button>
                         </div>
-                    </div>
 
-                    {error && (
-                        <div className="error-alert">
-                            {error}
-                            <button onClick={() => setError('')} aria-label={t.close}>×</button>
-                        </div>
-                    )}
-
-                    <div className="mb-6">
-                        <input
-                            type="text"
-                            className="input-box w-full"
-                            value={priceInput}
-                            onChange={handleInputChange}
-                            placeholder={t.prices_placeholder}
-                            aria-label={t.enter_prices}
-                            ref={inputRef}
-                        />
-                        <div
-                            className="display-box"
-                            style={{ height: `${displayHeight}px` }}
-                            ref={displayRef}
-                            aria-label="Entered prices"
-                        >
-                            {displayPrices || t.prices_placeholder}
-                        </div>
-                        <label className="block mb-1 text-sm mt-2">{t.resize_display}</label>
-                        <input
-                            type="range"
-                            className="resize-slider"
-                            min="50"
-                            max="300"
-                            value={displayHeight}
-                            onChange={(e) => setDisplayHeight(e.target.value)}
-                            aria-label={t.resize_display}
-                        />
-                    </div>
-
-                    <div className={`settings-box ${showSettings ? 'visible' : 'hidden'}`}>
-                        <div className="mb-4">
-                            <label className="block mb-1 text-sm font-semibold">{t.percentage_label}</label>
-                            <input
-                                type="number"
-                                className="w-full p-2 border rounded-lg text-sm"
-                                value={percentage}
-                                onChange={(e) => setPercentage(e.target.value)}
-                                min="0"
-                                max="100"
-                                aria-label={t.percentage_label}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block mb-1 text-sm font-semibold">{t.rounding_step}</label>
-                            <input
-                                type="number"
-                                className="w-full p-2 border rounded-lg text-sm"
-                                value={roundingStep}
-                                onChange={(e) => setRoundingStep(e.target.value)}
-                                min="0"
-                                aria-label={t.rounding_step}
-                            />
-                        </div>
-                        <button
-                            className="action-button w-full py-2 text-sm"
-                            onClick={handleSaveSettings}
-                            aria-label={t.save_settings}
-                        >
-                            {t.save_settings}
-                        </button>
-                    </div>
-
-                    <button
-                        className="text-blue-600 hover:text-blue-800 mb-4 flex items-center text-sm font-semibold"
-                        onClick={() => setShowSettings(!showSettings)}
-                        aria-label={showSettings ? 'Hide Settings' : t.toggle_settings}
-                    >
-                        {showSettings ? 'Hide Settings' : t.toggle_settings}
-                        <svg className={`w-4 h-4 ml-1 transform ${showSettings ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-
-                    <div className="keypad-container">
-                        <div className="keypad-grid">
-                            {keypadLayout.map((key, index) => (
-                                <button
-                                    key={index}
-                                    className={`keypad-button py-3 sm:py-2 ${key === t.enter_line ? 'action-button' : ''}`}
-                                    onClick={() => handleKeypadInput(key)}
-                                    aria-label={key}
-                                >
-                                    {key}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="action-grid">
-                            {actionLayout.map((key, index) => (
-                                <button
-                                    key={index}
-                                    className={`action-button py-3 sm:py-2 ${key === t.clear || key === t.reset ? 'bg-gray-500 hover:bg-gray-600' : ''}`}
-                                    onClick={() => {
-                                        if (key === t.clear) {
-                                            handleClear();
-                                        } else if (key === t.reset) {
-                                            handleReset();
-                                        } else if (key === t.ce) {
-                                            handleKeypadInput('CE');
-                                        }
-                                    }}
-                                    aria-label={key}
-                                >
-                                    {key}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 mt-6">
-                        <button
-                            className="action-button py-3 sm:py-2"
-                            onClick={handleCalculate}
-                            aria-label={t.calculate}
-                        >
-                            {t.calculate}
-                        </button>
-                        <button
-                            className="action-button py-3 sm:py-2"
-                            onClick={() => {
-                                setShowReceipts(true);
-                                setShowSettings(false);
-                            }}
-                            aria-label={t.receipts}
-                        >
-                            {t.receipts}
-                        </button>
-                    </div>
-
-                    {results.prices.length > 0 && (
-                        <div className="mt-6">
-                            <h2 className="text-lg font-semibold mb-4 sm:text-base">{t.title}</h2>
-                            <div className="bg-gray-100 rounded-lg p-4">
-                                <table className="w-full border-collapse">
-                                    <thead>
-                                        <tr className="bg-gray-200">
-                                            <th className="p-2 text-sm font-semibold">{t.original_price}</th>
-                                            <th className="p-2 text-sm font-semibold">{t.discount}</th>
-                                            <th className="p-2 text-sm font-semibold">{t.final_price}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {results.prices.map((price, index) => (
-                                            <tr key={index}>
-                                                <td className="p-2 text-sm">{price.toFixed(2)}</td>
-                                                <td className="p-2 text-sm">{results.discounts[index].toFixed(2)}</td>
-                                                <td className="p-2 text-sm">{results.final_prices[index].toFixed(2)}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <div className="flex flex-col gap-2 mt-4 text-sm">
-                                    <p className="font-semibold">{t.total_before} {totals.total_original.toFixed(2)}</p>
-                                    <p className="font-semibold">{t.total_discount} {totals.total_discount.toFixed(2)}</p>
-                                    <p className="font-semibold">{t.total_after} {totals.total_final.toFixed(2)}</p>
+                        {showAbout && (
+                            <div className={`fixed inset-0 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} bg-opacity-75 flex items-center justify-center`}>
+                                <div className="bg-card p-6 rounded-xl shadow-lg max-w-md w-full">
+                                    <h2 className="text-xl font-bold mb-4">{t.about}</h2>
+                                    <p>{t.about_content}</p>
+                                    <button
+                                        onClick={() => setShowAbout(false)}
+                                        className="action-button bg-red-600 hover:bg-red-700 w-full mt-4"
+                                    >
+                                        {t.close}
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {results.prices.length > 0 && (
-                        <div className="mt-6">
-                            <h2 className="text-lg font-semibold mb-4 sm:text-base">{t.discount_details}</h2>
-                            <div className="bg-gray-100 rounded-lg p-4">
-                                <table className="w-full border-collapse">
-                                    <thead>
-                                        <tr className="bg-gray-200">
-                                            <th className="p-2 text-sm font-semibold">{t.original_price}</th>
-                                            <th className="p-2 text-sm font-semibold">{t.price_before_rounding}</th>
-                                            <th className="p-2 text-sm font-semibold">{t.final_price}</th>
-                                            <th className="p-2 text-sm font-semibold">{t.rounded_diff}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {results.prices.map((price, index) => (
-                                            <tr key={index}>
-                                                <td className="p-2 text-sm">{price.toFixed(2)}</td>
-                                                <td className="p-2 text-sm">{results.price_before_rounding[index].toFixed(2)}</td>
-                                                <td className="p-2 text-sm">{results.final_prices[index].toFixed(2)}</td>
-                                                <td className="p-2 text-sm">{results.rounded_diff[index].toFixed(2)}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                        {showResetConfirmation && (
+                            <div className="confirmation-modal">
+                                <div className="confirmation-content">
+                                    <h2 className="text-xl font-bold mb-4">{t.reset}</h2>
+                                    <p>{t.reset_confirmation}</p>
+                                    <div className="confirmation-buttons">
+                                        <button
+                                            onClick={handleResetAll}
+                                            className="action-button bg-red-600 hover:bg-red-700"
+                                        >
+                                            {t.confirm}
+                                        </button>
+                                        <button
+                                            onClick={() => setShowResetConfirmation(false)}
+                                            className="action-button bg-gray-500 hover:bg-gray-600"
+                                        >
+                                            {t.cancel}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             );
         }
-
+        
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
