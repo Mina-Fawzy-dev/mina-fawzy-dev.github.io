@@ -559,6 +559,7 @@
             en: {
                 title: 'Book Discount Calculator',
                 enter_prices: 'Enter Prices',
+                add_price: 'Add Price',
                 prices_placeholder: 'Enter a book price',
                 calculate: 'Calculate',
                 clear: 'Clear All',
@@ -623,7 +624,8 @@
                       <a href="https://mina-fawzy-dev.github.io" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">mina-fawzy-dev.github.io</a>
                     </div>
                   </div>
-                `,                close: 'Close',
+                `,
+                close: 'Close',
                 delete: 'Delete',
                 reset_confirmation: 'Are you sure you want to reset everything? This will delete all receipts and data permanently and cannot be undone.',
                 confirm: 'Confirm',
@@ -632,6 +634,7 @@
             ar: {
                 title: 'حاسبة خصم الكتب',
                 enter_prices: 'أدخل الأسعار',
+                add_price: 'إضافة سعر',
                 prices_placeholder: 'أدخل سعر كتاب',
                 calculate: 'احسب',
                 clear: 'مسح الكل',
@@ -805,6 +808,13 @@
                     setError(t.error_invalid_prices);
                     inputRef.current.classList.add('animate-shake');
                     setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
+                }
+            };
+
+            const handleInputBlur = () => {
+                // Only add the price if the input is not empty and is valid
+                if (priceInput && /^[0-9]+(\.[0-9]{1,2})?$/.test(priceInput)) {
+                    handleAddPrice();
                 }
             };
 
@@ -1066,7 +1076,7 @@
             };
 
             const handleKeyDown = (e, index = null) => {
-                if (e.key === 'Enter' || e.key === 'Done' || e.key === 'Go') {
+                if (e.key === 'Enter' || e.key === 'Done' || e.key === 'Go' || e.key === 'Return') {
                     e.preventDefault();
                     if (index === null) {
                         handleAddPrice();
@@ -1218,18 +1228,27 @@
 
                         <div className="mb-4 bg-card p-4 rounded-xl shadow-lg">
                             <label className="block mb-1">{t.enter_prices}</label>
-                            <input
-                                ref={inputRef}
-                                type="number"
-                                inputMode="decimal"
-                                pattern="[0-9]*\.?[0-9]*"
-                                value={priceInput}
-                                onChange={handleInputChange}
-                                onKeyDown={(e) => handleKeyDown(e)}
-                                onFocus={handleInputFocus}
-                                placeholder={t.prices_placeholder}
-                                className="input-box"
-                            />
+                            <div className="flex items-center gap-2">
+                                <input
+                                    ref={inputRef}
+                                    type="number"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*\.?[0-9]*"
+                                    value={priceInput}
+                                    onChange={handleInputChange}
+                                    onKeyDown={(e) => handleKeyDown(e)}
+                                    onBlur={handleInputBlur}
+                                    onFocus={handleInputFocus}
+                                    placeholder={t.prices_placeholder}
+                                    className="input-box flex-1"
+                                />
+                                <button
+                                    onClick={handleAddPrice}
+                                    className="action-button bg-green-600 hover:bg-green-700"
+                                >
+                                    {t.add_price}
+                                </button>
+                            </div>
                         </div>
 
                         <div
