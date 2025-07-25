@@ -449,7 +449,11 @@
             align-items: center;
             z-index: 1000;
         }
-
+        
+        .dark-mode .about-content a {
+          color: #60a5fa !important;
+        }
+        
         .confirmation-content {
             background-color: white;
             padding: 2rem;
@@ -607,8 +611,19 @@
                 success_receipt_saved: 'Receipt saved successfully!',
                 success_receipt_exported: 'Receipt exported successfully!',
                 success_excel_exported: 'Receipts exported as Excel successfully!',
-                about_content: 'This app was developed by Mina. More Projects: <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer">github.com/mina-fawzy-dev</a> <a href="https://mina-fawzy-dev.github.io" target="_blank" rel="noopener noreferrer">mina-fawzy-dev.github.io</a>',
-                close: 'Close',
+                about_content: `
+                  <div class="space-y-2">
+                    <p>Dev. By Mina.</p>
+                    <div class="flex items-center">
+                      <span class="font-semibold mr-2">Github:</span>
+                      <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">github.com/mina-fawzy-dev</a>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="font-semibold mr-2">Portfolio:</span>
+                      <a href="https://mina-fawzy-dev.github.io" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">mina-fawzy-dev.github.io</a>
+                    </div>
+                  </div>
+                `,                close: 'Close',
                 delete: 'Delete',
                 reset_confirmation: 'Are you sure you want to reset everything? This will delete all receipts and data permanently and cannot be undone.',
                 confirm: 'Confirm',
@@ -669,7 +684,19 @@
                 success_receipt_saved: 'تم حفظ الإيصال بنجاح!',
                 success_receipt_exported: 'تم تصدير الإيصال بنجاح!',
                 success_excel_exported: 'تم تصدير الإيصالات إلى Excel بنجاح!',
-                about_content: 'This app was developed by Mina. More Projects: <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer">github.com/mina-fawzy-dev</a> <a href="https://mina-fawzy-dev.github.io" target="_blank" rel="noopener noreferrer">mina-fawzy-dev.github.io</a>',
+                about_content: `
+                  <div class="space-y-2">
+                    <p>Dev. By Mina.</p>
+                    <div class="flex items-center">
+                      <span class="font-semibold mr-2">Github:</span>
+                      <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">github.com/mina-fawzy-dev</a>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="font-semibold mr-2">Portfolio:</span>
+                      <a href="https://mina-fawzy-dev.github.io" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">mina-fawzy-dev.github.io</a>
+                    </div>
+                  </div>
+                `,
                 close: 'إغلاق',
                 delete: 'حذف',
                 reset_confirmation: 'هل أنت متأكد من إعادة تعيين كل شيء؟ سيؤدي هذا إلى حذف جميع الإيصالات والبيانات بشكل دائم ولا يمكن التراجع عنه.',
@@ -1491,7 +1518,7 @@
                             <div className={`fixed inset-0 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} bg-opacity-75 flex items-center justify-center`}>
                                 <div className="bg-card p-6 rounded-xl shadow-lg max-w-md w-full">
                                     <h2 className="text-xl font-bold mb-4">{t.about}</h2>
-                                    <p dangerouslySetInnerHTML={{ __html: t.about_content }}></p>
+                                    <p className="about-content" dangerouslySetInnerHTML={{ __html: t.about_content }}></p>
                                     <button
                                         onClick={() => setShowAbout(false)}
                                         className="action-button bg-red-600 hover:bg-red-700 w-full mt-4"
