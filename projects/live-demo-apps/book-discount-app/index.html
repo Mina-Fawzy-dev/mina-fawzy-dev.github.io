@@ -560,7 +560,6 @@
                 title: 'Book Discount Calculator',
                 enter_prices: 'Enter Prices',
                 add_price: 'Add Price',
-                close: 'Close',
                 prices_placeholder: 'Enter a book price',
                 calculate: 'Calculate',
                 clear: 'Clear All',
@@ -615,7 +614,7 @@
                 success_excel_exported: 'Receipts exported as Excel successfully!',
                 about_content: `
                   <div class="space-y-2">
-                    <p>Dev. By Mina. Last updated: 03:59 PM EEST, Friday, July 25, 2025.</p>
+                    <p>Dev. By Mina. Last updated: 05:12 PM EEST, Friday, July 25, 2025.</p>
                     <div class="flex items-center">
                       <span class="font-semibold mr-2">Github:</span>
                       <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">github.com/mina-fawzy-dev</a>
@@ -635,7 +634,6 @@
                 title: 'حاسبة خصم الكتب',
                 enter_prices: 'أدخل الأسعار',
                 add_price: 'إضافة سعر',
-                close: 'إغلاق',
                 prices_placeholder: 'أدخل سعر كتاب',
                 calculate: 'احسب',
                 clear: 'مسح الكل',
@@ -690,7 +688,7 @@
                 success_excel_exported: 'تم تصدير الإيصالات إلى Excel بنجاح!',
                 about_content: `
                   <div class="space-y-2">
-                    <p>Dev. By Mina. آخر تحديث: 03:59 مساءً EEST، الجمعة، 25 يوليو 2025.</p>
+                    <p>Dev. By Mina. آخر تحديث: 05:12 مساءً EEST، الجمعة، 25 يوليو 2025.</p>
                     <div class="flex items-center">
                       <span class="font-semibold mr-2">Github:</span>
                       <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">github.com/mina-fawzy-dev</a>
@@ -733,7 +731,6 @@
             const [selectedReceipts, setSelectedReceipts] = useState([]);
             const [showFabOptions, setShowFabOptions] = useState(false);
             const [showResetConfirmation, setShowResetConfirmation] = useState(false);
-            const [isNumpadOpen, setIsNumpadOpen] = useState(false); // Track numpad visibility
             const displayRef = useRef(null);
             const inputRef = useRef(null);
 
@@ -798,6 +795,9 @@
                         setPrices([...prices, price]);
                         setPriceInput(''); // Clear input but keep focus
                         setError('');
+                        if (inputRef.current) {
+                            inputRef.current.focus(); // Keep numpad open
+                        }
                         if (displayRef.current) {
                             displayRef.current.scrollTop = displayRef.current.scrollHeight;
                         }
@@ -810,23 +810,6 @@
                     setError(t.error_invalid_prices);
                     inputRef.current.classList.add('animate-shake');
                     setTimeout(() => inputRef.current.classList.remove('animate-shake'), 300);
-                }
-            };
-
-            const toggleNumpad = () => {
-                if (isNumpadOpen) {
-                    setIsNumpadOpen(false);
-                    if (inputRef.current) {
-                        inputRef.current.blur(); // Close numpad
-                    }
-                } else {
-                    setIsNumpadOpen(true);
-                    setTimeout(() => {
-                        if (inputRef.current) {
-                            inputRef.current.focus(); // Open numpad
-                            inputRef.current.select(); // Highlight text for easy editing
-                        }
-                    }, 0);
                 }
             };
 
@@ -1116,7 +1099,6 @@
             };
 
             const handleInputFocus = () => {
-                setIsNumpadOpen(true);
                 if (inputRef.current) {
                     inputRef.current.select();
                 }
@@ -1162,10 +1144,10 @@
             };
 
             useEffect(() => {
-                if (inputRef.current && isNumpadOpen) {
-                    inputRef.current.focus();
+                if (inputRef.current) {
+                    inputRef.current.focus(); // Always keep numpad open when input is active
                 }
-            }, [isNumpadOpen]);
+            }, [prices, priceInput]); // Trigger focus on price updates or input changes
 
             useEffect(() => {
                 const saveData = setTimeout(() => {
@@ -1250,16 +1232,13 @@
                                     onFocus={handleInputFocus}
                                     placeholder={t.prices_placeholder}
                                     className="input-box flex-1"
-                                    autoFocus={isNumpadOpen}
+                                    autoFocus
                                 />
                                 <button
-                                    onClick={() => {
-                                        if (priceInput) handleAddPrice(); // Add price only if input exists
-                                        toggleNumpad(); // Toggle numpad visibility
-                                    }}
+                                    onClick={handleAddPrice}
                                     className="action-button bg-green-600 hover:bg-green-700"
                                 >
-                                    {isNumpadOpen ? t.close : t.add_price}
+                                    {t.add_price}
                                 </button>
                             </div>
                         </div>
