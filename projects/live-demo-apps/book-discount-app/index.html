@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
     <title>Book Discount Calculator</title>
     <meta name="description" content="A modern app to calculate book discounts with ease">
+    <link rel="icon" type="image/png" href="icon.png">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -606,7 +607,7 @@
                 success_receipt_saved: 'Receipt saved successfully!',
                 success_receipt_exported: 'Receipt exported successfully!',
                 success_excel_exported: 'Receipts exported as Excel successfully!',
-                about_content: 'This app was developed by Mina Fawzy, a passionate programmer aiming to provide simple and effective solutions. Contact: github.com/mina-fawzy-dev',
+                about_content: 'This app was developed by Mina. More Projects: <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer">github.com/mina-fawzy-dev</a> <a href="https://mina-fawzy-dev.github.io" target="_blank" rel="noopener noreferrer">mina-fawzy-dev.github.io</a>',
                 close: 'Close',
                 delete: 'Delete',
                 reset_confirmation: 'Are you sure you want to reset everything? This will delete all receipts and data permanently and cannot be undone.',
@@ -668,7 +669,7 @@
                 success_receipt_saved: 'تم حفظ الإيصال بنجاح!',
                 success_receipt_exported: 'تم تصدير الإيصال بنجاح!',
                 success_excel_exported: 'تم تصدير الإيصالات إلى Excel بنجاح!',
-                about_content: 'تم تطوير هذا التطبيق بواسطة مينا فوزي، مبرمج شغوف يهدف إلى تقديم حلول بسيطة وفعالة. التواصل: github.com/mina-fawzy-dev',
+                about_content: 'This app was developed by Mina. More Projects: <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer">github.com/mina-fawzy-dev</a> <a href="https://mina-fawzy-dev.github.io" target="_blank" rel="noopener noreferrer">mina-fawzy-dev.github.io</a>',
                 close: 'إغلاق',
                 delete: 'حذف',
                 reset_confirmation: 'هل أنت متأكد من إعادة تعيين كل شيء؟ سيؤدي هذا إلى حذف جميع الإيصالات والبيانات بشكل دائم ولا يمكن التراجع عنه.',
@@ -1490,7 +1491,7 @@
                             <div className={`fixed inset-0 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} bg-opacity-75 flex items-center justify-center`}>
                                 <div className="bg-card p-6 rounded-xl shadow-lg max-w-md w-full">
                                     <h2 className="text-xl font-bold mb-4">{t.about}</h2>
-                                    <p>{t.about_content}</p>
+                                    <p dangerouslySetInnerHTML={{ __html: t.about_content }}></p>
                                     <button
                                         onClick={() => setShowAbout(false)}
                                         className="action-button bg-red-600 hover:bg-red-700 w-full mt-4"
