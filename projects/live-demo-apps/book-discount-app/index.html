@@ -614,7 +614,7 @@
                 success_excel_exported: 'Receipts exported as Excel successfully!',
                 about_content: `
                   <div class="space-y-2">
-                    <p>Dev. By Mina. Last updated: 05:32 PM EEST, Friday, July 25, 2025.</p>
+                    <p>Dev. By Mina. Last updated: 05:47 PM EEST, Friday, July 25, 2025.</p>
                     <div class="flex items-center">
                       <span class="font-semibold mr-2">Github:</span>
                       <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">github.com/mina-fawzy-dev</a>
@@ -628,7 +628,8 @@
                 delete: 'Delete',
                 reset_confirmation: 'Are you sure you want to reset everything? This will delete all receipts and data permanently and cannot be undone.',
                 confirm: 'Confirm',
-                cancel: 'Cancel'
+                cancel: 'Cancel',
+                close: 'Close'
             },
             ar: {
                 title: 'حاسبة خصم الكتب',
@@ -688,7 +689,7 @@
                 success_excel_exported: 'تم تصدير الإيصالات إلى Excel بنجاح!',
                 about_content: `
                   <div class="space-y-2">
-                    <p>Dev. By Mina. آخر تحديث: 05:32 مساءً EEST، الجمعة، 25 يوليو 2025.</p>
+                    <p>Dev. By Mina. آخر تحديث: 05:47 مساءً EEST، الجمعة، 25 يوليو 2025.</p>
                     <div class="flex items-center">
                       <span class="font-semibold mr-2">Github:</span>
                       <a href="https://github.com/mina-fawzy-dev" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 underline">github.com/mina-fawzy-dev</a>
@@ -702,7 +703,8 @@
                 delete: 'حذف',
                 reset_confirmation: 'هل أنت متأكد من إعادة تعيين كل شيء؟ سيؤدي هذا إلى حذف جميع الإيصالات والبيانات بشكل دائم ولا يمكن التراجع عنه.',
                 confirm: 'تأكيد',
-                cancel: 'إلغاء'
+                cancel: 'إلغاء',
+                close: 'إغلاق'
             }
         };
 
@@ -1487,44 +1489,14 @@
                                 >
                                     {t.export_all_excel}
                                 </button>
+                                <button
+                                    onClick={() => setShowReceipts(false)}
+                                    className="action-button bg-red-600 hover:bg-red-700 w-full"
+                                >
+                                    {t.close}
+                                </button>
                             </div>
                         )}
-
-                        <div className="fab-container">
-                            <button
-                                className={`fab-option bg-blue-600 ${showFabOptions ? 'visible' : ''}`}
-                                onClick={() => {
-                                    setShowSettings(true);
-                                    setShowFabOptions(false);
-                                }}
-                            >
-                                <SettingsIcon />
-                            </button>
-                            <button
-                                className={`fab-option bg-gray-500 ${showFabOptions ? 'visible' : ''}`}
-                                onClick={() => {
-                                    setShowAbout(true);
-                                    setShowFabOptions(false);
-                                }}
-                            >
-                                <i className="fas fa-info"></i>
-                            </button>
-                            <button
-                                className={`fab-option bg-red-600 ${showFabOptions ? 'visible' : ''}`}
-                                onClick={() => {
-                                    setShowResetConfirmation(true);
-                                    setShowFabOptions(false);
-                                }}
-                            >
-                                <i className="fas fa-trash"></i>
-                            </button>
-                            <button
-                                className="fab-main"
-                                onClick={() => setShowFabOptions(!showFabOptions)}
-                            >
-                                <i className={`fas ${showFabOptions ? 'fa-times' : 'fa-ellipsis-v'}`}></i>
-                            </button>
-                        </div>
 
                         {showAbout && (
                             <div className={`fixed inset-0 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} bg-opacity-75 flex items-center justify-center`}>
@@ -1591,13 +1563,55 @@
                                     </div>
                                     <button
                                         onClick={handleSaveSettings}
-                                        className="action-button bg-green-600 hover:bg-green-700 w-full"
+                                        className="action-button bg-green-600 hover:bg-green-700 w-full mb-2"
                                     >
                                         {t.save_settings}
+                                    </button>
+                                    <button
+                                        onClick={() => setShowSettings(false)}
+                                        className="action-button bg-red-600 hover:bg-red-700 w-full"
+                                    >
+                                        {t.close}
                                     </button>
                                 </div>
                             </div>
                         )}
+
+                        <div className="fab-container">
+                            <button
+                                className={`fab-option bg-blue-600 ${showFabOptions ? 'visible' : ''}`}
+                                onClick={() => {
+                                    setShowSettings(true);
+                                    setShowFabOptions(false);
+                                }}
+                            >
+                                <SettingsIcon />
+                            </button>
+                            <button
+                                className={`fab-option bg-gray-500 ${showFabOptions ? 'visible' : ''}`}
+                                onClick={() => {
+                                    setShowAbout(true);
+                                    setShowFabOptions(false);
+                                }}
+                            >
+                                <i className="fas fa-info"></i>
+                            </button>
+                            <button
+                                className={`fab-option bg-red-600 ${showFabOptions ? 'visible' : ''}`}
+                                onClick={() => {
+                                    setShowResetConfirmation(true);
+                                    setShowFabOptions(false);
+                                }}
+                            >
+                                <i className="fas fa-trash"></i>
+                            </button>
+                            <button
+                                className="fab-main"
+                                onClick={() => setShowFabOptions(!showFabOptions)}
+                            >
+                                <i className={`fas ${showFabOptions ? 'fa-times' : 'fa-ellipsis-v'}`}></i>
+                            </button>
+                        </div>
 
                         {showResetConfirmation && (
                             <div className="confirmation-modal">
