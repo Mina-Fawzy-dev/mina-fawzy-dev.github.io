@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <style>
-     .copyright-footer {
+      .copyright-footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -39,16 +39,28 @@
         align-items: center;
         gap: 5px;
       }
+
       /* Floating Settings Container */
       .floating-settings {
         position: fixed;
-        right: 20px;
         bottom: 20px;
         z-index: 999;
         display: flex;
         flex-direction: column-reverse;
         align-items: flex-end;
         gap: 10px;
+        transition: all 0.3s ease; /* Smooth transition for position change */
+      }
+
+      /* Position based on language direction */
+      .floating-settings.ltr {
+        right: 20px;
+        left: auto;
+      }
+
+      .floating-settings.rtl {
+        left: 20px;
+        right: auto;
       }
       
       /* Main Settings Toggle Button */
@@ -169,12 +181,35 @@
       .floating-settings.open .font-controls {
         transition-delay: 0.2s;
       }
+
+      /* Language Toggle Button */
+      .lang-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--card-color);
+        border: none;
+        color: var(--text-color);
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s ease;
+      }
+
+      .lang-toggle:hover {
+        transform: translateY(-2px);
+      }
     </style>
   </head>
   <body>
     <div id="react-root"></div>
     <div class="main-card">
-      <!-- Your existing content remains the same -->
       <div class="profile-card inner-card">
         <img src="profile.png" alt="Mina Fawzy" />
         <div class="name-title">
@@ -215,26 +250,30 @@
     </div>
 
     <script type="text/javascript">
-      // Initialize theme and font size from localStorage
+      // Initialize theme, font size, and language from localStorage
       const initializeSettings = () => {
         // Theme initialization
         const savedTheme = localStorage.getItem("theme");
         const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
         if (savedTheme === "light" || (!savedTheme && !prefersDark)) {
           document.body.classList.add("light-theme");
         }
-        
+
         // Font size initialization
         const savedFontSize = localStorage.getItem("fontSize");
         const defaultFontSize = 16;
         const fontSize = savedFontSize ? parseInt(savedFontSize) : defaultFontSize;
         document.documentElement.style.fontSize = fontSize + "px";
-        
-        return fontSize;
+
+        // Language initialization
+        const savedLang = localStorage.getItem("lang") || "en";
+        document.documentElement.lang = savedLang;
+        document.documentElement.setAttribute("dir", savedLang === "ar" ? "rtl" : "ltr");
+
+        return { fontSize, lang: savedLang };
       };
 
-      const initialFontSize = initializeSettings();
+      const { fontSize: initialFontSize, lang: initialLang } = initializeSettings();
 
       const toggleTheme = () => {
         document.body.classList.toggle("light-theme");
@@ -247,68 +286,95 @@
         localStorage.setItem("fontSize", size);
       };
 
+      const toggleLang = () => {
+        const newLang = document.documentElement.lang === "en" ? "ar" : "en";
+        document.documentElement.lang = newLang;
+        document.documentElement.setAttribute("dir", newLang === "ar" ? "rtl" : "ltr");
+        localStorage.setItem("lang", newLang);
+        return newLang;
+      };
+
       const Sidebar = () => {
         const [open, setOpen] = React.useState(false);
         const [fontSize, setFontSize] = React.useState(initialFontSize);
         const [isLightTheme, setIsLightTheme] = React.useState(document.body.classList.contains("light-theme"));
-        
+        const [lang, setLang] = React.useState(initialLang);
+
         const sizes = [14, 16, 18, 22];
-        
+
         const handleThemeToggle = () => {
           toggleTheme();
           setIsLightTheme(!isLightTheme);
         };
 
+        const handleLangToggle = () => {
+          const newLang = toggleLang();
+          setLang(newLang);
+        };
+
         return React.createElement(
           "div",
-          { className: `floating-settings ${open ? "open" : ""}` },
+          null,
           React.createElement(
             "button",
             {
-              className: "settings-toggle",
-              onClick: () => setOpen(!open),
-              title: "Settings"
+              className: "lang-toggle",
+              onClick: handleLangToggle,
+              title: "Toggle Language"
             },
-            "\u2699"
+            lang === "en" ? "AR" : "EN"
           ),
           React.createElement(
             "div",
-            { className: "settings-panel" },
-            React.createElement(
-              "div",
-              { className: "font-controls" },
-              React.createElement(
-                "div",
-                { className: "font-sizes" },
-                sizes.map((size) =>
-                  React.createElement(
-                    "button",
-                    {
-                      key: size,
-                      onClick: () => {
-                        setFontSize(size);
-                        changeFontSize(size);
-                      },
-                      title: `Font size ${size}px`,
-                      className: fontSize === size ? "active" : ""
-                    },
-                    React.createElement(
-                      "span",
-                      { style: { fontSize: size - 2 + "px" } },
-                      "A"
-                    )
-                  )
-                )
-              )
-            ),
+            { className: `floating-settings ${open ? "open" : ""} ${lang === "ar" ? "rtl" : "ltr"}` },
             React.createElement(
               "button",
               {
-                className: "theme-toggle",
-                onClick: handleThemeToggle,
-                title: "Toggle Theme"
+                className: "settings-toggle",
+                onClick: () => setOpen(!open),
+                title: "Settings"
               },
-              isLightTheme ? "\u263D" : "\u2600"
+              "\u2699"
+            ),
+            React.createElement(
+              "div",
+              { className: "settings-panel" },
+              React.createElement(
+                "div",
+                { className: "font-controls" },
+                React.createElement(
+                  "div",
+                  { className: "font-sizes" },
+                  sizes.map((size) =>
+                    React.createElement(
+                      "button",
+                      {
+                        key: size,
+                        onClick: () => {
+                          setFontSize(size);
+                          changeFontSize(size);
+                        },
+                        title: `Font size ${size}px`,
+                        className: fontSize === size ? "active" : ""
+                      },
+                      React.createElement(
+                        "span",
+                        { style: { fontSize: size - 2 + "px" } },
+                        "A"
+                      )
+                    )
+                  )
+                )
+              ),
+              React.createElement(
+                "button",
+                {
+                  className: "theme-toggle",
+                  onClick: handleThemeToggle,
+                  title: "Toggle Theme"
+                },
+                isLightTheme ? "\u263D" : "\u2600"
+              )
             )
           )
         );
