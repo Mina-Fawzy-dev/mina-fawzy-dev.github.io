@@ -8,147 +8,58 @@
   <link rel="icon" href="assets/logo.svg"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
   <style>
-    :root {
-      --bg: #0a0a0f;
-      --surface: #111118;
-      --text: #e0e0e0;
-      --accent: #d3fe00;
-      --border: #22222a;
-    }
-    [data-theme="light"] {
-      --bg: #fafafa;
-      --surface: #ffffff;
-      --text: #111;
-      --border: #ddd;
-    }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, sans-serif;
-      line-height: 1.6;
-      transition: background 0.3s ease;
-    }
-    header {
-      padding: 1rem;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: var(--surface);
-      z-index: 100;
-    }
-    .header-content {
-      max-width: 1400px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .logo {
-      width: 300px;
-      height: auto;
-      transition: transform 0.2s ease;
-    }
-    .logo:hover { transform: scale(1.1); }
-
-    .search-bar { flex: 1; max-width: 500px; position: relative; }
-    #search {
-      width: 100%;
-      padding: 0.75rem 1rem 0.75rem 2.5rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 1rem;
-      transition: border 0.2s;
-    }
-    #search:focus { border-color: var(--accent); outline: none; }
-    .search-icon { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--accent); }
-
-    .controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    button {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-    }
-    button:hover { background: var(--accent); color: #000; border-color: var(--accent); }
-    button.active { background: var(--accent); color: #000; font-weight: 600; }
-
-    main { display: flex; max-width: 1400px; margin: 1rem auto; padding: 0 1rem; gap: 1rem; }
-    #sidebar {
-      width: 260px;
-      background: var(--surface);
-      border-radius: 12px;
-      padding: 1rem;
-      border: 1px solid var(--border);
-      position: sticky;
-      top: 6rem;
-      max-height: calc(100vh - 8rem);
-      overflow-y: auto;
-    }
-    .nav-node {
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: background 0.2s;
-    }
-    .nav-node:hover { background: rgba(211,254,0,0.1); }
-    .nav-node.active { background: var(--accent); color: #000; font-weight: 600; }
-    .subnodes { margin-left: 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-    .subnodes.open { max-height: 1000px; }
-
-    #content { flex: 1; }
-    .view { display: none; background: var(--surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); }
-    .view.active { display: block; }
-    #page-title { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; }
-    .category { margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .cat-header {
-      padding: 0.75rem 1rem;
-      display: flex; justify-content: space-between; align-items: center;
-      cursor: pointer;
-      background: rgba(211,254,0,0.05);
-      transition: background 0.2s;
-    }
-    .cat-header:hover { background: rgba(211,254,0,0.1); }
-    .cat-header.open { background: var(--accent); color: #000; }
-    .cat-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; }
-    .count { background: var(--bg); color: var(--accent); padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.8rem; }
-    .toggle { transition: transform 0.3s; }
-    .cat-header.open .toggle { transform: rotate(180deg); }
-    .cat-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: var(--bg); }
-    .cat-content table { width: 100%; border-collapse: collapse; }
-    .cat-content td { padding: 0.5rem 0; border-bottom: 1px dashed var(--border); }
-    .cat-content tr:last-child td { border: none; }
-    .name { width: 30%; font-weight: 500; color: var(--accent); }
-    .link a { color: #888; text-decoration: none; font-size: 0.9rem; }
-    .link a:hover { color: var(--accent); }
-    .copy-btn { background: none; border: none; color: #666; cursor: pointer; margin-left: 0.5rem; }
-    .copy-btn:hover { color: var(--accent); }
-
-    @media (max-width: 768px) {
-      main { flex-direction: column; }
-      #sidebar { width: 100%; position: static; }
-      .header-content { flex-direction: column; align-items: stretch; }
-      .search-bar { max-width: none; }
-    }
+    :root{--bg:#0a0a0f;--surface:#111118;--text:#e0e0e0;--accent:#d3fe00;--border:#22222a}
+    [data-theme=light]{--bg:#fafafa;--surface:#fff;--text:#111;--border:#ddd}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;transition:background .3s ease}
+    header{padding:1rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:100}
+    .header-content{max-width:1400px;margin:auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .logo{width:260;height:auto;transition:transform .2s ease}
+    .logo:hover{transform:scale(1.1)}
+    .search-bar{flex:1;max-width:500px;position:relative}
+    #search{width:100%;padding:.75rem 1rem .75rem 2.5rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);font-size:1rem;transition:border .2s}
+    #search:focus{border-color:var(--accent);outline:none}
+    .search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--accent)}
+    .controls{display:flex;gap:.5rem;flex-wrap:wrap}
+    button{background:transparent;border:1px solid var(--border);color:var(--text);padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-size:.9rem;transition:all .2s ease}
+    button:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+    button.active{background:var(--accent);color:#000;font-weight:600}
+    main{display:flex;max-width:1400px;margin:1rem auto;padding:0 1rem;gap:1rem}
+    #sidebar{width:260px;background:var(--surface);border-radius:12px;padding:1rem;border:1px solid var(--border);position:sticky;top:6rem;max-height:calc(100vh-8rem);overflow-y:auto}
+    .nav-node{padding:.75rem 1rem;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:background .2s}
+    .nav-node:hover{background:rgba(211,254,0,.1)}
+    .nav-node.active{background:var(--accent);color:#000;font-weight:600}
+    .subnodes{margin-left:1.5rem;max-height:0;overflow:hidden;transition:max-height .3s ease}
+    .subnodes.open{max-height:1000px}
+    #content{flex:1}
+    .view{display:none;background:var(--surface);border-radius:12px;padding:1.5rem;border:1px solid var(--border)}
+    .view.active{display:block}
+    #page-title{font-size:1.5rem;font-weight:700;color:var(--accent);margin-bottom:.5rem}
+    .category{margin-bottom:1rem;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+    .cat-header{padding:.75rem 1rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:rgba(211,254,0,.05);transition:background .2s}
+    .cat-header:hover{background:rgba(211,254,0,.1)}
+    .cat-header.open{background:var(--accent);color:#000}
+    .cat-title{display:flex;align-items:center;gap:.5rem;font-weight:600}
+    .count{background:var(--bg);color:var(--accent);padding:.2rem .5rem;border-radius:6px;font-size:.8rem}
+    .toggle{transition:transform .3s}
+    .cat-header.open .toggle{transform:rotate(180deg)}
+    .cat-content{max-height:0;overflow:hidden;transition:max-height .3s ease;background:var(--bg)}
+    .cat-content table{width:100%;border-collapse:collapse}
+    .cat-content td{padding:.5rem 0;border-bottom:1px dashed var(--border)}
+    .cat-content tr:last-child td{border:none}
+    .name{width:30%;font-weight:500;color:var(--accent)}
+    .link a{color:#888;text-decoration:none;font-size:.9rem}
+    .link a:hover{color:var(--accent)}
+    .copy-btn{background:none;border:none;color:#666;cursor:pointer;margin-left:.5rem}
+    .copy-btn:hover{color:var(--accent)}
+    @media(max-width:768px){main{flex-direction:column}#sidebar{width:100%;position:static}.header-content{flex-direction:column;align-items:stretch}.search-bar{max-width:none}}
   </style>
 </head>
 <body>
   <header>
     <div class="header-content">
-      <a href="/design-hub/index.html" class="logo">
-        <img src="assets/logo.svg" alt="Logo" width="300" height="auto">
+      <a href="/design-hub/index.html" class="logo" id="logo-container">
+        <!-- SVG will be injected by JS -->
       </a>
       <div class="search-bar">
         <i class="bi bi-search search-icon"></i>
@@ -169,8 +80,8 @@
     <aside id="sidebar"><div id="nav-tree"></div></aside>
     <section id="content">
       <h2 id="page-title">Designs</h2>
-      <div id="stats">Loading...</div>
-      <div id="no-results" style="display:none; text-align:center; padding:2rem; color:#888;">
+      <div id="stats">Loading…</div>
+      <div id="no-results" style="display:none;text-align:center;padding:2rem;color:#888;">
         No results for "<span id="query"></span>"
       </div>
       <div id="view-normal" class="view active"></div>
