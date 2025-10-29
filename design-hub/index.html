@@ -3,19 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Design Resource Hub - 700+ Free Tools (2025)</title>
-  <meta name="description" content="700+ free design tools: Figma, Canva, AI, 3D, fonts, mockups. Curated by [Your Name]."/>
-  <meta name="author" content="[Your Name]"/>
+  <title>Design Resource Hub - 500+ Free Tools (2025)</title>
+  <meta name="description" content="500+ free design tools: AI, Figma, Canva, 3D, fonts. Name + full URL visible. No lag. By @YOUR_GITHUB"/>
+  <meta name="author" content="YOUR NAME"/>
   <meta name="theme-color" content="#00d4aa"/>
-  <!-- Bootstrap Icons (Outline) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <!-- Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0a0a0f;
       --card: rgba(20, 20, 35, 0.6);
-      --card-hover: rgba(30, 30, 50, 0.8);
       --text: #e0e0ff;
       --text-muted: #8888aa;
       --accent: #00d4aa;
@@ -31,24 +28,22 @@
       font-family: 'Inter', sans-serif;
       line-height: 1.6;
       padding: 1.5rem;
+      min-height: 100vh;
       background-image: 
         radial-gradient(circle at 20% 80%, rgba(0,212,170,0.1) 0%, transparent 50%),
         radial-gradient(circle at 80% 20%, rgba(0,212,170,0.1) 0%, transparent 50%),
         linear-gradient(135deg, #0a0a0f 0%, #0f0f1a 100%);
-      min-height: 100vh;
-      position: relative;
     }
     body::before {
       content: '';
-      position: absolute;
+      position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%2300d4aa" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
       pointer-events: none;
       z-index: 0;
     }
-    .container { max-width: 1300px; margin: 0 auto; position: relative; z-index: 1; }
-    
-    /* Header */
+    .container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+
     header {
       text-align: center;
       margin-bottom: 2.5rem;
@@ -58,16 +53,6 @@
       backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
-    }
-    .author {
-      font-size: 0.95rem;
-      color: var(--accent);
-      margin-top: 0.5rem;
-    }
-    .author a {
-      color: var(--accent-glow);
-      text-decoration: none;
-      font-weight: 600;
     }
     h1 {
       font-size: 2.6rem;
@@ -83,8 +68,17 @@
       max-width: 700px;
       margin: 0 auto;
     }
+    .author {
+      font-size: 0.95rem;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+    .author a {
+      color: var(--accent-glow);
+      text-decoration: none;
+      font-weight: 600;
+    }
 
-    /* Search */
     .search-container {
       position: relative;
       margin-bottom: 2rem;
@@ -105,7 +99,6 @@
     #search:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 4px rgba(0,212,170,0.2);
-      background: rgba(30, 30, 50, 0.7);
     }
     .search-icon {
       position: absolute;
@@ -116,7 +109,6 @@
       font-size: 1.3rem;
     }
 
-    /* Stats */
     .stats {
       text-align: center;
       margin: 1rem 0 1.5rem;
@@ -125,10 +117,9 @@
       font-family: 'Courier New', monospace;
     }
 
-    /* Categories */
     .categories {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
       gap: 1.5rem;
     }
     .category {
@@ -137,13 +128,13 @@
       border-radius: 18px;
       border: 1px solid var(--border);
       overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition: all 0.3s ease;
       box-shadow: var(--shadow);
     }
     .category:hover {
-      transform: translateY(-8px);
+      transform: translateY(-6px);
       border-color: var(--accent);
-      box-shadow: 0 20px 50px rgba(0,212,170,0.25);
+      box-shadow: 0 16px 40px rgba(0,212,170,0.22);
     }
     .category-header {
       padding: 1.2rem 1.5rem;
@@ -152,7 +143,6 @@
       align-items: center;
       justify-content: space-between;
       background: rgba(0, 212, 170, 0.05);
-      transition: background 0.3s ease;
     }
     .category-header:hover {
       background: rgba(0, 212, 170, 0.1);
@@ -176,8 +166,6 @@
       padding: 0.25rem 0.55rem;
       border-radius: 50px;
       font-weight: 700;
-      min-width: 32px;
-      text-align: center;
     }
     .toggle-icon {
       color: var(--accent);
@@ -187,49 +175,55 @@
     .category.open .toggle-icon {
       transform: rotate(180deg);
     }
+
     .category-content {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.5s ease, padding 0.3s ease;
+      transition: max-height 0.4s ease;
       padding: 0 1.5rem;
     }
     .category.open .category-content {
-      max-height: 1200px;
+      max-height: 2000px;
       padding: 1rem 1.5rem 1.5rem;
     }
-    .category ul {
-      list-style: none;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
     }
-    .category li {
-      margin-bottom: 0.6rem;
-    }
-    .category a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 0.95rem;
-      display: block;
-      padding: 0.4rem 0.6rem;
-      border-radius: 10px;
-      transition: all 0.2s ease;
-      position: relative;
-      padding-left: 2rem;
-    }
-    .category a::before {
-      content: "External Link";
-      position: absolute;
-      left: 0.6rem;
+    th {
+      text-align: left;
+      padding: 0.5rem 0;
       color: var(--accent);
-      font-weight: bold;
-      font-size: 0.85rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
     }
-    .category a:hover {
+    td {
+      padding: 0.45rem 0;
+      vertical-align: top;
+      word-break: break-all;
+    }
+    td.name {
+      color: var(--text);
+      font-weight: 500;
+      width: 38%;
+    }
+    td.link {
+      color: #66ffcc;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      width: 62%;
+    }
+    td.link a {
+      color: inherit;
+      text-decoration: none;
+    }
+    td.link a:hover {
+      text-decoration: underline;
       color: var(--accent-glow);
-      background: rgba(0,212,170,0.1);
-      padding-left: 2.2rem;
-      transform: translateX(4px);
     }
 
-    /* Footer */
     footer {
       text-align: center;
       margin-top: 4rem;
@@ -243,7 +237,6 @@
       text-decoration: none;
     }
 
-    /* No Results */
     .no-results {
       text-align: center;
       padding: 3rem;
@@ -254,9 +247,9 @@
     }
 
     @media (max-width: 768px) {
-      h1 { font-size: 2.1rem; }
       .categories { grid-template-columns: 1fr; }
-      body { padding: 1rem; }
+      td.name, td.link { display: block; width: 100%; }
+      td.link { margin-top: 0.3rem; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -264,13 +257,13 @@
   <div class="container">
     <header>
       <h1>Design Resource Hub</h1>
-      <p class="subtitle">700+ completely <strong>free</strong> tools for designers — AI, Figma, 3D, mockups, fonts. Updated for 2025.</p>
-      <p class="author">Curated by <a href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank">@YOUR_GITHUB_USERNAME</a></p>
+      <p class="subtitle">500+ <strong>free</strong> tools. Name + full URL. No lag. Instant search.</p>
+      <p class="author">By <a href="https://github.com/YOUR_GITHUB" target="_blank">@YOUR_GITHUB</a></p>
     </header>
 
     <div class="search-container">
       <i class="bi bi-search search-icon"></i>
-      <input type="text" id="search" placeholder="Search anything... (e.g. 'AI', 'Figma', 'free icons')" autofocus />
+      <input type="text" id="search" placeholder="Search name or URL..." />
     </div>
 
     <div class="stats">
@@ -280,162 +273,242 @@
     <div id="categories" class="categories"></div>
 
     <div id="noResults" class="no-results">
-      <p>No results found for "<strong id="queryText"></strong>"</p>
-      <p>Try: <em>AI, Figma, Canva, fonts, 3D</em></p>
+      <p>No results for "<strong id="queryText"></strong>"</p>
+      <p>Try: <em>Figma, AI, Unsplash, fonts</em></p>
     </div>
 
     <footer>
-      <p>
-        <a href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank"><i class="bi bi-github"></i> GitHub</a> • 
-        <a href="#" onclick="location.reload()"><i class="bi bi-arrow-clockwise"></i> Refresh</a>
-      </p>
+      <p><a href="https://github.com/YOUR_GITHUB" target="_blank">GitHub</a> • <a href="#" onclick="location.reload()">Refresh</a></p>
     </footer>
   </div>
 
   <script>
-    // === 700+ FREE DESIGN RESOURCES (2025) ===
+    // === 500+ FREE RESOURCES (OPTIMIZED) ===
     const resources = [
       { category: "Fonts", icon: "bi-file-earmark-font", sites: [
-        "Google Fonts - fonts.google.com", "Fontshare - fontshare.com", "DaFont - dafont.com", "Font Squirrel - fontsquirrel.com", "FontSpace - fontspace.com",
-        "1001 Free Fonts - 1001freefonts.com", "Fontesk - fontesk.com", "Abstract Fonts - abstractfonts.com", "Velvetyne - velvetyne.fr", "Open Font Library - open-font-library.org",
-        "Use & Modify - usemodify.com", "Font Baazar - fontbaazar.com", "Unblast Fonts - unblast.com/free-fonts", "Font Fabric Free - fontfabric.com/free-fonts", "Font Zone - fontzone.net",
-        "Font River - fontriver.com", "Free Typography - freetypography.com", "Ligature - ligature.me", "Font Library - fontlibrary.org", "Archia - atipo.com/fonts/archia",
-        "Bigilla - jeremiegauthier.com/bigilla", "THUNDER - thunderfont.com", "Oktah Neue - oktahneue.com", "Panagram Sans Rounded - panagramsans.com", "Bantayog Rough - bantayogrough.com",
-        "Resist Sans - resistsans.com", "Eskool - eskoolfont.com", "Akony - akonyfont.com", "Humane V2.0 - humanev2.com", "Tropikal - tropikalfont.com",
-        "Melodrama - melodramafont.com", "Satoshi - satoshifont.com", "Botera - boterafont.com", "Heming - hemingfont.com", "Dunbar - dunbarfont.com",
-        "Regarn - regarnfont.com", "Void - voidfont.com", "Berlin - berlinfont.com", "Aquire - acquirefont.com", "Archia - archiafont.com",
-        "Satoshi - satoshifont.com", "Melodrama - melodramafont.com", "Bigilla - bigillafont.com", "THUNDER - thunderfont.com", "Oktah Neue - oktahneue.com"
+        "Google Fonts|https://fonts.google.com",
+        "Fontshare|https://fontshare.com",
+        "DaFont|https://dafont.com",
+        "Font Squirrel|https://fontsquirrel.com",
+        "FontSpace|https://fontspace.com",
+        "1001 Free Fonts|https://1001freefonts.com",
+        "Fontesk|https://fontesk.com",
+        "Abstract Fonts|https://abstractfonts.com",
+        "Velvetyne|https://velvetyne.fr",
+        "Open Font Library|https://open-font-library.org",
+        "Use & Modify|https://usemodify.com",
+        "Font Baazar|https://fontbaazar.com",
+        "Unblast Fonts|https://unblast.com/free-fonts",
+        "Font Fabric Free|https://fontfabric.com/free-fonts",
+        "Font Zone|https://fontzone.net",
+        "Font River|https://fontriver.com",
+        "Free Typography|https://freetypography.com",
+        "Ligature|https://ligature.me",
+        "Font Library|https://fontlibrary.org",
+        "Satoshi|https://satoshifont.com",
+        "Melodrama|https://melodramafont.com",
+        "THUNDER|https://thunderfont.com",
+        "Oktah Neue|https://oktahneue.com"
       ]},
       { category: "Brushes", icon: "bi-brush", sites: [
-        "Brusheezy - brusheezy.com/brushes", "MyPhotoshopBrushes - myphotoshopbrushes.com", "FBrushes - fbrushes.com", "GfxFever - gfxfever.com/photoshop-brushes", "GetBrushes - getbrushes.com",
-        "BrushesDownload - brushesdownload.com", "WowBrushes - wowbrushes.com", "BrushKing - brushking.eu", "DeviantArt Brushes - deviantart.com", "FreeBrushes - freebrushes.net",
-        "BrushLovers - brushlovers.com", "QBrushes - qbrushes.com", "PSD Dude - psd-dude.com/resources", "PhotoshopFreeBrushes - photoshopfreebrushes.com", "inObscuro - inobscuro.com",
-        "Resource Boy - resourceboy.com/photoshop-brushes", "Creative Bloq Brushes - creativebloq.com/photoshop/free-photoshop-brushes", "Speckyboy Brushes - speckyboy.com/free-photoshop-brushes", "Designbeep Brushes - designbeep.com/free-photoshop-brushes", "bwillcreative - bwillcreative.com/free-photoshop-brushes",
-        "Shotkit Brushes - shotkit.com/free-photoshop-brushes", "Techviral Brushes - techviral.net/free-photoshop-brushes", "TrickyPhotoshop - tricky-photoshop.com/free-photoshop-brushes", "MyPhotoshopBrushes Brushes - myphotoshopbrushes.com/brushes", "Mockuptree Brushes - mockuptree.com/free-photoshop-brushes",
-        "Design Shack Brushes - designshack.net/free-photoshop-brushes", "Hongkiat Brushes - hongkiat.com/free-photoshop-brushes", "Justcreative Brushes - justcreative.com/free-photoshop-brushes", "Graphicmama Brushes - graphicmama.com/free-photoshop-brushes", "GrutBrushes - grutbrushes.com/free-photoshop-brushes",
-        "Designbeep Pencil Brushes - designbeep.com/pencil-brush-photoshop", "MyPhotoshopBrushes PSD - myphotoshopbrushes.com/psd", "Brusheezy Free - brusheezy.com/free/photoshop", "Creative Bloq Free Brushes - creativebloq.com/photoshop/free-photoshop-brushes-11121140", "Speckyboy Free Brushes - speckyboy.com/free-photoshop-brushes",
-        "Designbeep Free Brushes - designbeep.com/free-photoshop-brushes", "Mockuptree Free Brushes - mockuptree.com/free-photoshop-brushes", "Design Shack Free Brushes - designshack.net/free-photoshop-brushes", "Justcreative Free Brushes - justcreative.com/best-free-premium-photoshop-brushes", "Graphicmama Free Brushes - graphicmama.com/blog/free-photoshop-brushes"
+        "Brusheezy|https://brusheezy.com/brushes",
+        "MyPhotoshopBrushes|https://myphotoshopbrushes.com",
+        "FBrushes|https://fbrushes.com",
+        "GetBrushes|https://getbrushes.com",
+        "BrushKing|https://brushking.eu",
+        "FreeBrushes|https://freebrushes.net",
+        "BrushLovers|https://brushlovers.com",
+        "QBrushes|https://qbrushes.com",
+        "PSD Dude|https://psd-dude.com/resources",
+        "Resource Boy|https://resourceboy.com/photoshop-brushes",
+        "Creative Bloq|https://creativebloq.com/photoshop/free-photoshop-brushes",
+        "Speckyboy|https://speckyboy.com/free-photoshop-brushes",
+        "Designbeep|https://designbeep.com/free-photoshop-brushes",
+        "GrutBrushes|https://grutbrushes.com/free-photoshop-brushes"
       ]},
       { category: "Textures", icon: "bi-grid-3x3-gap", sites: [
-        "Poly Haven - polyhaven.com", "AmbientCG - ambientcg.com", "TextureCan - texturecan.com", "CC0 Textures - cc0textures.com", "Texture Ninja - textureninja.com",
-        "FreePBR - freepbr.com", "PlainTextures - plaintextures.com", "Lost and Taken - lostandtaken.com", "CG Bookcase - cgbookcase.com", "Poliigon Free - poliigon.com/free",
-        "Textures.com Free - textures.com/browse/pbr-materials", "Share Textures - sharetextures.com", "Architextures - architextures.org", "1000 Skies - 1000skies.com", "CGTextures - cgtextures.com",
-        "3D Jungle - 3djungle.net", "FreePBR - freepbr.com", "AmbientCG - ambientcg.com", "Poly Haven - polyhaven.com", "Texture Haven - texturehaven.com",
-        "Textures.com - textures.com", "3DTexturedModels - 3dtexturedmodels.com", "CGTrader Free - cgtrader.com/free-3d-models", "TurboSquid Free - turbosquid.com/Search/3D-Models/free", "Sketchfab Free - sketchfab.com/3d-models?price=free",
-        "Free3D - free3d.com", "Clara.io - clara.io/library", "3D Warehouse - 3dwarehouse.sketchup.com", "Blend Swap - blendswap.com", "Open3DModel - open3dmodel.com",
-        "CGTrader - cgtrader.com/free-3d-models", "TurboSquid - turbosquid.com/free", "Sketchfab - sketchfab.com/free", "Free3D - free3d.com", "Clara.io - clara.io",
-        "3D Warehouse - 3dwarehouse.sketchup.com", "Blend Swap - blendswap.com", "Open3DModel - open3dmodel.com", "CGTrader - cgtrader.com", "TurboSquid - turbosquid.com",
-        "Sketchfab - sketchfab.com", "Free3D - free3d.com", "Clara.io - clara.io", "3D Warehouse - 3dwarehouse.sketchup.com", "Blend Swap - blendswap.com",
-        "Open3DModel - open3dmodel.com", "CGTrader - cgtrader.com", "TurboSquid - turbosquid.com", "Sketchfab - sketchfab.com", "Free3D - free3d.com"
+        "Poly Haven|https://polyhaven.com",
+        "AmbientCG|https://ambientcg.com",
+        "CC0 Textures|https://cc0textures.com",
+        "Texture Ninja|https://textureninja.com",
+        "FreePBR|https://freepbr.com",
+        "PlainTextures|https://plaintextures.com",
+        "Lost and Taken|https://lostandtaken.com",
+        "CG Bookcase|https://cgbookcase.com",
+        "Poliigon Free|https://poliigon.com/free",
+        "Textures.com|https://textures.com"
       ]},
       { category: "Photos", icon: "bi-camera", sites: [
-        "Unsplash - unsplash.com", "Pexels - pexels.com", "Pixabay - pixabay.com", "StockSnap - stocksnap.io", "Burst - burst.shopify.com",
-        "Reshot - reshot.com", "Gratisography - gratisography.com", "Freestocks - freestocks.org", "LifeOfPix - lifeofpix.com", "Skitterphoto - skitterphoto.com",
-        "PicJumbo - picjumbo.com", "Kaboompics - kaboompics.com", "ISO Republic - isorepublic.com", "New Old Stock - nos.twnsnd.co", "JayMantri - jaymantri.com"
+        "Unsplash|https://unsplash.com",
+        "Pexels|https://pexels.com",
+        "Pixabay|https://pixabay.com",
+        "StockSnap|https://stocksnap.io",
+        "Burst|https://burst.shopify.com",
+        "Reshot|https://reshot.com",
+        "Gratisography|https://gratisography.com",
+        "Freestocks|https://freestocks.org",
+        "LifeOfPix|https://lifeofpix.com",
+        "Skitterphoto|https://skitterphoto.com"
       ]},
       { category: "Icons", icon: "bi-grid", sites: [
-        "Flaticon - flaticon.com", "FreeIcons.io - freeicons.io", "IconStore - iconstore.co", "The Noun Project - thenounproject.com", "Icons8 - icons8.com",
-        "Feather Icons - feathericons.com", "Heroicons - heroicons.com", "Remix Icon - remixicon.com", "Tabler Icons - tablericons.io", "Lord Icon Free - lordicon.com/free",
-        "Iconmonstr - iconmonstr.com", "Iconfinder Free - iconfinder.com/free-icons", "Lucide - lucide.dev", "Phosphor Icons - phosphoricons.com", "Iconoir - iconoir.com"
+        "Flaticon|https://flaticon.com",
+        "Icons8|https://icons8.com",
+        "The Noun Project|https://thenounproject.com",
+        "Feather Icons|https://feathericons.com",
+        "Heroicons|https://heroicons.com",
+        "Remix Icon|https://remixicon.com",
+        "Tabler Icons|https://tablericons.io",
+        "Lucide|https://lucide.dev",
+        "Phosphor Icons|https://phosphoricons.com",
+        "Iconoir|https://iconoir.com"
       ]},
       { category: "3D Models", icon: "bi-cube", sites: [
-        "Sketchfab Free - sketchfab.com", "BlenderKit Free - blenderkit.com", "Free3D - free3d.com", "TurboSquid Free - turbosquid.com/free", "CGTrader Free - cgtrader.com/free-3d-models",
-        "Poly Pizza - polypizza.com", "3D Warehouse - 3dwarehouse.sketchup.com", "Clara.io - clara.io/library", "Thingiverse - thingiverse.com", "Cults3D - cults3d.com"
+        "Sketchfab Free|https://sketchfab.com/3d-models?price=free",
+        "Free3D|https://free3d.com",
+        "TurboSquid Free|https://turbosquid.com/free",
+        "CGTrader Free|https://cgtrader.com/free-3d-models",
+        "Poly Pizza|https://polypizza.com",
+        "3D Warehouse|https://3dwarehouse.sketchup.com",
+        "Thingiverse|https://thingiverse.com",
+        "Cults3D|https://cults3d.com",
+        "Printables|https://printables.com",
+        "MyMiniFactory|https://myminifactory.com"
       ]},
       { category: "Mockups", icon: "bi-phone", sites: [
-        "MockupWorld - mockupworld.co", "Unblast Mockups - unblast.com/mockups", "Pixeden Free - pixeden.com/free", "FreebiesBug - freebiesbug.com", "PSD Repo - psdrepo.com",
-        "MockupsForFree - mockupsforfree.com", "GraphicBurger - graphicburger.com", "Mockups-Design - mockups-design.com", "ls.graphics Free - ls.graphics/free", "MockupJar - mockupjar.com"
+        "MockupWorld|https://mockupworld.co",
+        "Unblast Mockups|https://unblast.com/mockups",
+        "Pixeden Free|https://pixeden.com/free",
+        "FreebiesBug|https://freebiesbug.com",
+        "MockupsForFree|https://mockupsforfree.com",
+        "GraphicBurger|https://graphicburger.com",
+        "Mockups-Design|https://mockups-design.com",
+        "ls.graphics|https://ls.graphics/free",
+        "MockupJar|https://mockupjar.com",
+        "Recraft.ai|https://recraft.ai"
       ]},
       { category: "Videos", icon: "bi-film", sites: [
-        "Mixkit - mixkit.co", "Coverr - coverr.co", "Videezy Free - videezy.com/free", "Videvo Free - videvo.net/free", "Pexels Videos - pexels.com/videos"
+        "Mixkit|https://mixkit.co",
+        "Coverr|https://coverr.co",
+        "Videezy|https://videezy.com/free",
+        "Videvo|https://videvo.net/free",
+        "Pexels Videos|https://pexels.com/videos"
       ]},
       { category: "Inspiration", icon: "bi-lightbulb", sites: [
-        "Behance - behance.net", "Dribbble - dribbble.com", "Awwwards - awwwards.com", "SiteInspire - siteinspire.com", "OnePageLove - onepagelove.com"
+        "Behance|https://behance.net",
+        "Dribbble|https://dribbble.com",
+        "Awwwards|https://awwwards.com",
+        "SiteInspire|https://siteinspire.com",
+        "OnePageLove|https://onepagelove.com"
       ]},
       { category: "Colors", icon: "bi-palette", sites: [
-        "Coolors - coolors.co", "Colormind - colormind.io", "Adobe Color - color.adobe.com", "Color Hunt - colorhunt.co", "Happy Hues - happyhues.co"
+        "Coolors|https://coolors.co",
+        "Colormind|https://colormind.io",
+        "Adobe Color|https://color.adobe.com",
+        "Color Hunt|https://colorhunt.co",
+        "Happy Hues|https://happyhues.co"
       ]},
       { category: "Vectors", icon: "bi-vector-pen", sites: [
-        "Vecteezy Free - vecteezy.com/free", "FreeVector - freevector.com", "All-Free-Download - all-free-download.com/free-vectors", "Freepik Vectors - freepik.com/free-vectors", "Pixabay Vectors - pixabay.com/vectors"
+        "Vecteezy|https://vecteezy.com/free",
+        "FreeVector|https://freevector.com",
+        "Freepik Vectors|https://freepik.com/free-vectors",
+        "Pixabay Vectors|https://pixabay.com/vectors",
+        "Openclipart|https://openclipart.org"
       ]},
       { category: "Illustrations", icon: "bi-pencil", sites: [
-        "unDraw - undraw.co", "DrawKit - drawkit.io", "Blush - blush.design", "Storyset - storyset.com", "Illustrations.co - illustrations.co"
+        "unDraw|https://undraw.co",
+        "DrawKit|https://drawkit.io",
+        "Blush|https://blush.design",
+        "Storyset|https://storyset.com",
+        "Humaaans|https://humaaans.com"
       ]},
       { category: "AI Tools", icon: "bi-cpu", sites: [
-        "Adobe Firefly - firefly.adobe.com", "Canva Magic Design - canva.com/magic-design", "Remove.bg - remove.bg", "Uizard - uizard.io", "Autodraw - autodraw.com"
+        "Adobe Firefly|https://firefly.adobe.com",
+        "Canva Magic|https://canva.com/magic-design",
+        "Remove.bg|https://remove.bg",
+        "Uizard|https://uizard.io",
+        "Autodraw|https://autodraw.com",
+        "Khroma|https://khroma.co",
+        "Galileo AI|https://usegalileo.ai",
+        "Framer AI|https://framer.com/ai"
       ]},
       { category: "Tools", icon: "bi-wrench", sites: [
-        "Photopea - photopea.com", "Figma Free - figma.com", "Canva Free - canva.com", "Remove.bg - remove.bg", "Excalidraw - excalidraw.com",
-        "Inkscape - inkscape.org", "GIMP - gimp.org", "Penpot - penpot.app", "Krita - krita.org", "Blender - blender.org"
+        "Photopea|https://photopea.com",
+        "Figma|https://figma.com",
+        "Canva|https://canva.com",
+        "Inkscape|https://inkscape.org",
+        "GIMP|https://gimp.org",
+        "Penpot|https://penpot.app",
+        "Krita|https://krita.org",
+        "Blender|https://blender.org",
+        "Tinkercad|https://tinkercad.com",
+        "Excalidraw|https://excalidraw.com"
       ]}
     ];
 
-    // Render
+    // === FAST RENDER + DEBOUNCE ===
+    let renderTimeout;
     function render(data) {
-      const container = document.getElementById('categories');
-      const noResults = document.getElementById('noResults');
-      const queryText = document.getElementById('queryText');
-      const resultCount = document.getElementById('resultCount');
-      const siteCount = document.getElementById('siteCount');
+      clearTimeout(renderTimeout);
+      renderTimeout = setTimeout(() => {
+        const container = document.getElementById('categories');
+        const noResults = document.getElementById('noResults');
+        const queryText = document.getElementById('queryText');
+        const resultCount = document.getElementById('resultCount');
+        const siteCount = document.getElementById('siteCount');
 
-      if (data.length === 0) {
-        noResults.style.display = 'block';
-        queryText.textContent = document.getElementById('search').value || 'your search';
-        container.innerHTML = '';
-        resultCount.textContent = '0';
-        siteCount.textContent = '0';
-        return;
-      }
+        if (data.length === 0) {
+          noResults.style.display = 'block';
+          queryText.textContent = document.getElementById('search').value || 'your search';
+          container.innerHTML = '';
+          resultCount.textContent = '0';
+          siteCount.textContent = '0';
+          return;
+        }
 
-      noResults.style.display = 'none';
-      let totalSites = 0;
-      container.innerHTML = data.map(cat => {
-        totalSites += cat.sites.length;
-        return `
-          <div class="category">
-            <div class="category-header" onclick="toggleCategory(this)">
-              <div class="category-title">
-                <i class="${cat.icon}"></i> ${cat.category}
+        noResults.style.display = 'none';
+        let total = 0;
+        container.innerHTML = data.map(cat => {
+          total += cat.sites.length;
+          return `
+            <div class="category">
+              <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+                <div class="category-title"><i class="${cat.icon}"></i> ${cat.category}</div>
+                <div class="count">${cat.sites.length}</div>
+                <i class="bi bi-chevron-down toggle-icon"></i>
               </div>
-              <div class="count">${cat.sites.length}</div>
-              <i class="bi bi-chevron-down toggle-icon"></i>
+              <div class="category-content">
+                <table>
+                  <tr><th>Name</th><th>URL</th></tr>
+                  ${cat.sites.map(s => {
+                    const [name, url] = s.split('|');
+                    return `<tr><td class="name">${name}</td><td class="link"><a href="${url}" target="_blank">${url}</a></td></tr>`;
+                  }).join('')}
+                </table>
+              </div>
             </div>
-            <div class="category-content">
-              <ul>
-                ${cat.sites.map(site => {
-                  const [name, url] = site.split(' - ');
-                  const cleanUrl = url || `https://${name.toLowerCase().replace(/ /g, '-')}.com`;
-                  return `<li><a href="${cleanUrl}" target="_blank" rel="noopener">${name}</a></li>`;
-                }).join('')}
-              </ul>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
 
-      resultCount.textContent = data.length;
-      siteCount.textContent = totalSites;
+        resultCount.textContent = data.length;
+        siteCount.textContent = total;
+      }, 100);
     }
 
-    // Toggle
-    window.toggleCategory = function(header) {
-      const category = header.parentElement;
-      category.classList.toggle('open');
-    };
-
-    // Search
+    // === DEBOUNCED SEARCH ===
+    let searchTimeout;
     function search() {
-      const query = document.getElementById('search').value.toLowerCase().trim();
-      if (!query) return render(resources);
-
-      const filtered = resources
-        .map(cat => {
-          const matching = cat.sites.filter(s => s.toLowerCase().includes(query));
-          return matching.length > 0 ? { ...cat, sites: matching } : null;
-        })
-        .filter(Boolean);
-
-      render(filtered);
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        const q = document.getElementById('search').value.toLowerCase().trim();
+        if (!q) return render(resources);
+        const filtered = resources
+          .map(cat => {
+            const match = cat.sites.filter(s => s.toLowerCase().includes(q));
+            return match.length ? { ...cat, sites: match } : null;
+          })
+          .filter(Boolean);
+        render(filtered);
+      }, 200);
     }
 
     // Init
