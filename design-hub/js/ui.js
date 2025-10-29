@@ -6,6 +6,19 @@ let current = { section: 'designs', sub: null, mode: 'normal' };
 let searchTerm = '';
 let expanded = new Set();
 
+/* ---------- LOGO INJECTION & COLOR SWAP ---------- */
+const LOGO_SVG = `<!-- paste your full SVG here (the one you gave) -->`;
+function injectLogo() {
+  const container = document.getElementById('logo-container');
+  if (!container) return;
+  container.innerHTML = LOGO_SVG;
+
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const blackFill = isDark ? '#fff' : '#000';
+  container.querySelectorAll('path[fill="#000000"]').forEach(p => p.setAttribute('fill', blackFill));
+}
+document.addEventListener('DOMContentLoaded', injectLogo);
+
 /* ---------- THEME ---------- */
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
@@ -16,13 +29,17 @@ themeBtn?.addEventListener('click', () => {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
   themeBtn.textContent = isDark ? 'Dark' : 'Light';
+  injectLogo();               // re-color logo
 });
 
-/* ---------- NAV ---------- */
+/* ---------- NAV (adds Show All) ---------- */
 function renderNav() {
   const tree = document.getElementById('nav-tree');
   if (!tree) return;
   tree.innerHTML = '';
+
+  // Show All
+  tree.appendChild(createNavNode('all', 'Show All', 'bi-grid-3x3-gap-fill'));
 
   // Designs
   tree.appendChild(createNavNode('designs', 'Designs', 'bi-palette'));
@@ -51,7 +68,6 @@ function createNavNode(id, label, icon, hasSubs = false, parent = null) {
   div.dataset.id = id;
   div.dataset.parent = parent || '';
   div.innerHTML = `<i class="${icon}"></i> ${label}`;
-
   if (hasSubs) {
     div.onclick = e => {
       e.stopPropagation();
@@ -95,7 +111,15 @@ function renderContent() {
   updateStats(filtered);
 }
 
+/* Show All → merge every category */
 function getCurrentData() {
+  if (current.section === 'all') {
+    const all = [];
+    all.push(...resources.designs);
+    all.push(...Object.values(resources['3d'] || {}));
+    all.push(...resources.stores);
+    return all;
+  }
   if (current.section === '3d' && current.sub) return [resources['3d'][current.sub]];
   if (current.section === 'stores') return resources.stores;
   if (current.section === '3d') return Object.values(resources['3d'] || {});
@@ -120,26 +144,19 @@ function createCategoryCard(cat) {
       <div class="count">${cat.sites.length}</div>
       <i class="bi bi-chevron-down toggle"></i>
     </div>
-    <div class="cat-content" style="max-height:${open ? '5000px' : '0'};padding:${open ? '1rem 1.2rem' : '0 1.2rem'}">
+    <div class="cat-content" style="max-height:${open?'5000px':'0'};padding:${open?'1rem 1.2rem':'0 1.2rem'}">
       <table>${cat.sites.map(s => {
         const [name, url] = s.split('|');
-        return `<tr>
-          <td class="name">${name}</td>
-          <td class="link"><a href="${url}" target="_blank">${url}</a>
-            <button class="copy-btn" onclick="copyText('${url}')"><i class="bi bi-clipboard"></i></button>
-          </td>
-        </tr>`;
+        return `<tr><td class="name">${name}</td><td class="link"><a href="${url}" target="_blank">${url}</a>
+          <button class="copy-btn" onclick="copyText('${url}')"><i class="bi bi-clipboard"></i></button></td></tr>`;
       }).join('')}</table>
     </div>`;
   return div;
 }
-window.toggleCategory = id => {
-  expanded.has(id) ? expanded.delete(id) : expanded.add(id);
-  renderContent();
-};
+window.toggleCategory = id => { expanded.has(id) ? expanded.delete(id) : expanded.add(id); renderContent(); };
 
 function updatePageTitle() {
-  const titles = { designs: 'Designs', '3d': '3D Tools', stores: 'Stores' };
+  const titles = { designs: 'Designs', '3d': '3D Tools', stores: 'Stores', all: 'All Resources' };
   const sub = current.sub && resources['3d'][current.sub]?.name;
   const titleEl = document.getElementById('page-title');
   if (titleEl) titleEl.textContent = sub || titles[current.section] || 'DesignHub';
@@ -186,25 +203,22 @@ document.getElementById('copy-all')?.addEventListener('click', () => {
   let txt = '';
   Object.entries(resources).forEach(([k, v]) => {
     const cats = k === '3d' ? Object.values(v) : v;
-    cats.forEach(c => {
-      txt += `${c.name}\n${c.sites.map(s => s.split('|').join(': ')).join('\n')}\n\n`;
-    });
+    cats.forEach(c => txt += `${c.name}\n${c.sites.map(s=>s.split('|').join(': ')).join('\n')}\n\n`);
   });
   navigator.clipboard.writeText(txt.trim());
   alert('All 1,024 sites copied!');
 });
 window.copyText = txt => { navigator.clipboard.writeText(txt); alert('Copied!'); };
 
-/* ---------- DEFAULT MODE BUTTON ---------- */
+/* ---------- INIT ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   renderNav();
   renderContent();
 
-  // click the default mode button (prevents the null.click() error)
-  const defaultBtn = document.querySelector('.mode-btn[data-mode="normal"]');
-  defaultBtn?.click();
+  // default mode button (prevents null.click)
+  document.querySelector('.mode-btn[data-mode="normal"]')?.click();
 
-  // PWA registration – ignore if sw.js missing
+  // PWA
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
