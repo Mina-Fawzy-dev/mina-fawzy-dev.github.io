@@ -1,49 +1,64 @@
-// js/mindmap.js
+/* design-hub/js/mindmap.js */
 export function renderMindMap() {
   const container = document.getElementById('view-mindmap');
-  container.innerHTML = '<canvas id="mindcanvas"></canvas>';
-  const canvas = document.getElementById('mindcanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = container.clientWidth;
-  canvas.height = container.clientHeight;
+  if (!container) return;
+  container.innerHTML = '<canvas id="mindmap-canvas" width="800" height="600"></canvas>';
 
+  const canvas = document.getElementById('mindmap-canvas');
+  const ctx = canvas.getContext('2d');
+
+  // ---- simple demo graph ----
   const nodes = [
-    { id: 'home', x: canvas.width/2, y: canvas.height/2, label: 'DesignHub', color: '#00d4aa' },
-    { id: 'designs', x: 200, y: 150, label: 'Designs', parent: 'home' },
-    { id: '3d', x: 600, y: 150, label: '3D', parent: 'home' },
-    // ... subnodes
+    { id: 'root', label: 'DesignHub', x: 400, y: 300, r: 40 },
+    { id: 'd1', label: 'Designs', x: 200, y: 150, r: 30 },
+    { id: 'd2', label: '3D', x: 600, y: 150, r: 30 },
+    { id: 'd3', label: 'Stores', x: 400, y: 450, r: 30 }
+  ];
+  const links = [
+    { from: 'root', to: 'd1' },
+    { from: 'root', to: 'd2' },
+    { from: 'root', to: 'd3' }
   ];
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    nodes.forEach(node => {
-      if (node.parent) {
-        const parent = nodes.find(n => n.id === node.parent);
-        ctx.beginPath();
-        ctx.moveTo(parent.x, parent.y);
-        ctx.lineTo(node.x, node.y);
-        ctx.strokeStyle = '#00d4aa';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-      ctx.fillStyle = node.color || '#141423';
-      ctx.fillRect(node.x - 60, node.y - 30, 120, 60);
-      ctx.fillStyle = '#fff';
-      ctx.font = '14px Inter';
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#d3fe00';
+    ctx.fillStyle = '#111';
+
+    links.forEach(l => {
+      const a = nodes.find(n => n.id === l.from);
+      const b = nodes.find(n => n.id === l.to);
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.stroke();
+    });
+
+    nodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#d3fe00';
+      ctx.font = '14px system-ui';
       ctx.textAlign = 'center';
-      ctx.fillText(node.label, node.x, node.y + 5);
+      ctx.fillText(n.label, n.x, n.y + 5);
+      ctx.fillStyle = '#111';
     });
   }
-
   draw();
-  canvas.onclick = (e) => {
+
+  // ---- click handler – just logs the node (no loadSection) ----
+  canvas.onclick = e => {
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const clicked = nodes.find(n => Math.abs(n.x - x) < 60 && Math.abs(n.y - y) < 30);
-    if (clicked && clicked.id === '3d') {
-      // Load 3D section
-      loadSection('3d');
-    }
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const hit = nodes.find(n => Math.hypot(n.x - mx, n.y - my) < n.r);
+    if (hit) console.log('Mind-map node clicked:', hit.label);
   };
+}
+
+/* expose a tiny helper used by ui.js when switching back to list view */
+export function loadSection() {
+  // placeholder – ui.js never calls it any more
 }
