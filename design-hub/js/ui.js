@@ -1,5 +1,6 @@
 // js/ui.js
 import { resources } from './data.js';
+import { setupPWA } from './pwa.js';
 
 let current = { section: 'designs', sub: null, mode: 'normal' };
 let searchTerm = '';
