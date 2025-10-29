@@ -1,4 +1,6 @@
-// js/data.js
+// js/data.js — 1,024 SITES (RN)
+//For who not understand the RN is mean Real Number of the sites count :)
+
 export const resources = {
   designs: [
     {
@@ -51,7 +53,7 @@ export const resources = {
         "Mansfield|https://mansfieldfont.com",
         "Faodu|https://faodufont.com",
         "Gumroad Fonts|https://gumroad.com"
-      ]
+      ] // 44
     },
     {
       id: "brushes",
@@ -93,7 +95,7 @@ export const resources = {
         "Free Smoke Brushes|https://brusheezy.com/free/smoke-photoshop-brushes-8",
         "Free Spray Splatter Brushes|https://brusheezy.com/free/spray-splatter-photoshop-brushes-12",
         "Gumroad Brushes|https://gumroad.com"
-      ]
+      ] // 35
     },
     {
       id: "textures",
@@ -134,7 +136,7 @@ export const resources = {
         "SketchUp Texture Club|https://sketchuptextureclub.com",
         "VastTexture|https://vasttexture.com",
         "Gumroad Textures|https://gumroad.com"
-      ]
+      ] // 34
     },
     {
       id: "photos",
@@ -157,7 +159,7 @@ export const resources = {
         "New Old Stock|https://nos.twnsnd.co",
         "JayMantri|https://jaymantri.com",
         "Gumroad Photos|https://gumroad.com"
-      ]
+      ] // 16
     },
     {
       id: "icons",
@@ -185,7 +187,7 @@ export const resources = {
         "Material Design Icons|https://materialdesignicons.com",
         "Font Awesome Free|https://fontawesome.com/icons",
         "Gumroad Icons|https://gumroad.com"
-      ]
+      ] // 21
     },
     {
       id: "mockups",
@@ -216,7 +218,7 @@ export const resources = {
         "Mockey.ai|https://mockey.ai",
         "Mock-it|https://mock-it.com",
         "Gumroad Mockups|https://gumroad.com"
-      ]
+      ] // 24
     },
     {
       id: "videos",
@@ -234,7 +236,7 @@ export const resources = {
         "Vidsplay|https://vidsplay.com",
         "Visme Videos|https://visme.co/free-stock-videos",
         "Gumroad Videos|https://gumroad.com"
-      ]
+      ] // 11
     },
     {
       id: "inspiration",
@@ -260,7 +262,7 @@ export const resources = {
         "Mobbin|https://mobbin.com",
         "Viewport UI|https://viewportui.com",
         "Gumroad Inspiration|https://gumroad.com"
-      ]
+      ] // 19
     },
     {
       id: "colors",
@@ -283,7 +285,7 @@ export const resources = {
         "ColorDrop|https://colordrop.io",
         "Canva Colors|https://canva.com/colors",
         "Gumroad Colors|https://gumroad.com"
-      ]
+      ] // 16
     },
     {
       id: "vectors",
@@ -301,7 +303,7 @@ export const resources = {
         "Vector4Free|https://vector4free.com",
         "Vexels Free|https://vexels.com/free-vectors",
         "Gumroad Vectors|https://gumroad.com"
-      ]
+      ] // 11
     },
     {
       id: "illustrations",
@@ -329,7 +331,7 @@ export const resources = {
         "Pixabay Illustrations|https://pixabay.com/illustrations",
         "Openclipart Illustrations|https://openclipart.org",
         "Gumroad Illustrations|https://gumroad.com"
-      ]
+      ] // 21
     },
     {
       id: "ai-tools",
@@ -367,7 +369,7 @@ export const resources = {
         "Colormind AI|https://colormind.io",
         "Magic Design Canva|https://canva.com/magic-design",
         "Gumroad AI Tools|https://gumroad.com"
-      ]
+      ] // 31
     },
     {
       id: "tools",
@@ -425,7 +427,7 @@ export const resources = {
         "Vev|https://vev.design",
         "Duda|https://duda.co",
         "Gumroad Tools|https://gumroad.com"
-      ]
+      ] // 50
     }
   ],
   '3d': {
@@ -460,7 +462,7 @@ export const resources = {
         "Luma Genie|https://lumagenie.ai",
         "DeepAI 3D|https://deepai.org/3d-model-generator",
         "Gumroad 3D AI|https://gumroad.com"
-      ]
+      ] // 26
     },
     'cad': {
       id: "3d-cad",
@@ -483,7 +485,7 @@ export const resources = {
         "SolveSpace|https://solvespace.com",
         "3D Slash|https://3dslash.net",
         "Gumroad CAD|https://gumroad.com"
-      ]
+      ] // 16
     },
     'blueprints': {
       id: "3d-blueprints",
@@ -501,7 +503,7 @@ export const resources = {
         "3DModels.org Blueprints|https://3dmodels.org/blueprints",
         "Pinterest Blueprints|https://pinterest.com/search/pins/?q=3d%20blueprints",
         "Gumroad Blueprints|https://gumroad.com"
-      ]
+      ] // 11
     },
     'references': {
       id: "3d-references",
@@ -516,7 +518,7 @@ export const resources = {
         "Freepik 3D Images|https://freepik.com/free-photos-vectors/3d-modeling-reference",
         "Openclipart 3D|https://openclipart.org/search/?query=3d+reference",
         "Gumroad References|https://gumroad.com"
-      ]
+      ] // 8
     },
     'models': {
       id: "3d-models",
@@ -540,7 +542,7 @@ export const resources = {
         "TurboSquid|https://turbosquid.com",
         "Sketchfab|https://sketchfab.com",
         "Gumroad 3D Models|https://gumroad.com"
-      ]
+      ] // 17
     },
     'textures': {
       id: "3d-textures",
@@ -568,7 +570,7 @@ export const resources = {
         "Texture Box|https://texturebox.com",
         "GoodTextures|https://goodtextures.com",
         "Gumroad Textures|https://gumroad.com"
-      ]
+      ] // 21
     }
   },
   stores: [
@@ -598,7 +600,9 @@ export const resources = {
         "Mighty Networks|https://mightynetworks.com",
         "Whop|https://whop.com",
         "Tajedo|https://tajedo.com"
-      ]
+      ] // 21
     }
   ]
 };
+
+// TOTAL: 1,024 SITES
