@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CGHub Archive – Design Resources Hub</title>
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-bg: #0a0a0a;
+      --accent-color: #ddff1c;
+      --secondary-bg: #1a1a1a;
+      --text-color: #e8e8e8;
+      --card-bg: #151515;
+      --border-color: #333333;
+      --hover-bg: #252525;
+      --header-bg: #0f0f0f;
+      --font-size: 16px;
+      --max-card-height: 800px;
+      --card-gap: 1.5rem;
+      --card-border: 1px;
+      --card-radius: 0.5rem;
+    }
+    [data-theme="light"] {
+      --primary-bg: #f8f9fa;
+      --accent-color: #ddff1c;
+      --secondary-bg: #ffffff;
+      --text-color: #2d3748;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --hover-bg: #f7fafc;
+      --header-bg: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      background:var(--primary-bg);
+      color:var(--text-color);
+      font-family:'Segoe UI',system-ui,sans-serif;
+      font-size:var(--font-size);
+      line-height:1.6;
+      overflow-x:hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ===================== HEADER NAVIGATION ===================== */
+    .header-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-nav .logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      text-decoration: none;
+    }
+
+    .header-nav .logo img {
+      height: 32px;
+    }
+
+    .header-nav .logo span {
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: var(--text-color);
+    }
+
+    .menu-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .menu-toggle:hover {
+      background: var(--hover-bg);
+    }
+
+    /* ===================== DROPDOWN MENU ===================== */
+    .dropdown-menu {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      background: var(--secondary-bg);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 999;
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .dropdown-menu.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .dropdown-content {
+      padding: 1rem 1.5rem;
+    }
+
+    .menu-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .menu-item a {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem .85rem;
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: .5rem;
+      transition: background .2s, color .2s;
+    }
+
+    .menu-item a:hover {
+      background: var(--hover-bg);
+      color: var(--accent-color);
+    }
+
+    .menu-item a i {
+      font-size: 1.35rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* ===================== MAIN CONTENT ===================== */
+    .main-content {
+      margin-top: 60px;
+      padding: 2rem;
+      flex: 1;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: .5rem;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+
+    .stat-label {
+      font-size: .875rem;
+      opacity: .8;
+    }
+
+    /* DYNAMIC MASONRY LAYOUT WITH CSS COLUMNS */
+    .resource-grid {
+      columns: 4 auto;
+      column-gap: var(--card-gap);
+      column-fill: balance;
+    }
+
+    @media (max-width: 1400px) { .resource-grid { columns: 3 auto; } }
+    @media (max-width: 992px) { .resource-grid { columns: 2 auto; } }
+    @media (max-width: 576px) { .resource-grid { columns: 1 auto; } }
+
+    /* CATEGORY CARD */
+    .resource-card {
+      background: var(--card-bg);
+      border: var(--card-border) solid var(--border-color);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      margin-bottom: var(--card-gap);
+      break-inside: avoid;
+      display: block;
+      transition: all .3s ease;
+      height: fit-content;
+    }
+
+    .resource-card:hover {
+      border-color: var(--accent-color);
+    }
+
+    .card-header {
+      padding: .75rem 1rem;
+      background: var(--hover-bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .card-icon {
+      font-size: 1.1rem;
+    }
+
+    .bi-chevron-down {
+      transition: transform .25s;
+    }
+
+    .bi-chevron-down.rotated {
+      transform: rotate(180deg);
+    }
+
+    .card-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .card-content.expanded {
+      max-height: none;
+      overflow-y: auto;
+    }
+
+    .card-inner {
+      padding: 1rem;
+    }
+
+    .card-desc {
+      font-size: .85rem;
+      opacity: .7;
+      margin-bottom: .5rem;
+    }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .5rem;
+    }
+
+    .link-checkbox {
+      accent-color: var(--accent-color);
+    }
+
+    .link-name {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .link-name:hover {
+      text-decoration: underline;
+    }
+
+    .link-url {
+      font-size: .8rem;
+      color: #888;
+      word-break: break-all;
+    }
+
+    .link-desc {
+      font-size: .75rem;
+      opacity: .6;
+      margin-top: .25rem;
+    }
+
+    /* ===================== FAB ===================== */
+    .fab-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fab-main {
+      width: 56px;
+      height: 56px;
+      background: var(--accent-color);
+      color: var(--primary-bg);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,.3);
+      transition: all .3s;
+    }
+
+    .fab-main:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,.4);
+    }
+
+    .fab-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all .3s;
+    }
+
+    .fab-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .fab-btn {
+      width: 48px;
+      height: 48px;
+      background: var(--secondary-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+
+    .fab-btn:hover {
+      background: var(--hover-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    }
+
+    /* ===================== SETTINGS MODAL ===================== */
+    .settings-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(4px);
+    }
+
+    .settings-modal.show {
+      display: flex;
+    }
+
+    .settings-content {
+      background: var(--secondary-bg);
+      padding: 2rem;
+      border-radius: .75rem;
+      max-width: 420px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,.3);
+    }
+
+    .settings-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--text-color);
+      cursor: pointer;
+      opacity: .7;
+    }
+
+    .settings-close:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .setting-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .setting-group label {
+      display: block;
+      margin-bottom: .5rem;
+      font-weight: 600;
+    }
+
+    .setting-group select, .setting-group input {
+      width: 100%;
+      padding: .5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      border-radius: .25rem;
+    }
+
+    .setting-group input[type="range"] {
+      accent-color: var(--accent-color);
+    }
+
+    .section-desc {
+      font-size: .9rem;
+      opacity: .7;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    /* ===================== FOOTER ===================== */
+    .site-footer {
+      background: var(--secondary-bg);
+      border-top: 1px solid var(--border-color);
+      padding: 2rem 1.5rem;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-logo-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      height: 32px;
+    }
+
+    .footer-info {
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .footer-info p {
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .footer-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-color);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: var(--accent-color);
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .footer-info {
+        text-align: left;
+      }
+    }
+
+    /* ===================== LOADING STATE ===================== */
+    .loading-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border-color);
+      border-left: 4px solid var(--accent-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+<!-- ===================== HEADER NAVIGATION ===================== -->
+<header class="header-nav">
+  <a href="/" class="logo">
+    <img src="cghub-high-resolution-logo-transparent-dark-mode.png" alt="CGHub" class="logo-img">
+  </a>
+  <button class="menu-toggle" id="menuToggle">
+    <i class="bi bi-list"></i>
+  </button>
+</header>
+
+<!-- ===================== DROPDOWN MENU ===================== -->
+<div class="dropdown-menu" id="dropdownMenu">
+  <div class="dropdown-content">
+    <div class="menu-group" id="sidebarMenu"></div>
+  </div>
+</div>
+
+<!-- ===================== FAB ===================== -->
+<div class="fab-container">
+  <div class="fab-menu" id="fabMenu">
+    <button class="fab-btn" id="fabExpandAll" title="Expand All"><i class="bi bi-arrows-angle-expand"></i></button>
+    <button class="fab-btn" id="fabCollapseAll" title="Collapse All"><i class="bi bi-arrows-angle-contract"></i></button>
+    <button class="fab-btn" id="fabSelectAll" title="Select / Deselect All"><i class="bi bi-check-square"></i></button>
+    <button class="fab-btn" id="fabCopy" title="Copy Selected"><i class="bi bi-clipboard"></i></button>
+    <button class="fab-btn" id="fabTheme" title="Toggle Theme"><i class="bi bi-moon-stars-fill"></i></button>
+    <button class="fab-btn" id="fabSettings" title="Settings"><i class="bi bi-gear"></i></button>
+  </div>
+  <button class="fab-main" id="fabToggle"><i class="bi bi-plus"></i></button>
+</div>
+
+<!-- ===================== SETTINGS MODAL ===================== -->
+<div class="settings-modal" id="settingsModal">
+  <div class="settings-content">
+    <button class="settings-close" id="closeSettings"><i class="bi bi-x"></i></button>
+    <h3>Settings</h3>
+    <div class="setting-group">
+      <label>Font Size</label>
+      <select id="fontSize">
+        <option value="14">Small</option>
+        <option value="16" selected>Normal</option>
+        <option value="18">Large</option>
+        <option value="20">X-Large</option>
+      </select>
+    </div>
+    <div class="setting-group">
+      <label>Max Category Height</label>
+      <select id="expandedHeight">
+        <option value="400">Compact</option>
+        <option value="600">Normal</option>
+        <option value="800" selected>Spacious</option>
+        <option value="1200">Large</option>
+        <option value="none">Unlimited</option>
+      </select>
+    </div>
+    <div class="setting-group">
+      <label>Card Gap: <span id="gapValue">1.5rem</span></label>
+      <input type="range" id="cardGap" min="0.5" max="3" step="0.25" value="1.5">
+    </div>
+    <div class="setting-group">
+      <label>Card Border: <span id="borderValue">1px</span></label>
+      <input type="range" id="cardBorder" min="0" max="4" step="1" value="1">
+    </div>
+    <div class="setting-group">
+      <label>Corner Radius: <span id="radiusValue">0.5rem</span></label>
+      <input type="range" id="cardRadius" min="0" max="1.5" step="0.1" value="0.5">
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MAIN CONTENT ===================== -->
+<main class="main-content">
+  <header class="page-header">
+    <h1 class="h4 mb-0">Design Resource Hub</h1>
+    <button class="theme-toggle" id="themeToggle"><i class="bi bi-moon-stars-fill"></i></button>
+  </header>
+  
+  <div class="stats-grid" id="statsContainer"></div>
+  
+  <div id="sectionsContainer">
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading resources...</p>
+    </div>
+  </div>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-logo-section">
+      <img src="cghub-high-resolution-logo-transparent-dark-mode-s.png" alt="CGHub" class="footer-logo">
+      <div class="footer-info">
+        <p><strong>CGHub Archive</strong> - A helpful hub for all designers</p>
+        <p>Curated design resources, tools, and inspiration</p>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/YourGitHubUsername" target="_blank" class="footer-link">
+        <i class="bi bi-github"></i>
+        <span>GitHub</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== TOASTS ===================== -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:2000;">
+  <div class="toast align-items-center text-white bg-success border-0" id="copyToast" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">Copied!</div>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+  <div class="toast align-items-center text-white bg-danger border-0" id="errorToast" role="alert">
+    <div class="d-flex">
+      <div class="toast-body"></div>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const config = {
+  logo: { dark: "cghub-high-resolution-logo-transparent-dark-mode.png", light: "cghub-high-resolution-logo-grayscale-transparent-light-mode.png" },
+  logoSmall: { dark: "cghub-high-resolution-logo-transparent-dark-mode-s.png", light: "cghub-high-resolution-logo-grayscale-transparent-light-mode-s.png" },
+  lastUpdated: "2025-11-04",
+  descriptions: {
+    designs: "A curated collection of UI/UX design tools, templates, and inspiration sources for modern interfaces.",
+    '3d': "3D modeling and rendering resources for artists and developers creating immersive digital experiences.",
+    'technical-artist': "Tools and tutorials for technical artists bridging art and engineering in game development.",
+    plugins: "Essential plugins to supercharge your creative workflow in popular design software.",
+    arabicFonts: "Beautiful Arabic typography fonts for authentic Middle Eastern design projects.",
+    copticFonts: "Coptic script fonts for historical and cultural design applications.",
+    stores: "Online marketplaces for digital assets, fonts, and design resources."
+  }
+};
+
+let app = { data: null, selected: new Set(), allSelected: false };
+
+/* ==============================================================
+   UTILS
+   ============================================================== */
+function showError(msg) {
+  const t = document.getElementById('errorToast');
+  t.querySelector('.toast-body').textContent = msg;
+  new bootstrap.Toast(t).show();
+}
+function showSuccess(msg) {
+  const t = document.getElementById('copyToast');
+  t.querySelector('.toast-body').textContent = msg;
+  new bootstrap.Toast(t).show();
+}
+
+/* ==============================================================
+   CARD ANIMATION FUNCTIONS
+   ============================================================== */
+function expandCard(card) {
+  const content = card.querySelector('.card-content');
+  const inner = content.querySelector('.card-inner');
+  const chevron = card.querySelector('.bi-chevron-down');
+
+  // Measure true height (no flash)
+  content.style.transition = 'none';
+  content.style.maxHeight = 'none';
+  const fullHeight = inner.scrollHeight;
+  content.style.maxHeight = '0px';
+  content.style.transition = '';
+
+  // Calculate target
+  const rootStyle = getComputedStyle(document.documentElement);
+  const maxHStr = rootStyle.getPropertyValue('--max-card-height').trim();
+  let targetHeight = fullHeight;
+  let overflowY = 'visible';
+  if (maxHStr !== 'none') {
+    const maxH = parseInt(maxHStr);
+    if (!isNaN(maxH) && fullHeight > maxH) {
+      targetHeight = maxH;
+      overflowY = 'auto';
+    }
+  }
+
+  // Animate
+  requestAnimationFrame(() => {
+    content.style.maxHeight = targetHeight + 'px';
+    content.style.overflowY = overflowY;
+  });
+
+  content.classList.add('expanded');
+  chevron.classList.add('rotated');
+  card.setAttribute('aria-expanded', 'true');
+}
+
+function collapseCard(card) {
+  const content = card.querySelector('.card-content');
+  const chevron = card.querySelector('.bi-chevron-down');
+
+  // Animate collapse
+  content.style.maxHeight = content.scrollHeight + 'px';
+  requestAnimationFrame(() => {
+    content.style.maxHeight = '0px';
+    chevron.classList.remove('rotated');
+    card.setAttribute('aria-expanded', 'false');
+  });
+
+  setTimeout(() => {
+    content.classList.remove('expanded');
+    content.style.maxHeight = '';
+    content.style.overflowY = '';
+  }, 350);
+}
+
+function expandAll() {
+  document.querySelectorAll('.resource-card').forEach(card => {
+    const content = card.querySelector('.card-content');
+    if (!content.classList.contains('expanded')) {
+      expandCard(card);
+    }
+  });
+}
+
+function collapseAll() {
+  document.querySelectorAll('.resource-card').forEach(collapseCard);
+}
+
+/* ==============================================================
+   INIT - LOAD FROM JSON FILE
+   ============================================================== */
+async function init() {
+  try {
+    // Load data from resources.json
+    const response = await fetch('resources.json');
+    
+    if (!response.ok) {
+      throw new Error(`Failed to load resources.json: ${response.status} ${response.statusText}`);
+    }
+    
+    app.data = await response.json();
+    
+    // Check if data is properly loaded
+    if (!app.data || Object.keys(app.data).length === 0) {
+      throw new Error('resources.json is empty or invalid');
+    }
+    
+    console.log('Successfully loaded data:', app.data);
+    
+  } catch (e) {
+    console.error('Error loading resources:', e);
+    showError('Failed to load resources.json - ' + e.message);
+    document.getElementById('sectionsContainer').innerHTML = `
+      <div class="text-center mt-5">
+        <h3>Failed to load resources</h3>
+        <p class="text-muted">${e.message}</p>
+        <p class="text-muted">Make sure resources.json exists in the same directory</p>
+      </div>
+    `;
+    return;
+  }
+  
+  loadAllSettings();
+  initTheme();
+  buildSidebar();
+  renderStats();
+  renderSections();
+  setupEvents();
+}
+
+/* ==============================================================
+   SETTINGS - REAL TIME
+   ============================================================== */
+function loadAllSettings() {
+  const s = JSON.parse(localStorage.getItem('uiSettings') || '{}');
+
+  // Font
+  const fs = s.fontSize || 16;
+  document.documentElement.style.setProperty('--font-size', fs + 'px');
+  document.getElementById('fontSize').value = fs;
+
+  // Max height
+  const eh = s.expandedHeight || '800';
+  const maxCard = eh === 'none' ? 'none' : eh + 'px';
+  document.documentElement.style.setProperty('--max-card-height', maxCard);
+  document.getElementById('expandedHeight').value = eh;
+
+  // Gap
+  const gap = s.cardGap || 1.5;
+  document.documentElement.style.setProperty('--card-gap', gap + 'rem');
+  document.getElementById('cardGap').value = gap;
+  document.getElementById('gapValue').textContent = gap + 'rem';
+
+  // Border
+  const border = s.cardBorder ?? 1;
+  document.documentElement.style.setProperty('--card-border', border + 'px');
+  document.getElementById('cardBorder').value = border;
+  document.getElementById('borderValue').textContent = border + 'px';
+
+  // Radius
+  const radius = s.cardRadius || 0.5;
+  document.documentElement.style.setProperty('--card-radius', radius + 'rem');
+  document.getElementById('cardRadius').value = radius;
+  document.getElementById('radiusValue').textContent = radius + 'rem';
+}
+
+function saveSetting(key, value) {
+  const s = JSON.parse(localStorage.getItem('uiSettings') || '{}');
+  s[key] = value;
+  localStorage.setItem('uiSettings', JSON.stringify(s));
+}
+
+// Listeners for real-time
+['fontSize', 'expandedHeight'].forEach(id => {
+  document.getElementById(id).addEventListener('change', e => {
+    const val = e.target.value;
+    if (id === 'expandedHeight') {
+      const maxCard = val === 'none' ? 'none' : val + 'px';
+      document.documentElement.style.setProperty('--max-card-height', maxCard);
+    } else {
+      document.documentElement.style.setProperty('--font-size', val + 'px');
+    }
+    saveSetting(id, val);
+  });
+});
+
+document.getElementById('cardGap').addEventListener('input', e => {
+  const val = e.target.value;
+  document.documentElement.style.setProperty('--card-gap', val + 'rem');
+  document.getElementById('gapValue').textContent = val + 'rem';
+  saveSetting('cardGap', val);
+});
+document.getElementById('cardBorder').addEventListener('input', e => {
+  const val = e.target.value;
+  document.documentElement.style.setProperty('--card-border', val + 'px');
+  document.getElementById('borderValue').textContent = val + 'px';
+  saveSetting('cardBorder', val);
+});
+document.getElementById('cardRadius').addEventListener('input', e => {
+  const val = e.target.value;
+  document.documentElement.style.setProperty('--card-radius', val + 'rem');
+  document.getElementById('radiusValue').textContent = val + 'rem';
+  saveSetting('cardRadius', val);
+});
+
+/* ==============================================================
+   THEME
+   ============================================================== */
+function initTheme() {
+  const t = localStorage.getItem('theme') || 'dark';
+  document.body.dataset.theme = t;
+  updateLogos(t);
+  updateAllThemeIcons(t);
+}
+function toggleTheme() {
+  const next = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+  document.body.dataset.theme = next;
+  localStorage.setItem('theme', next);
+  updateLogos(next);
+  updateAllThemeIcons(next);
+}
+function updateLogos(t) {
+  const headerLogo = document.querySelector('.header-nav .logo img');
+  const footerLogo = document.querySelector('.footer-logo');
+  
+  if (headerLogo) {
+    headerLogo.src = t === 'dark' ? config.logo.dark : config.logo.light;
+  }
+  
+  if (footerLogo) {
+    footerLogo.src = t === 'dark' ? config.logoSmall.dark : config.logoSmall.light;
+  }
+}
+function updateAllThemeIcons(t) {
+  document.querySelectorAll('.theme-toggle i, #fabTheme i').forEach(i => {
+    i.className = t === 'light' ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
+  });
+}
+
+/* ==============================================================
+   SIDEBAR & RENDER
+   ============================================================== */
+function buildSidebar() {
+  const c = document.getElementById('sidebarMenu');
+  c.innerHTML = '';
+  Object.keys(app.data).forEach(k => {
+    const title = k.replace(/([A-Z])/g, ' $1').trim();
+    const icon = getIcon(k);
+    c.insertAdjacentHTML('beforeend', `<div class="menu-item"><a href="#${k}"><i class="bi ${icon}"></i><span class="label">${title}</span></a></div>`);
+  });
+}
+function getIcon(k) {
+  const m = {
+    'designs':'bi-palette',
+    '3d':'bi-box-seam',
+    'technical-artist':'bi-wrench',
+    'plugins':'bi-plug',
+    'arabicFonts':'bi-type',
+    'copticFonts':'bi-type-bold',
+    'stores':'bi-shop',
+    'inspiration':'bi-lightbulb',
+    'tools':'bi-tools',
+    'fonts':'bi-fonts',
+    'icons':'bi-app-indicator',
+    'colors':'bi-palette2',
+    'illustrations':'bi-image',
+    'templates':'bi-file-earmark-richtext',
+    'learning':'bi-book'
+  };
+  return m[k] || 'bi-folder';
+}
+function renderStats() {
+  const {cats, links, sections} = calcStats();
+  document.getElementById('statsContainer').innerHTML = `
+    <div class="stat-card"><span class="stat-number">${cats}</span><div class="stat-label">Categories</div></div>
+    <div class="stat-card"><span class="stat-number">${links}+</span><div class="stat-label">Links</div></div>
+    <div class="stat-card"><span class="stat-number">${sections}</span><div class="stat-label">Sections</div></div>
+    <div class="stat-card"><span class="stat-number">${config.lastUpdated}</span><div class="stat-label">Updated</div></div>`;
+}
+function calcStats() {
+  let cats = 0, links = 0, sections = 0;
+  for (const k in app.data) {
+    sections++;
+    const v = app.data[k];
+    if (Array.isArray(v)) {
+      v.forEach(cat => { 
+        cats++; 
+        links += cat.sites ? cat.sites.length : 0; 
+      });
+    } else {
+      Object.values(v).forEach(cat => { 
+        cats++; 
+        links += cat.sites ? cat.sites.length : 0; 
+      });
+    }
+  }
+  return {cats, links, sections};
+}
+function renderSections() {
+  const c = document.getElementById('sectionsContainer');
+  c.innerHTML = '';
+  Object.keys(app.data).forEach(k => c.insertAdjacentHTML('beforeend', buildSection(k, app.data[k])));
+}
+function buildSection(id, data) {
+  const title = id.replace(/([A-Z])/g, ' $1').trim();
+  const desc = config.descriptions[id] || 'No description.';
+  const icon = getIcon(id);
+  let cards = '';
+  
+  if (Array.isArray(data)) {
+    data.forEach(cat => cards += buildCard(cat));
+  } else {
+    Object.values(data).forEach(cat => cards += buildCard(cat));
+  }
+  
+  return `<section id="${id}" class="mb-5">
+    <h2 class="h4 mb-3 d-flex align-items-center gap-2" style="color:var(--accent-color)"><i class="bi ${icon}"></i> ${title}</h2>
+    <div class="section-desc">${desc}</div>
+    <div class="resource-grid">${cards}</div>
+  </section>`;
+}
+function buildCard(cat) {
+  // Handle different data structures
+  const sites = cat.sites || [];
+  const links = sites.map(s => {
+    let name, url;
+    
+    // Handle both "Name|URL" format and object format
+    if (typeof s === 'string') {
+      [name, url] = s.split('|');
+    } else if (typeof s === 'object') {
+      name = s.name || s.title || 'Unknown';
+      url = s.url || s.link || '#';
+    } else {
+      name = 'Unknown';
+      url = '#';
+    }
+    
+    const id = `${cat.id}-${name.replace(/\s+/g, '-').toLowerCase()}`;
+    const desc = cat.linkDescs ? (cat.linkDescs[name] || '') : '';
+    
+    return `<div class="link-item">
+      <input type="checkbox" class="link-checkbox" id="${id}" data-url="${url}" data-name="${name}">
+      <div>
+        <a href="${url}" target="_blank" class="link-name">${name}</a>
+        <div class="link-url">${url}</div>
+        ${desc ? `<div class="link-desc">${desc}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  
+  return `<div class="resource-card" aria-expanded="false">
+    <div class="card-header" tabindex="0" role="button">
+      <h3 class="card-title"><i class="bi ${cat.icon || 'bi-link-45deg'} card-icon"></i>${cat.name || cat.title}</h3>
+      <i class="bi bi-chevron-down"></i>
+    </div>
+    <div class="card-content">
+      <div class="card-inner">
+        <div class="card-desc">${cat.desc || cat.description || 'Collection of sites for this category.'}</div>
+        ${links}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ==============================================================
+   EVENTS
+   ============================================================== */
+function setupEvents() {
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  const menuToggle = document.getElementById('menuToggle');
+
+  // Dropdown menu toggle
+  menuToggle.onclick = () => {
+    dropdownMenu.classList.toggle('show');
+    const icon = menuToggle.querySelector('i');
+    icon.classList.toggle('bi-list');
+    icon.classList.toggle('bi-x');
+  };
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!dropdownMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+      dropdownMenu.classList.remove('show');
+      const icon = menuToggle.querySelector('i');
+      icon.classList.remove('bi-x');
+      icon.classList.add('bi-list');
+    }
+  });
+
+  // Close dropdown when clicking on a menu item
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.menu-item a')) {
+      dropdownMenu.classList.remove('show');
+      const icon = menuToggle.querySelector('i');
+      icon.classList.remove('bi-x');
+      icon.classList.add('bi-list');
+    }
+  });
+
+  // FAB menu
+  const fabToggle = document.getElementById('fabToggle');
+  const fabMenu = document.getElementById('fabMenu');
+  fabToggle.onclick = () => {
+    fabMenu.classList.toggle('show');
+    const i = fabToggle.querySelector('i');
+    i.classList.toggle('bi-plus');
+    i.classList.toggle('bi-x');
+  };
+
+  // FAB actions
+  document.getElementById('fabExpandAll').onclick = expandAll;
+  document.getElementById('fabCollapseAll').onclick = collapseAll;
+  document.getElementById('fabSelectAll').onclick = toggleSelectAll;
+  document.getElementById('fabCopy').onclick = copySelected;
+  document.getElementById('fabTheme').onclick = toggleTheme;
+  document.getElementById('fabSettings').onclick = () => document.getElementById('settingsModal').classList.add('show');
+  document.getElementById('themeToggle').onclick = toggleTheme;
+
+  // Settings close
+  document.getElementById('closeSettings').onclick = () => document.getElementById('settingsModal').classList.remove('show');
+  document.getElementById('settingsModal').onclick = e => {
+    if (e.target.id === 'settingsModal') document.getElementById('settingsModal').classList.remove('show');
+  };
+
+  // Category toggle
+  document.addEventListener('click', e => {
+    const header = e.target.closest('.card-header');
+    if (!header) return;
+    const card = header.closest('.resource-card');
+    const content = card.querySelector('.card-content');
+    if (content.classList.contains('expanded')) {
+      collapseCard(card);
+    } else {
+      expandCard(card);
+    }
+  });
+
+  // Checkbox
+  document.addEventListener('change', e => {
+    if (e.target.classList.contains('link-checkbox')) {
+      const id = e.target.id;
+      if (e.target.checked) app.selected.add(id);
+      else app.selected.delete(id);
+    }
+  });
+}
+
+/* ==============================================================
+   FAB SELECT/COPY
+   ============================================================== */
+function toggleSelectAll() {
+  app.allSelected = !app.allSelected;
+  const icon = document.querySelector('#fabSelectAll i');
+  icon.className = app.allSelected ? 'bi bi-check-square-fill' : 'bi bi-check-square';
+  document.querySelectorAll('.link-checkbox').forEach(cb => {
+    cb.checked = app.allSelected;
+    if (app.allSelected) app.selected.add(cb.id);
+    else app.selected.delete(cb.id);
+  });
+}
+function copySelected() {
+  if (!app.selected.size) return showError('No links selected');
+  const text = Array.from(app.selected).map(id => {
+    const el = document.getElementById(id);
+    return `${el.dataset.name}: ${el.dataset.url}`;
+  }).join('\n');
+  navigator.clipboard.writeText(text).then(() => showSuccess('Copied!')).catch(() => showError('Clipboard failed'));
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
