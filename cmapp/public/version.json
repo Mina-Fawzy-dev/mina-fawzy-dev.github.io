@@ -1,0 +1,14 @@
+{
+  "version": "1.0.8",
+  "name": "Confession Manager",
+  "description": "A modern mobile-first Progressive Web App for managing confessions and spiritual guidance sessions",
+  "changelog": [
+    "Added advanced reports and analytics",
+    "Improved notification system",
+    "Enhanced user interface",
+    "Added multi-language support",
+    "Bug fixes and performance improvements"
+  ],
+  "downloadUrl": "https://main-fawzy-dev.github.com/CMApp",
+  "minVersion": "1.0.0"
+}
