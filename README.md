@@ -47,6 +47,6 @@ Simply append your new `Site Name|https://link.com` to the `sites` array of any 
 
 ## 👨‍💻 Developed By
 
-**[Mina.m](https://github.com/Mina-Fawzy-dev/)**  
+**[Mina.dev](https://github.com/Mina-Fawzy-dev/)**  
 **[CGHub](https://mina-fawzy-dev.github.io/)**  
 Feel free to follow me on GitHub for more projects and updates!
