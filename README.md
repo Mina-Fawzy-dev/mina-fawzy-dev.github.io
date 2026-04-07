@@ -27,7 +27,7 @@ CG Hub is built to be lightweight, portable, and extremely easy to run without a
 Since CG Hub is entirely client-side, using it is incredibly simple:
 
 1. Clone or download this repository.
-2. Open the `index (1).html` (or `index.html` if renamed) file in your preferred web browser.
+2. Open the `index.html` file in your preferred web browser.
 3. *That's it!* You can instantly start browsing and searching through the resources.
 
 ## 📂 Customization & Adding New Sites
