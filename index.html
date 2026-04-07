@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CG Hub — Mina's Resource Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@300;500;700;900&family=Barlow:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --bg2: #111116;
+      --bg3: #18181f;
+      --border: #2a2a35;
+      --accent: #c8f542;
+      --accent2: #42f5c8;
+      --accent3: #f5a742;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --card: #13131a;
+      --hover: #1e1e28;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10, 10, 12, 0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg {
+      width: 18px;
+      height: 18px;
+      fill: #0a0a0c;
+    }
+
+    .logo-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .logo-text span {
+      color: var(--accent);
+    }
+
+    /* SEARCH */
+    .search-wrap {
+      flex: 1;
+      max-width: 440px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 9px 16px 9px 40px;
+      border-radius: 6px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-wrap input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .site-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .site-count span {
+      color: var(--accent);
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* SIDEBAR */
+    aside {
+      width: 220px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      position: sticky;
+      top: 65px;
+      height: calc(100vh - 65px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .sidebar-section {
+      margin-bottom: 6px;
+    }
+
+    .sidebar-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+      padding: 10px 20px 6px;
+      display: block;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 20px;
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-btn i {
+      font-size: 14px;
+      width: 16px;
+    }
+
+    .nav-btn:hover {
+      color: var(--text);
+      background: var(--bg3);
+      border-left-color: var(--border);
+    }
+
+    .nav-btn.active {
+      color: var(--accent);
+      background: rgba(200, 245, 66, 0.06);
+      border-left-color: var(--accent);
+      font-weight: 500;
+    }
+
+    .nav-count {
+      margin-left: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--muted);
+      background: var(--bg3);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .nav-btn.active .nav-count {
+      color: var(--accent);
+      background: rgba(200, 245, 66, 0.1);
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      padding: 28px 32px;
+      overflow-x: hidden;
+    }
+
+    /* SECTION HEADER */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 32px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .section-title .accent {
+      color: var(--accent);
+    }
+
+    .section-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* GRID */
+    .sites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+    }
+
+    /* SITE CARD */
+    .site-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.18s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .site-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .site-card:hover {
+      border-color: var(--accent);
+      background: var(--hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(200, 245, 66, 0.08);
+    }
+
+    .site-card:hover::before {
+      opacity: 0.04;
+    }
+
+    .site-favicon {
+      width: 28px;
+      height: 28px;
+      border-radius: 5px;
+      background: var(--bg3);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    .site-favicon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .site-favicon .fallback {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .site-info {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .site-name {
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    .site-domain {
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .site-card:hover .site-domain {
+      color: var(--accent);
+    }
+
+    .site-arrow {
+      font-size: 12px;
+      color: var(--muted);
+      flex-shrink: 0;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: all 0.15s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .site-card:hover .site-arrow {
+      opacity: 1;
+      transform: translateX(0);
+      color: var(--accent);
+    }
+
+    /* CATEGORY PILLS */
+    .sub-cats {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .sub-cat-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .sub-cat-btn:hover {
+      color: var(--text);
+      border-color: var(--muted);
+    }
+
+    .sub-cat-btn.active {
+      background: var(--accent);
+      color: #0a0a0c;
+      border-color: var(--accent);
+    }
+
+    /* HOME DASHBOARD */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .dash-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 16px;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dash-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent-color, var(--accent));
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+
+    .dash-card:hover {
+      border-color: var(--accent-color, var(--accent));
+      background: var(--hover);
+      transform: translateY(-2px);
+    }
+
+    .dash-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .dash-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: var(--accent-color, var(--accent));
+    }
+
+    .dash-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .dash-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(200, 245, 66, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 52px;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 12px;
+    }
+
+    .hero-title .line2 {
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* SEARCH RESULTS EMPTY */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state i {
+      font-size: 40px;
+      margin-bottom: 12px;
+      display: block;
+      opacity: 0.3;
+    }
+
+    .empty-state p {
+      font-size: 13px;
+    }
+
+    /* QUICK TOOLS BAR */
+    .quick-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .quick-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .quick-pill:hover {
+      color: var(--text);
+      border-color: var(--muted);
+    }
+
+    .quick-pill i {
+      font-size: 13px;
+    }
+
+    .quick-group {
+      margin-bottom: 18px;
+    }
+
+    .quick-group-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quick-group-label i {
+      font-size: 13px;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    /* SEARCH HIGHLIGHT */
+    .site-card.hidden {
+      display: none;
+    }
+
+    mark {
+      background: rgba(200, 245, 66, 0.25);
+      color: var(--accent);
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    /* FOOTER LINE */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      margin-top: 32px;
+    }
+
+    .section-divider span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 12, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 99;
+    }
+
+    .global-footer {
+      margin-top: 40px;
+    }
+
+    .global-about {
+      padding: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .about-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .about-title span {
+      color: var(--accent);
+    }
+
+    .about-desc {
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-size: 14px;
+      max-width: 500px;
+    }
+
+    .about-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      background: var(--hover);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .about-btn:hover {
+      border-color: var(--accent);
+      background: var(--bg3);
+    }
+
+    main {
+      flex: 1;
+      padding: 28px 32px;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #mainContent {
+      flex: 1;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .logo {
+        gap: 8px;
+      }
+
+      .logo-text {
+        font-size: 18px;
+      }
+
+      aside {
+        position: fixed;
+        left: -260px;
+        top: 65px;
+        width: 260px;
+        height: calc(100vh - 65px);
+        background: var(--bg);
+        z-index: 100;
+        transition: left 0.3s ease;
+        border-right: 1px solid var(--border);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+      }
+
+      aside.open {
+        left: 0;
+      }
+
+      .sidebar-overlay.show {
+        display: block;
+      }
+
+      .layout {
+        flex-direction: column;
+      }
+
+      main {
+        padding: 20px 16px;
+      }
+
+      header {
+        padding: 14px 16px;
+        gap: 12px;
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+    <a href="#" class="logo" onclick="showSection('home')">
+      <div class="logo-mark">
+        <svg viewBox="0 0 20 20">
+          <path d="M10 2L3 6v8l7 4 7-4V6L10 2zm0 2.4l5 2.85v5.5L10 15.6 5 12.75V7.25L10 4.4z" />
+        </svg>
+      </div>
+      <span class="logo-text">CG<span>Hub</span></span>
+    </a>
+
+    <div class="search-wrap">
+      <i class="bi bi-search"></i>
+      <input type="text" id="globalSearch" placeholder="Search fonts, brushes, plugins..."
+        oninput="handleSearch(this.value)">
+    </div>
+
+    <div class="header-right">
+      <div class="site-count">
+        <span id="totalCount">0</span> sites
+      </div>
+    </div>
+  </header>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+  <div class="layout">
+    <aside id="sidebar">
+      <div class="sidebar-section">
+        <span class="sidebar-label">Navigation</span>
+        <button class="nav-btn active" onclick="showSection('home')" data-section="home">
+          <i class="bi bi-house"></i> Home
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <span class="sidebar-label">Design Resources</span>
+        <button class="nav-btn" onclick="showSection('fonts')" data-section="fonts">
+          <i class="bi bi-file-earmark-font"></i> Fonts <span class="nav-count" id="nc-fonts"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('brushes')" data-section="brushes">
+          <i class="bi bi-brush"></i> Brushes <span class="nav-count" id="nc-brushes"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('textures')" data-section="textures">
+          <i class="bi bi-grid-3x3-gap"></i> Textures <span class="nav-count" id="nc-textures"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('photos')" data-section="photos">
+          <i class="bi bi-camera"></i> Photos <span class="nav-count" id="nc-photos"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('png-images')" data-section="png-images">
+          <i class="bi bi-file-image"></i> PNG Images <span class="nav-count" id="nc-png-images"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('icons')" data-section="icons">
+          <i class="bi bi-grid"></i> Icons <span class="nav-count" id="nc-icons"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('mockups')" data-section="mockups">
+          <i class="bi bi-phone"></i> Mockups <span class="nav-count" id="nc-mockups"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('videos')" data-section="videos">
+          <i class="bi bi-film"></i> Videos <span class="nav-count" id="nc-videos"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('illustrations')" data-section="illustrations">
+          <i class="bi bi-pencil"></i> Illustrations <span class="nav-count" id="nc-illustrations"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('vectors')" data-section="vectors">
+          <i class="bi bi-vector-pen"></i> Vectors <span class="nav-count" id="nc-vectors"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('colors')" data-section="colors">
+          <i class="bi bi-palette"></i> Colors <span class="nav-count" id="nc-colors"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('inspiration')" data-section="inspiration">
+          <i class="bi bi-lightbulb"></i> Inspiration <span class="nav-count" id="nc-inspiration"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('ai-tools')" data-section="ai-tools">
+          <i class="bi bi-cpu"></i> AI Tools <span class="nav-count" id="nc-ai-tools"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('tools')" data-section="tools">
+          <i class="bi bi-wrench"></i> Tools <span class="nav-count" id="nc-tools"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('productivity')" data-section="productivity">
+          <i class="bi bi-kanban"></i> Productivity <span class="nav-count" id="nc-productivity"></span>
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <span class="sidebar-label">3D Resources</span>
+        <button class="nav-btn" onclick="showSection('3d')" data-section="3d">
+          <i class="bi bi-cube"></i> 3D Hub <span class="nav-count" id="nc-3d"></span>
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <span class="sidebar-label">Software</span>
+        <button class="nav-btn" onclick="showSection('ps-actions')" data-section="ps-actions">
+          <i class="bi bi-magic"></i> Photoshop <span class="nav-count" id="nc-ps-actions"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('ae-presets')" data-section="ae-presets">
+          <i class="bi bi-film"></i> After Effects <span class="nav-count" id="nc-ae-presets"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('pr-presets')" data-section="pr-presets">
+          <i class="bi bi-camera-video"></i> Premiere Pro <span class="nav-count" id="nc-pr-presets"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('max-scripts')" data-section="max-scripts">
+          <i class="bi bi-cube"></i> 3ds Max <span class="nav-count" id="nc-max-scripts"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('vray-mats')" data-section="vray-mats">
+          <i class="bi bi-sun"></i> V-Ray <span class="nav-count" id="nc-vray-mats"></span>
+        </button>
+        <button class="nav-btn" onclick="showSection('blender-addons')" data-section="blender-addons">
+          <i class="bi bi-box"></i> Blender <span class="nav-count" id="nc-blender-addons"></span>
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <span class="sidebar-label">Sell</span>
+        <button class="nav-btn" onclick="showSection('stores')" data-section="stores">
+          <i class="bi bi-shop"></i> Stores <span class="nav-count" id="nc-stores"></span>
+        </button>
+      </div>
+    </aside>
+
+    <main>
+      <div id="mainContent"></div>
+
+      <footer class="global-footer">
+        <div class="global-about">
+          <h2 class="about-title">Developed by <span>Mina.m</span></h2>
+          <p class="about-desc">A fast, centralized resource hub to keep all essential design, UI/UX, and 3D tools
+            easily accessible from anywhere.</p>
+          <a href="https://github.com/Mina-Fawzy-dev/" target="_blank" class="about-btn">
+            <i class="bi bi-github"></i> GitHub
+          </a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // ===== DATA =====
+    const resources = {
+      designs: [
+        { id: "fonts", name: "Fonts", icon: "bi-file-earmark-font", accent: "#c8f542", sites: ["Google Fonts|https://fonts.google.com", "DaFont|https://www.dafont.com", "ArbFonts|https://arbfonts.com", "Fontshare|https://fontshare.com", "Font Squirrel|https://fontsquirrel.com", "FontSpace|https://fontspace.com", "1001 Free Fonts|https://1001freefonts.com", "Fontesk|https://fontesk.com", "Abstract Fonts|https://abstractfonts.com", "Velvetyne|https://velvetyne.fr", "Open Font Library|https://open-font-library.org", "Use & Modify|https://usemodify.com", "Font Library|https://fontlibrary.org", "Unblast Fonts|https://unblast.com/free-fonts", "Font Fabric Free|https://fontfabric.com/free-fonts", "Font Zone|https://fontzone.net", "Free Typography|https://freetypography.com", "Satoshi|https://fontsource.org/fonts/satoshi", "Switzer|https://fontshare.com/fonts/switzer", "Clash Display|https://www.fontshare.com/fonts/clash-display", "Cabinet Grotesk|https://www.fontshare.com/fonts/cabinet-grotesk", "General Sans|https://www.fontshare.com/fonts/general-sans", "Zodiak|https://www.fontshare.com/fonts/zodiak", "Boska|https://www.fontshare.com/fonts/boska", "Khand|https://fonts.google.com/specimen/Khand", "Bebas Neue|https://fonts.google.com/specimen/Bebas+Neue", "Oswald|https://fonts.google.com/specimen/Oswald", "Rajdhani|https://fonts.google.com/specimen/Rajdhani"] },
+        { id: "brushes", name: "Brushes", icon: "bi-brush", accent: "#42f5c8", sites: ["Brusheezy|https://www.brusheezy.com", "MyPhotoshopBrushes|https://myphotoshopbrushes.com", "FBrushes|https://fbrushes.com", "GfxFever|https://gfxfever.com/photoshop-brushes", "GetBrushes|https://getbrushes.com", "BrushesDownload|https://brushesdownload.com", "WowBrushes|https://wowbrushes.com", "BrushKing|https://brushking.eu", "DeviantArt Brushes|https://deviantart.com/tag/photoshop+brush", "FreeBrushes|https://freebrushes.net", "BrushLovers|https://brushlovers.com", "PSD Dude|https://psd-dude.com/resources", "PhotoshopFreeBrushes|https://photoshopfreebrushes.com", "Resource Boy|https://resourceboy.com/photoshop-brushes", "GrutBrushes|https://grutbrushes.com", "Gumroad Brushes|https://gumroad.com"] },
+        { id: "textures", name: "Textures", icon: "bi-grid-3x3-gap", accent: "#f5a742", sites: ["Poly Haven|https://polyhaven.com", "AmbientCG|https://ambientcg.com", "TextureCan|https://texturecan.com", "CC0 Textures|https://cc0textures.com", "FreePBR|https://freepbr.com", "PlainTextures|https://plaintextures.com", "Lost and Taken|https://lostandtaken.com", "CG Bookcase|https://cgbookcase.com", "Poliigon Free|https://poliigon.com/free", "Share Textures|https://sharetextures.com", "Architextures|https://architextures.org", "CGTextures|https://cgtextures.com", "3DTextures.me|https://3dtextures.me", "Sketchfab|https://sketchfab.com", "Gumroad Textures|https://gumroad.com"] },
+        { id: "photos", name: "Photos", icon: "bi-camera", accent: "#f542b9", sites: ["Freepik|https://www.freepik.com", "Pixabay|https://pixabay.com", "Pexels|https://www.pexels.com", "Unsplash|https://unsplash.com", "Vecteezy|https://www.vecteezy.com", "Shutterstock|https://www.shutterstock.com", "StockSnap|https://stocksnap.io", "Burst|https://burst.shopify.com", "Reshot|https://reshot.com", "Gratisography|https://gratisography.com", "Freestocks|https://freestocks.org", "LifeOfPix|https://lifeofpix.com", "PicJumbo|https://picjumbo.com", "Kaboompics|https://kaboompics.com", "ISO Republic|https://isorepublic.com", "New Old Stock|https://nos.twnsnd.co", "Wallpaper Flare|https://www.wallpaperflare.com"] },
+        { id: "png-images", name: "PNG Images", icon: "bi-file-image", accent: "#42c8f5", sites: ["HiClipart|https://www.hiclipart.com", "CleanPNG|https://www.cleanpng.com", "FootyRenders|https://www.footyrenders.com", "PNGtree|https://pngtree.com"] },
+        { id: "icons", name: "Icons", icon: "bi-grid", accent: "#42b8f5", sites: ["Flaticon|https://www.flaticon.com", "FreeIcons.io|https://freeicons.io", "IconStore|https://iconstore.co", "The Noun Project|https://thenounproject.com", "Icons8|https://icons8.com", "Feather Icons|https://feathericons.com", "Heroicons|https://heroicons.com", "Remix Icon|https://remixicon.com", "Tabler Icons|https://tablericons.io", "Iconmonstr|https://iconmonstr.com", "Lucide|https://lucide.dev", "Phosphor Icons|https://phosphoricons.com", "Iconoir|https://iconoir.com", "Material Design Icons|https://materialdesignicons.com", "Font Awesome Free|https://fontawesome.com/icons", "Iconify|https://iconify.design"] },
+        { id: "mockups", name: "Mockups", icon: "bi-phone", accent: "#f5e742", sites: ["Mockups Design|https://mockups-design.com", "MockupHunt|https://mockuphunt.co", "MockupWorld|https://mockupworld.co", "Unblast Mockups|https://unblast.com/mockups", "FreebiesBug|https://freebiesbug.com", "PSD Repo|https://psdrepo.com", "MockupsForFree|https://mockupsforfree.com", "GraphicBurger|https://graphicburger.com", "TheMockupClub|https://themockup.club", "ls.graphics Free|https://ls.graphics/free", "Freepik Mockups|https://freepik.com/mockups", "Mockey|https://mockey.ai", "Recraft.ai|https://recraft.ai", "Smart Mockups|https://smartmockups.com"] },
+        { id: "videos", name: "Videos", icon: "bi-film", accent: "#f56042", sites: ["Mixkit|https://mixkit.co", "Coverr|https://coverr.co", "Videezy Free|https://videezy.com/free", "Videvo Free|https://videvo.net/free", "Pexels Videos|https://pexels.com/videos", "Pixabay Videos|https://pixabay.com/videos", "Clipstill|https://clipstill.com", "Mazwai|https://mazwai.com", "Vidsplay|https://vidsplay.com"] },
+        { id: "illustrations", name: "Illustrations", icon: "bi-pencil", accent: "#b842f5", sites: ["unDraw|https://undraw.co", "DrawKit|https://drawkit.io", "Blush|https://blush.design", "Storyset|https://storyset.com", "Humaaans|https://humaaans.com", "3dicons|https://3dicons.io", "Ouch|https://ouch.pics", "Iconscout|https://iconscout.com/illustrations", "ManyPixels|https://manypixels.co/illustrations", "Freepik Illustrations|https://freepik.com", "Pixabay Illustrations|https://pixabay.com/illustrations", "LottieFiles|https://lottiefiles.com"] },
+        { id: "vectors", name: "Vectors", icon: "bi-vector-pen", accent: "#42f56e", sites: ["Vecteezy Free|https://vecteezy.com/free", "FreeVector|https://freevector.com", "Freepik Vectors|https://freepik.com/free-vectors", "VectorStock Free|https://vectorstock.com/free-vectors", "Pixabay Vectors|https://pixabay.com/vectors", "Openclipart|https://openclipart.org", "Public Domain Vectors|https://publicdomainvectors.org", "Vexels Free|https://vexels.com/free-vectors"] },
+        { id: "colors", name: "Colors", icon: "bi-palette", accent: "#f5426e", sites: ["Color Hunt|https://colorhunt.co", "Adobe Color|https://color.adobe.com", "Coolors|https://coolors.co", "Colormind|https://colormind.io", "Happy Hues|https://happyhues.co", "PaletteMaker|https://palettemaker.com", "Paletton|https://paletton.com", "Khroma|https://khroma.co", "ColorSpace|https://mycolor.space", "Dopely Colors|https://colors.dopely.top", "ColorDrop|https://colordrop.io", "Canva Colors|https://canva.com/colors", "UI Colors|https://uicolors.app"] },
+        { id: "inspiration", name: "Inspiration", icon: "bi-lightbulb", accent: "#f5c842", sites: ["Pinterest|https://www.pinterest.com", "Behance|https://www.behance.net", "Wallpaper Flare|https://www.wallpaperflare.com", "Dribbble|https://dribbble.com", "Awwwards|https://awwwards.com", "SiteInspire|https://siteinspire.com", "OnePageLove|https://onepagelove.com", "Designspiration|https://designspiration.com", "Abduzeedo|https://abduzeedo.com", "Godly|https://godly.website", "Minimal Gallery|https://minimal.gallery", "Mobbin|https://mobbin.com", "Dark Mode Design|https://dark-mode.design", "ArtStation|https://artstation.com"] },
+        { id: "ai-tools", name: "AI Tools", icon: "bi-cpu", accent: "#c8f542", sites: ["Adobe Firefly|https://firefly.adobe.com", "Canva Magic Design|https://canva.com/magic-design", "Remove.bg|https://remove.bg", "Autodraw|https://autodraw.com", "Designs.ai|https://designs.ai", "Framer AI|https://framer.com/ai", "Kittl|https://kittl.com", "Freepik AI Suite|https://freepik.com/ai", "Luma AI|https://lumalabs.ai", "Spline AI|https://spline.design/ai", "DALL-E (Bing)|https://bing.com/create", "Microsoft Designer|https://designer.microsoft.com", "Gamma|https://gamma.app", "Recraft.ai|https://recraft.ai", "Flair|https://flair.ai", "Ideogram|https://ideogram.ai", "Leonardo AI|https://leonardo.ai", "Kling AI|https://klingai.com"] },
+        { id: "tools", name: "Tools", icon: "bi-wrench", accent: "#42f5c8", sites: ["Photopea|https://photopea.com", "Figma Free|https://figma.com", "Canva Free|https://canva.com", "Remove.bg|https://remove.bg", "FontBug|https://fontbug.com", "Image Upscaler (Zyro)|https://zyro.com/tools/image-upscaler", "Topaz Gigapixel AI|https://www.topazlabs.com/gigapixel-ai", "Social Media Sizes|https://ssizes.com", "Excalidraw|https://excalidraw.com", "Vectr|https://vectr.com", "Inkscape|https://inkscape.org", "GIMP|https://gimp.org", "Lunacy|https://icons8.com/lunacy", "Draw.io|https://app.diagrams.net", "Penpot|https://penpot.app", "Krita|https://krita.org", "Piskel|https://piskelapp.com", "Boxy SVG|https://boxy-svg.com", "Adobe XD|https://adobe.com/products/xd.html", "SVGator|https://svgator.com", "Blender|https://blender.org", "Tinkercad|https://tinkercad.com", "Framer|https://framer.com", "VistaCreate|https://create.vista.com", "Snappa|https://snappa.com", "BeFunky|https://befunky.com", "Wepik|https://wepik.com"] },
+        { id: "productivity", name: "Productivity", icon: "bi-kanban", accent: "#f5a742", sites: ["Trello|https://trello.com", "MindMeister|https://www.mindmeister.com", "Milanote|https://app.milanote.com", "Notion|https://notion.so", "ClickUp|https://clickup.com", "Miro|https://miro.com", "Asana|https://asana.com", "Todoist|https://todoist.com"] }
+      ],
+      '3d': {
+        ai: { id: "3d-ai", name: "3D AI Tools", icon: "bi-cpu", accent: "#c8f542", sites: ["Meshy AI|https://meshy.ai", "Luma AI|https://lumalabs.ai", "Tripo AI|https://tripo3d.ai", "Sloyd|https://sloyd.ai", "Kaedim|https://kaedim3d.com", "3D AI Studio|https://3daistudio.com", "Rodin AI|https://rodin.ai", "Spline AI|https://spline.design/ai", "CGDream|https://cgdream.ai", "Hyper3D|https://hyper3d.ai", "Skybox AI|https://skybox.blockadelabs.com", "TripoSR|https://stability.ai/news/triposr", "DeepMotion|https://deepmotion.com"] },
+        cad: { id: "3d-cad", name: "CAD Tools", icon: "bi-rulers", accent: "#42f5c8", sites: ["Tinkercad|https://tinkercad.com", "FreeCAD|https://freecad.org", "Onshape Free|https://onshape.com", "AutoCAD Web|https://web.autocad.com", "LibreCAD|https://librecad.org", "QCAD|https://qcad.org", "SelfCAD Free|https://selfcad.com", "SketchUp Free|https://sketchup.com", "Fusion 360 Free|https://autodesk.com/products/fusion-360/personal", "BRL-CAD|https://brl-cad.org", "SolveSpace|https://solvespace.com", "3D Slash|https://3dslash.net"] },
+        blueprints: { id: "3d-blueprints", name: "Blueprints", icon: "bi-diagram-2", accent: "#f5a742", sites: ["The Blueprints|https://the-blueprints.com", "Drawing Database|https://drawingdatabase.com", "Sketchfab Blueprints|https://sketchfab.com/tags/blueprint", "CG Frog Blueprints|https://cgfrog.com/blueprints", "Concept Art Empire|https://conceptartempire.com", "Wikibooks Blueprints|https://en.wikibooks.org/wiki/Blender_3D:_Noob_to_Pro/Blueprint_Links_List", "Pinterest Blueprints|https://pinterest.com/search/pins/?q=3d+blueprints"] },
+        references: { id: "3d-references", name: "References", icon: "bi-images", accent: "#f542b9", sites: ["Concept Art World|https://conceptartworld.com", "ArtStation|https://artstation.com", "Pinterest References|https://pinterest.com/search/pins/?q=3d+modeling+references", "Pexels 3D|https://pexels.com/search/product+reference", "Unsplash 3D|https://unsplash.com/s/photos/product", "PureRef|https://pureref.com", "Reference Angle|https://referenceangle.com", "SculptReference|https://www.sculptreference.com"] },
+        models: { id: "3d-models", name: "3D Models", icon: "bi-cube", accent: "#42b8f5", sites: ["Sketchfab Free|https://sketchfab.com/3d-models?price=free", "BlenderKit|https://blenderkit.com", "Free3D|https://free3d.com", "TurboSquid Free|https://turbosquid.com/free", "CGTrader Free|https://cgtrader.com/free-3d-models", "Poly Pizza|https://polypizza.com", "3D Warehouse|https://3dwarehouse.sketchup.com", "Clara.io|https://clara.io/library", "Thingiverse|https://thingiverse.com", "Printables|https://printables.com", "NASA 3D|https://nasa3d.arc.nasa.gov", "Blend Swap|https://blendswap.com", "Open3DModel|https://open3dmodel.com"] },
+        textures: { id: "3d-textures", name: "PBR Textures", icon: "bi-grid-3x3-gap", accent: "#f56042", sites: ["Poly Haven|https://polyhaven.com", "AmbientCG|https://ambientcg.com", "TextureCan|https://texturecan.com", "CC0 Textures|https://cc0textures.com", "FreePBR|https://freepbr.com", "CG Bookcase|https://cgbookcase.com", "Poliigon Free|https://poliigon.com/free", "Share Textures|https://sharetextures.com", "3DTextures.me|https://3dtextures.me", "Architextures|https://architextures.org"] }
+      },
+      software: {
+        photoshop: { id: "ps-actions", name: "Photoshop", icon: "bi-magic", accent: "#31a8ff", sites: ["PanosFX|https://panosfx.com", "PSD Dude Actions|https://psd-dude.com/actions", "Brusheezy Actions|https://brusheezy.com/actions", "DeviantArt PS Actions|https://deviantart.com/tag/photoshop+action", "FreePSActions|https://freepsactions.com", "PSScripts|https://ps-scripts.com", "Photoshop Roadmap|https://photoshoproadmap.com/photoshop-scripts", "Eazy Plugin|https://eazyplugin.com", "Gumroad PS|https://gumroad.com", "Video Copilot|https://videocopilot.net"] },
+        aftereffects: { id: "ae-presets", name: "After Effects", icon: "bi-film", accent: "#9999ff", sites: ["AE Sweets|https://aesweets.com", "Motion Array Free|https://motionarray.com/free", "VideoCopilot Free|https://videocopilot.net", "AEJuice Free|https://aejuice.com/free", "Motion Bro Free|https://motionbro.net", "LottieFiles|https://lottiefiles.com", "Envato Elements Free|https://elements.envato.com/ae-templates", "Motion Array|https://motionarray.com", "Gumroad AE|https://gumroad.com", "mixkit AE|https://mixkit.co/free-after-effects-templates"] },
+        premiere: { id: "pr-presets", name: "Premiere Pro", icon: "bi-camera-video", accent: "#e789f5", sites: ["Motion Array PR|https://motionarray.com/premiere-pro-presets", "Mixkit PR|https://mixkit.co/free-premiere-presets", "FilterGrade LUTs|https://filtergrade.com/free-luts", "Motion Array Free|https://motionarray.com/free", "Creative Dojo|https://creativedojo.net", "Gumroad PR|https://gumroad.com", "Premiere Basics|https://premierebasics.net", "Free LUTs|https://freeluts.com"] },
+        '3dsmax': { id: "max-scripts", name: "3ds Max", icon: "bi-cube", accent: "#c8f542", sites: ["ScriptSpot|https://scriptspot.com", "MaxPlugins|https://maxplugins.de", "PolyTools3D|https://polytools3d.com", "Autodesk App Store|https://apps.autodesk.com", "iToo Software|https://itoosoft.com", "SiNi Software Free|https://sinisoftware.com", "Boomer Labs|https://www.boomerlabs.com", "Gumroad Max|https://gumroad.com"] },
+        vray: { id: "vray-mats", name: "V-Ray", icon: "bi-sun", accent: "#f5a742", sites: ["V-Ray Materials|https://vray-materials.de", "Chaos Cosmos|https://cosmos.chaos.com", "VrayForC4D Free|https://vrayforc4d.net", "VIZPARK Free|https://vizpark.com", "Maxtree|https://maxtree.net", "Chaos Forums|https://forums.chaos.com", "Gumroad V-Ray|https://gumroad.com"] },
+        blender: { id: "blender-addons", name: "Blender", icon: "bi-box", accent: "#f5762a", sites: ["Blender Market|https://blendermarket.com", "BlenderKit|https://blenderkit.com", "Poly Haven|https://polyhaven.com", "Blender Nation|https://blendernation.com", "Graswald Free|https://graswald3d.com/free", "Sanctus Library|https://sanctus.io", "Blender Extensions|https://extensions.blender.org", "Gumroad Blender|https://gumroad.com", "BlenderArtists|https://blenderartists.org"] }
+      },
+      stores: [{ id: "stores", name: "Stores & Sell", icon: "bi-shop", accent: "#42f5c8", sites: ["Gumroad|https://gumroad.com", "Sellfy|https://sellfy.com", "Payhip|https://payhip.com", "Podia|https://podia.com", "Fourthwall|https://fourthwall.com", "Creative Market|https://creativemarket.com", "Art Station Store|https://artstation.com/marketplace", "Behance Store|https://behance.net", "ArtStation|https://artstation.com", "Whop|https://whop.com", "Lemon Squeezy|https://lemonsqueezy.com", "Ko-fi|https://ko-fi.com"] }]
+    };
+
+    // Build flat lookup
+    const allSections = {};
+
+    resources.designs.forEach(d => allSections[d.id] = d);
+    Object.entries(resources['3d']).forEach(([k, v]) => allSections[v.id] = v);
+    Object.entries(resources.software).forEach(([k, v]) => allSections[v.id] = v);
+    resources.stores.forEach(s => allSections[s.id] = s);
+
+    // 3D meta group
+    allSections['3d'] = {
+      id: '3d',
+      name: '3D Hub',
+      isGroup: true,
+      accent: '#c8f542',
+      icon: 'bi-cube',
+      subsections: resources['3d']
+    };
+
+    function parseSite(str) {
+      const [name, url] = str.split('|');
+      return { name, url };
+    }
+
+    function getDomain(url) {
+      try {
+        return new URL(url).hostname.replace('www.', '');
+      } catch { return url; }
+    }
+
+    function getFaviconUrl(url) {
+      try {
+        const domain = new URL(url).hostname;
+        return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+      } catch { return null; }
+    }
+
+    // Count total
+    let total = 0;
+    Object.values(allSections).forEach(s => {
+      if (s.sites) total += s.sites.length;
+    });
+    document.getElementById('totalCount').textContent = total;
+
+    // Set nav counts
+    function setNavCounts() {
+      Object.values(allSections).forEach(s => {
+        if (s.sites) {
+          const el = document.getElementById('nc-' + s.id);
+          if (el) el.textContent = s.sites.length;
+        }
+      });
+      const el3d = document.getElementById('nc-3d');
+      if (el3d) {
+        let c = 0;
+        Object.values(resources['3d']).forEach(v => c += v.sites.length);
+        el3d.textContent = c;
+      }
+    }
+
+    setNavCounts();
+
+    // ===== RENDER =====
+    function renderSiteCard(site) {
+      const { name, url } = parseSite(site);
+      const domain = getDomain(url);
+      const favicon = getFaviconUrl(url);
+      return `<a class="site-card" href="${url}" target="_blank" rel="noopener" data-name="${name.toLowerCase()}" data-domain="${domain.toLowerCase()}">
+    <div class="site-favicon">
+      ${favicon ? `<img src="${favicon}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <span class="fallback" style="display:none">${name[0]}</span>` : `<span class="fallback">${name[0]}</span>`}
+    </div>
+    <div class="site-info">
+      <div class="site-name">${name}</div>
+      <div class="site-domain">${domain}</div>
+    </div>
+    <i class="bi bi-arrow-up-right site-arrow"></i>
+  </a>`;
+    }
+
+    function renderSection(data, showTitle = false) {
+      return `
+    ${showTitle ? `<div class="section-divider"><span>${data.name}</span></div>` : ''}
+    <div class="sites-grid" id="grid-${data.id}">
+      ${data.sites.map(renderSiteCard).join('')}
+    </div>`;
+    }
+
+    function showSection(id) {
+      // Update nav
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const btn = document.querySelector(`[data-section="${id}"]`);
+      if (btn) btn.classList.add('active');
+
+      const main = document.getElementById('mainContent');
+
+      if (id === 'home') {
+        renderHome();
+      } else if (id === '3d') {
+        render3D();
+      } else {
+        const section = allSections[id];
+        if (section) {
+          main.innerHTML = `
+        <div class="section-header">
+          <h1 class="section-title"><i class="bi ${section.icon}" style="color:${section.accent}"></i> <span style="color:${section.accent}">${section.name}</span></h1>
+        </div>
+        <div class="section-meta">${section.sites.length} free resources · sorted by usefulness</div>
+        ${renderSection(section)}
+      `;
+          main.scrollTop = 0;
+          window.scrollTo(0, 0);
+        }
+      }
+
+      // Auto-close sidebar on mobile when a link is clicked
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('show');
+      }
+
+      document.getElementById('globalSearch').value = '';
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebarOverlay').classList.toggle('show');
+    }
+
+    function render3D() {
+      const main = document.getElementById('mainContent');
+      const subs = resources['3d'];
+
+      let subsHtml = `
+    <div class="section-header">
+      <h1 class="section-title"><i class="bi bi-cube" style="color:var(--accent)"></i> <span class="accent">3D Hub</span></h1>
+    </div>
+    <div class="sub-cats">`;
+
+      Object.values(subs).forEach(s => {
+        subsHtml += `<button class="sub-cat-btn" onclick="scrollTo3DSub('${s.id}')">${s.name}</button>`;
+      });
+      subsHtml += `</div>`;
+
+      Object.values(subs).forEach(s => {
+        subsHtml += renderSection(s, true);
+      });
+
+      main.innerHTML = subsHtml;
+      window.scrollTo(0, 0);
+    }
+
+    function scrollTo3DSub(id) {
+      const el = document.getElementById('grid-' + id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderHome() {
+      const main = document.getElementById('mainContent');
+
+      // Quick access links grouped by category
+      const quickGroups = [
+        {
+          label: 'Photos', icon: 'bi-camera', items: [
+            { name: 'Freepik', url: 'https://www.freepik.com/' },
+            { name: 'Pixabay', url: 'https://pixabay.com/' },
+            { name: 'Pexels', url: 'https://www.pexels.com/' },
+            { name: 'Unsplash', url: 'https://unsplash.com/' },
+            { name: 'Vecteezy', url: 'https://www.vecteezy.com/' },
+            { name: 'Shutterstock', url: 'https://www.shutterstock.com/' },
+          ]
+        },
+        {
+          label: 'PNG Images', icon: 'bi-file-image', items: [
+            { name: 'HiClipart', url: 'https://www.hiclipart.com/' },
+            { name: 'CleanPNG', url: 'https://www.cleanpng.com/' },
+            { name: 'FootyRenders', url: 'https://www.footyrenders.com/' },
+            { name: 'PNGtree', url: 'https://pngtree.com/' },
+          ]
+        },
+        {
+          label: 'Mockups', icon: 'bi-phone', items: [
+            { name: 'Mockups Design', url: 'https://mockups-design.com/' },
+            { name: 'MockupHunt', url: 'https://mockuphunt.co/' },
+          ]
+        },
+        {
+          label: 'Icons', icon: 'bi-grid', items: [
+            { name: 'Flaticon', url: 'https://www.flaticon.com/' },
+          ]
+        },
+        {
+          label: 'Brushes', icon: 'bi-brush', items: [
+            { name: 'Brusheezy', url: 'https://www.brusheezy.com/' },
+          ]
+        },
+        {
+          label: 'Fonts', icon: 'bi-file-earmark-font', items: [
+            { name: 'Google Fonts', url: 'https://fonts.google.com/' },
+            { name: 'DaFont', url: 'https://www.dafont.com/' },
+            { name: 'ArbFonts', url: 'https://arbfonts.com/' },
+          ]
+        },
+        {
+          label: 'Colors', icon: 'bi-palette', items: [
+            { name: 'Color Hunt', url: 'https://colorhunt.co/' },
+            { name: 'Adobe Color', url: 'https://color.adobe.com/' },
+          ]
+        },
+        {
+          label: 'Inspiration', icon: 'bi-lightbulb', items: [
+            { name: 'Pinterest', url: 'https://www.pinterest.com/' },
+            { name: 'Behance', url: 'https://www.behance.net' },
+            { name: 'Wallpaper Flare', url: 'https://www.wallpaperflare.com/' },
+          ]
+        },
+        {
+          label: 'Productivity', icon: 'bi-kanban', items: [
+            { name: 'Trello', url: 'https://trello.com' },
+            { name: 'MindMeister', url: 'https://www.mindmeister.com' },
+            { name: 'Milanote', url: 'https://app.milanote.com' },
+          ]
+        },
+        {
+          label: 'Important Sites', icon: 'bi-star', items: [
+            { name: 'FontBug', url: 'https://fontbug.com/' },
+            { name: 'Image Upscaler', url: 'https://zyro.com/tools/image-upscaler' },
+            { name: 'Topaz Gigapixel AI', url: 'https://www.topazlabs.com/gigapixel-ai' },
+            { name: 'SSizes', url: 'https://ssizes.com/' },
+          ]
+        },
+        {
+          label: 'Toools.design Directory', icon: 'bi-folder', items: [
+            { name: 'AI Tools', url: 'https://www.toools.design/ai-design-tools' },
+            { name: 'Inspiration', url: 'https://www.toools.design/ui-web-design-inspiration-websites' },
+            { name: 'Icons', url: 'https://www.toools.design/free-open-source-icon-libraries' },
+            { name: 'Illustrations', url: 'https://www.toools.design/free-open-source-illustrations' },
+            { name: 'Mocks + UI Kits', url: 'https://www.toools.design/mockups-ui-kits-and-freebies' },
+            { name: 'Stock Photos', url: 'https://www.toools.design/free-stock-images-videos' },
+            { name: 'Learning', url: 'https://www.toools.design/learn-ui-ux-design' },
+            { name: 'Community', url: 'https://www.toools.design/design-communities' },
+            { name: 'Blogs & Magz', url: 'https://www.toools.design/best-design-blogs-and-magazines' },
+            { name: 'Podcasts', url: 'https://www.toools.design/best-design-podcasts' },
+            { name: 'Books', url: 'https://www.toools.design/books-for-designers' },
+            { name: 'Productivity', url: 'https://www.toools.design/productivity-tools-for-design-and-poduct-teams' },
+            { name: 'Design Tools', url: 'https://www.toools.design/best-design-tools' },
+            { name: 'UX Tools', url: 'https://www.toools.design/best-ux-tools' },
+            { name: 'Color Tools', url: 'https://www.toools.design/best-color-inspiration-tools' },
+            { name: 'Typography', url: 'https://www.toools.design/font-library-and-inspiration' },
+            { name: 'Marketing', url: 'https://www.toools.design/marketing-tools' },
+            { name: 'Web Builders', url: 'https://www.toools.design/best-no-code-website-builders' },
+          ]
+        },
+      ];
+
+      // Flat standalone list of all sites
+      const standaloneList = [
+        { name: 'Freepik', url: 'https://www.freepik.com/', icon: 'bi-camera' },
+        { name: 'Pixabay', url: 'https://pixabay.com/', icon: 'bi-camera' },
+        { name: 'Pexels', url: 'https://www.pexels.com/', icon: 'bi-camera' },
+        { name: 'Unsplash', url: 'https://unsplash.com/', icon: 'bi-camera' },
+        { name: 'Vecteezy', url: 'https://www.vecteezy.com/', icon: 'bi-camera' },
+        { name: 'Shutterstock', url: 'https://www.shutterstock.com/', icon: 'bi-camera' },
+        { name: 'HiClipart', url: 'https://www.hiclipart.com/', icon: 'bi-file-image' },
+        { name: 'CleanPNG', url: 'https://www.cleanpng.com/', icon: 'bi-file-image' },
+        { name: 'FootyRenders', url: 'https://www.footyrenders.com/', icon: 'bi-file-image' },
+        { name: 'PNGtree', url: 'https://pngtree.com/', icon: 'bi-file-image' },
+        { name: 'Mockups Design', url: 'https://mockups-design.com/', icon: 'bi-phone' },
+        { name: 'MockupHunt', url: 'https://mockuphunt.co/', icon: 'bi-phone' },
+        { name: 'Flaticon', url: 'https://www.flaticon.com/', icon: 'bi-grid' },
+        { name: 'Brusheezy', url: 'https://www.brusheezy.com/', icon: 'bi-brush' },
+        { name: 'Google Fonts', url: 'https://fonts.google.com/', icon: 'bi-file-earmark-font' },
+        { name: 'DaFont', url: 'https://www.dafont.com/', icon: 'bi-file-earmark-font' },
+        { name: 'ArbFonts', url: 'https://arbfonts.com/', icon: 'bi-file-earmark-font' },
+        { name: 'Color Hunt', url: 'https://colorhunt.co/', icon: 'bi-palette' },
+        { name: 'Adobe Color', url: 'https://color.adobe.com/', icon: 'bi-palette' },
+        { name: 'Pinterest', url: 'https://www.pinterest.com/', icon: 'bi-lightbulb' },
+        { name: 'Behance', url: 'https://www.behance.net', icon: 'bi-lightbulb' },
+        { name: 'Wallpaper Flare', url: 'https://www.wallpaperflare.com/', icon: 'bi-lightbulb' },
+        { name: 'Trello', url: 'https://trello.com', icon: 'bi-kanban' },
+        { name: 'MindMeister', url: 'https://www.mindmeister.com', icon: 'bi-kanban' },
+        { name: 'Milanote', url: 'https://app.milanote.com', icon: 'bi-kanban' },
+        { name: 'FontBug', url: 'https://fontbug.com/', icon: 'bi-star' },
+        { name: 'Image Upscaler', url: 'https://zyro.com/tools/image-upscaler', icon: 'bi-star' },
+        { name: 'Topaz Gigapixel AI', url: 'https://www.topazlabs.com/gigapixel-ai', icon: 'bi-star' },
+        { name: 'SSizes', url: 'https://ssizes.com/', icon: 'bi-star' },
+      ];
+
+      function renderQuickGroup(g) {
+        return `<div class="quick-group">
+          <div class="quick-group-label"><i class="bi ${g.icon}"></i> ${g.label}</div>
+          <div class="quick-bar">
+            ${g.items.map(t => `<a class="quick-pill" href="${t.url}" target="_blank" rel="noopener"><i class="bi ${g.icon}"></i> ${t.name}</a>`).join('')}
+          </div>
+        </div>`;
+      }
+
+      let html = `
+    <div class="hero">
+      <div class="hero-eyebrow">// Personal Resource Center</div>
+      <h1 class="hero-title">CG<br><span class="line2">Hub</span></h1>
+      <p class="hero-desc">Every font, texture, brush, preset, plugin, and tool you need — always one click away from any machine.</p>
+    </div>
+
+    <div class="section-divider"><span>Quick Access</span></div>
+    ${quickGroups.map(renderQuickGroup).join('')}
+
+    <div class="section-divider"><span>Design Resources</span></div>
+    <div class="dashboard-grid">
+      ${resources.designs.map(d => `
+        <div class="dash-card" onclick="showSection('${d.id}')" style="--accent-color:${d.accent}">
+          <div class="dash-icon"><i class="bi ${d.icon}"></i></div>
+          <div class="dash-name">${d.name}</div>
+          <div class="dash-count">${d.sites.length} sites</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="section-divider"><span>3D Resources</span></div>
+    <div class="dashboard-grid">
+      ${Object.values(resources['3d']).map(d => `
+        <div class="dash-card" onclick="showSection('3d')" style="--accent-color:${d.accent}">
+          <div class="dash-icon"><i class="bi ${d.icon}"></i></div>
+          <div class="dash-name">${d.name}</div>
+          <div class="dash-count">${d.sites.length} sites</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="section-divider"><span>Software & Tools</span></div>
+    <div class="dashboard-grid">
+      ${Object.values(resources.software).map(d => `
+        <div class="dash-card" onclick="showSection('${d.id}')" style="--accent-color:${d.accent}">
+          <div class="dash-icon"><i class="bi ${d.icon}"></i></div>
+          <div class="dash-name">${d.name}</div>
+          <div class="dash-count">${d.sites.length} sites</div>
+        </div>`).join('')}
+      ${resources.stores.map(d => `
+        <div class="dash-card" onclick="showSection('stores')" style="--accent-color:${d.accent}">
+          <div class="dash-icon"><i class="bi ${d.icon}"></i></div>
+          <div class="dash-name">${d.name}</div>
+          <div class="dash-count">${d.sites.length} sites</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="section-divider"><span>Standalone List</span></div>
+    <div class="quick-bar">
+      ${standaloneList.map(t => `<a class="quick-pill" href="${t.url}" target="_blank" rel="noopener"><i class="bi ${t.icon}"></i> ${t.name}</a>`).join('')}
+    </div>
+  `;
+
+      main.innerHTML = html;
+      window.scrollTo(0, 0);
+    }
+
+    // ===== SEARCH =====
+    function handleSearch(query) {
+      const q = query.toLowerCase().trim();
+
+      if (!q) {
+        // show current section normally
+        document.querySelectorAll('.site-card').forEach(c => c.classList.remove('hidden'));
+        return;
+      }
+
+      // Show all sections during search
+      const main = document.getElementById('mainContent');
+
+      // Collect all sites
+      let results = [];
+      Object.values(allSections).forEach(s => {
+        if (!s.sites) return;
+        s.sites.forEach(site => {
+          const { name, url } = parseSite(site);
+          if (name.toLowerCase().includes(q) || getDomain(url).includes(q) || s.name.toLowerCase().includes(q)) {
+            results.push({ site, section: s });
+          }
+        });
+      });
+
+      // Deduplicate
+      const seen = new Set();
+      results = results.filter(r => {
+        if (seen.has(r.site)) return false;
+        seen.add(r.site);
+        return true;
+      });
+
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+      if (results.length === 0) {
+        main.innerHTML = `<div class="empty-state"><i class="bi bi-search"></i><p>No results for "${query}"</p></div>`;
+        return;
+      }
+
+      main.innerHTML = `
+    <div class="section-header">
+      <h1 class="section-title">Search <span class="accent">Results</span></h1>
+    </div>
+    <div class="section-meta">${results.length} sites found for "${query}"</div>
+    <div class="sites-grid">
+      ${results.map(r => renderSiteCard(r.site)).join('')}
+    </div>
+  `;
+    }
+
+    // Init
+    renderHome();
+  </script>
+</body>
+
+</html>
