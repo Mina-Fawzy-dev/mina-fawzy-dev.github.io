@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){const t=localStorage.getItem('mcg-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mina Fawzy Malak — Portfolio</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.16/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="header-panel">
+    <div class="header-left">
+      <div class="mcg-logo-panel">
+        <div class="mcg-text">MCG<span class="mcg-dot"></span></div>
+      </div>
+      <div class="nav-panel">
+        <div class="nav-buttons" id="navButtons">
+          <div class="pill-indicator" id="navPill"></div>
+          <button class="nav-btn active" data-section="info" onclick="switchSection('info', 0)">
+            <span>Info</span><span class="icon-circle"></span>
+          </button>
+          <button class="nav-btn" data-section="work" onclick="switchSection('work', 1)">
+            <span>Work</span><span class="icon-circle"></span>
+          </button>
+          <button class="nav-btn" data-section="contact" onclick="switchSection('contact', 2)">
+            <span>Contact</span><span class="icon-circle"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="time-panel">
+        <div class="time-info">
+          <div class="time-text" id="clock">13:55:19</div>
+          <div class="date-text" id="dateDisplay">Mon, Jan 1</div>
+        </div>
+        <div class="time-divider"></div>
+        <div class="time-toggles">
+          <button class="toggle-btn" id="timeFormatBtn" onclick="toggleTimeFormat()" title="Toggle 12/24 hour format">
+            <i class="bi bi-clock" id="timeFormatIcon"></i>
+          </button>
+          <button class="toggle-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle dark/light theme">
+            <i class="bi bi-moon-stars" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Section -->
+  <div class="section active" id="section-info">
+    <div class="profile-banner">
+      <div class="banner-photo">
+        <img src="https://avatars.githubusercontent.com/u/204509993?v=4" alt="Mina Fawzy Malak">
+      </div>
+      <div class="banner-info">
+        <h2>Mina Fawzy Malak</h2>
+        <div class="banner-title">Technical Artist · Python Developer</div>
+        <div class="banner-social-links">
+          <a href="https://github.com/Mina-Fawzy-dev" target="_blank" class="banner-social-link" title="GitHub">
+            <i class="bi bi-github"></i>
+            <span class="link-label">GitHub</span>
+          </a>
+          <a href="https://behance.net/mina_fawzy" target="_blank" class="banner-social-link" title="Behance">
+            <i class="bi bi-behance"></i>
+            <span class="link-label">Behance</span>
+          </a>
+          <a href="mailto:mina.fawzy.malak@gmail.com" class="banner-social-link" title="Email">
+            <i class="bi bi-envelope-fill"></i>
+            <span class="link-label">Email</span>
+          </a>
+        </div>
+      </div>
+      <div class="banner-logo">MCG<span class="logo-dot"></span></div>
+    </div>
+
+    <div class="tools-marquee-wrapper">
+      <div class="tools-marquee-track">
+        <div class="tool-logo"><span class="tool-icon" style="background:#31A8FF;">Ps</span><span>Photoshop</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#FF9A00;">Ai</span><span>Illustrator</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#9999FF;">Ae</span><span>After Effects</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#EA77FF;">Pr</span><span>Premiere Pro</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#1a1a1a;">3d</span><span>3ds Max</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#F58220;">V</span><span>V-Ray</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#E87D0D;">Bl</span><span>Blender</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#7B68EE;">Co</span><span>Corona</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#3776AB;">Py</span><span>Python</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#10A37F;">AI</span><span>ComfyUI</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#31A8FF;">Ps</span><span>Photoshop</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#FF9A00;">Ai</span><span>Illustrator</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#9999FF;">Ae</span><span>After Effects</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#EA77FF;">Pr</span><span>Premiere Pro</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#1a1a1a;">3d</span><span>3ds Max</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#F58220;">V</span><span>V-Ray</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#E87D0D;">Bl</span><span>Blender</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#7B68EE;">Co</span><span>Corona</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#3776AB;">Py</span><span>Python</span></div>
+        <div class="tool-logo"><span class="tool-icon" style="background:#10A37F;">AI</span><span>ComfyUI</span></div>
+      </div>
+    </div>
+
+    <div class="about-tabs-wrapper">
+      <div class="about-tabs" id="aboutTabs">
+        <div class="pill-indicator" id="aboutPill"></div>
+        <button class="about-tab active" data-tab="about" onclick="switchAboutTab('about', 0)">
+          <i class="bi bi-person"></i><span>About Me</span>
+        </button>
+        <button class="about-tab" data-tab="skills" onclick="switchAboutTab('skills', 1)">
+          <i class="bi bi-code-slash"></i><span>Technical Skills</span>
+        </button>
+        <button class="about-tab" data-tab="services" onclick="switchAboutTab('services', 2)">
+          <i class="bi bi-stars"></i><span>Services</span>
+        </button>
+      </div>
+
+      <div class="about-tab-content active" id="tab-about">
+        <p class="profile-bio">
+          Hello! My name is <strong>Mina</strong>. I'm a <strong>Technical Artist & Python Developer</strong> — specializing in product visualization, motion design, and advertising visuals that grab attention and deliver results. Growing into a <strong>CG Technical Artist</strong>: where creativity meets smart tools and clean workflows — building custom scripts and exploring AI-powered design pipelines.
+        </p>
+      </div>
+
+      <div class="about-tab-content" id="tab-skills">
+        <div class="skills-grid">
+          <div class="skill-category">
+            <div class="skill-icon"><i class="bi bi-palette"></i></div>
+            <h4>Graphic Design</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Photoshop</span>
+              <span class="skill-tag">Illustrator</span>
+              <span class="skill-tag">Brand Identity</span>
+              <span class="skill-tag">Typography</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <div class="skill-icon"><i class="bi bi-film"></i></div>
+            <h4>Motion & Video</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">After Effects</span>
+              <span class="skill-tag">Premiere Pro</span>
+              <span class="skill-tag">Motion Graphics</span>
+              <span class="skill-tag">Video Editing</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <div class="skill-icon"><i class="bi bi-cube"></i></div>
+            <h4>3D & Rendering</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">3ds Max</span>
+              <span class="skill-tag">Blender</span>
+              <span class="skill-tag">V-Ray</span>
+              <span class="skill-tag">Corona</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <div class="skill-icon"><i class="bi bi-robot"></i></div>
+            <h4>AI Design Tools</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">ComfyUI</span>
+              <span class="skill-tag">Krea</span>
+              <span class="skill-tag">ChatGPT</span>
+              <span class="skill-tag">Flux</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <div class="skill-icon"><i class="bi bi-code-square"></i></div>
+            <h4>Programming</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">MaxScript</span>
+              <span class="skill-tag">Django</span>
+              <span class="skill-tag">HTML/CSS/JS</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <div class="skill-icon"><i class="bi bi-lightbulb"></i></div>
+            <h4>Soft Skills</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Art Direction</span>
+              <span class="skill-tag">Problem Solving</span>
+              <span class="skill-tag">Visual Storytelling</span>
+              <span class="skill-tag">Teamwork</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-tab-content" id="tab-services">
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon"><i class="bi bi-film"></i></div>
+            <h4>Motion & Animation</h4>
+            <p>Dynamic motion graphics and logo animations crafted in <strong>Adobe After Effects</strong> — kinetic typography, brand reveals, and animated social content.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="bi bi-megaphone"></i></div>
+            <h4>Advertising & Posters</h4>
+            <p>Social media campaigns, promotional visuals, and poster designs that stop the scroll.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="bi bi-box-seam"></i></div>
+            <h4>Product Visualization</h4>
+            <p>Photorealistic 3D renders — lighting, texturing, and compositing done right.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="bi bi-images"></i></div>
+            <h4>Photo Manipulation</h4>
+            <p>Creative compositing, retouching, and visual storytelling.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="bi bi-camera-video"></i></div>
+            <h4>Video Editing</h4>
+            <p>Clean, dynamic cuts for reels, ads, and brand content.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="bi bi-cube"></i></div>
+            <h4>3D & Hard Surface Modeling</h4>
+            <p>Detailed, production-ready models — products, vehicles, mechanical, and industrial.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects Marquee — rendered by JS -->
+    <div class="projects-marquee-card" id="marqueeContainer"></div>
+
+    <a href="https://github.com/Mina-Fawzy-dev" class="github-project-card" target="_blank" style="margin-bottom: 16px;">
+      <div class="github-thumb"><i class="bi bi-github"></i></div>
+      <div class="github-info">
+        <div class="github-title"><i class="bi bi-github"></i> Project Name Example</div>
+        <p class="github-desc">Replace this with your real GitHub project. Add a brief description of what the project does and the tech stack used.</p>
+        <span class="github-link"><i class="bi bi-box-arrow-up-right"></i> View on GitHub</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Work Section -->
+  <div class="section" id="section-work">
+    <div class="work-section-header">
+      <h2>My Work</h2>
+      <p>Explore my projects across design, branding, motion, 3D, and development.</p>
+    </div>
+
+    <div class="sub-tabs" id="subTabs">
+      <div class="pill-indicator" id="workPill"></div>
+      <button class="sub-tab active" data-sub="behance" onclick="switchSubTab('behance')">
+        <i class="bi bi-behance"></i><span>Behance</span>
+      </button>
+      <button class="sub-tab" data-sub="github" onclick="switchSubTab('github')">
+        <i class="bi bi-github"></i><span>GitHub</span>
+      </button>
+    </div>
+
+    <div class="sub-tab-content active" id="sub-behance">
+      <div class="tab-description">
+        <div class="tab-desc-icon"><i class="bi bi-behance"></i></div>
+        <div class="tab-desc-text">
+          <h4>Behance Portfolio Projects</h4>
+          <p>Selected works in graphic design, branding, motion, and 3D modeling — powered by Behance embeds.</p>
+        </div>
+      </div>
+      <!-- Behance project groups rendered by JS -->
+      <div id="workContent"></div>
+    </div>
+
+    <div class="sub-tab-content" id="sub-github">
+      <div class="tab-description">
+        <div class="tab-desc-icon"><i class="bi bi-github"></i></div>
+        <div class="tab-desc-text">
+          <h4>Programming & Development Projects</h4>
+          <p>Web apps, automation scripts, Django projects, and Python tools — where code meets creativity.</p>
+        </div>
+      </div>
+      <!-- GitHub projects rendered by JS -->
+      <div id="githubContent"></div>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="section" id="section-contact">
+    <div class="contact-section-card">
+      <h2>Get in Touch</h2>
+      <div class="contact-links">
+        <a href="mailto:mina.fawzy.malak@gmail.com" class="contact-link-item">
+          <i class="bi bi-envelope"></i>
+          mina.fawzy.malak@gmail.com
+        </a>
+        <a href="https://github.com/Mina-Fawzy-dev" class="contact-link-item" target="_blank">
+          <i class="bi bi-github"></i>
+          github.com/Mina-Fawzy-dev
+        </a>
+        <a href="https://behance.net/mina_fawzy" class="contact-link-item" target="_blank">
+          <i class="bi bi-behance"></i>
+          behance.net/mina_fawzy
+        </a>
+        <a href="https://linkedin.com/in/minafawzy" class="contact-link-item" target="_blank">
+          <i class="bi bi-linkedin"></i>
+          linkedin.com/in/minafawzy
+        </a>
+        <a href="https://mina-fawzy-dev.github.io" class="contact-link-item" target="_blank">
+          <i class="bi bi-globe"></i>
+          mina-fawzy-dev.github.io
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
