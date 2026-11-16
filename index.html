@@ -4,25 +4,26 @@
 <script>(function(){const t=localStorage.getItem('mcg-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mina Fawzy — 3D Artist &amp; Technical Artist</title>
-<meta name="description" content="Mina Fawzy — 3D artist, graphic designer and technical artist in Cairo, Egypt. Photoreal product and automotive CGI, motion design, art direction, and Python/MaxScript pipeline tools.">
+<title>Mina Fawzy — Technical Artist</title>
+<meta name="description" content="Mina Fawzy — technical artist in Cairo, Egypt. Look-dev, lighting and rendering for product and automotive CGI, plus Python, MaxScript and ComfyUI tools that speed up the pipeline.">
 <meta name="author" content="Mina Fawzy">
 <meta name="theme-color" content="#F7F6F3">
 <link rel="canonical" href="https://mina-fawzy-dev.github.io/">
 
 <meta property="og:type" content="profile">
-<meta property="og:title" content="Mina Fawzy — 3D Artist &amp; Technical Artist">
-<meta property="og:description" content="Photoreal product and automotive CGI, motion design and art direction. Cairo, Egypt.">
+<meta property="og:title" content="Mina Fawzy — Technical Artist">
+<meta property="og:description" content="Look-dev, rendering and pipeline tooling for product and automotive CGI. Cairo, Egypt.">
 <meta property="og:url" content="https://mina-fawzy-dev.github.io/">
 <meta property="og:image" content="https://mir-s3-cdn-cf.behance.net/projects/404/a99b89240229695.Y3JvcCwxNjE2LDEyNjQsMCww.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Mina Fawzy — 3D Artist &amp; Technical Artist">
-<meta name="twitter:description" content="Photoreal product and automotive CGI, motion design and art direction.">
+<meta name="twitter:title" content="Mina Fawzy — Technical Artist">
+<meta name="twitter:description" content="Look-dev, rendering and pipeline tooling for product and automotive CGI.">
 <meta name="twitter:image" content="https://mir-s3-cdn-cf.behance.net/projects/404/a99b89240229695.Y3JvcCwxNjE2LDEyNjQsMCww.jpg">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23E63946'/%3E%3Ctext x='32' y='42' font-family='Arial,Helvetica,sans-serif' font-size='23' font-weight='900' fill='white' text-anchor='middle'%3EMCG%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://mir-s3-cdn-cf.behance.net" crossorigin>
+<link rel="preconnect" href="https://avatars.githubusercontent.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.16/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="style.css">
@@ -32,13 +33,13 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Mina Fawzy",
-  "jobTitle": "3D Artist, Graphic Designer & Technical Artist",
-  "description": "3D artist and technical artist specialising in product visualisation, automotive CGI, motion design and art direction.",
+  "jobTitle": "Technical Artist",
+  "description": "Technical artist working on look-dev, lighting, rendering and pipeline tooling for product and automotive CGI.",
   "url": "https://mina-fawzy-dev.github.io/",
   "image": "https://avatars.githubusercontent.com/u/204509993?v=4",
   "email": "mailto:mina.fawzy.malak@gmail.com",
   "address": { "@type": "PostalAddress", "addressLocality": "Cairo", "addressCountry": "EG" },
-  "knowsAbout": ["3D Modeling", "Product Visualization", "Automotive CGI", "Motion Design", "Graphic Design", "Art Direction", "Python Scripting", "MaxScript"],
+  "knowsAbout": ["Technical Art", "Look Development", "Lighting", "Rendering", "3D Modeling", "Python", "MaxScript", "ComfyUI", "Product Visualization"],
   "sameAs": [
     "https://github.com/Mina-Fawzy-dev",
     "https://www.behance.net/mina_fawzy",
@@ -56,9 +57,9 @@
     <a href="#top" class="brand">Mina Fawzy<span class="brand-dot"></span></a>
     <nav class="nav" aria-label="Sections">
       <a href="#work" class="nav-link">Work</a>
-      <a href="#about" class="nav-link">About</a>
-      <a href="#services" class="nav-link" data-optional>Services</a>
+      <a href="#pipeline" class="nav-link">Pipeline</a>
       <a href="#code" class="nav-link" data-optional>Code</a>
+      <a href="#about" class="nav-link">About</a>
       <a href="#contact" class="nav-link">Contact</a>
     </nav>
     <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle theme">
@@ -71,25 +72,41 @@
 
   <!-- Hero -->
   <section class="hero">
-    <p class="eyebrow">3D Artist · Graphic Designer · Technical Artist</p>
-    <h1>Mina&nbsp;Fawzy</h1>
-    <p class="lede">
-      I build photoreal <strong>product and automotive CGI</strong>, <strong>motion design</strong>
-      and <strong>advertising visuals</strong> — and the Python tools that make the pipeline faster.
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Technical Artist · 3D &amp; Look-Dev</p>
+        <h1>Mina&nbsp;Fawzy</h1>
+        <p class="lede">
+          I build photoreal <strong>product and automotive CGI</strong> — and the
+          <strong>Python, MaxScript and ComfyUI</strong> tooling that makes the pipeline faster.
+        </p>
+        <div class="hero-meta">
+          <span class="avail"><span class="dot"></span>Available for freelance &amp; full-time</span>
+          <span class="hero-sep">/</span>
+          <span>Cairo, Egypt</span>
+          <span class="hero-sep">/</span>
+          <span>23 projects · 172 appreciations</span>
+        </div>
+        <div class="hero-links">
+          <a href="https://www.behance.net/mina_fawzy" target="_blank" rel="noopener noreferrer">Behance<i class="bi bi-arrow-up-right"></i></a>
+          <a href="https://github.com/Mina-Fawzy-dev" target="_blank" rel="noopener noreferrer">GitHub<i class="bi bi-arrow-up-right"></i></a>
+          <a href="https://www.linkedin.com/in/minafawzy" target="_blank" rel="noopener noreferrer">LinkedIn<i class="bi bi-arrow-up-right"></i></a>
+          <a href="mailto:mina.fawzy.malak@gmail.com">Email<i class="bi bi-arrow-up-right"></i></a>
+        </div>
+      </div>
+
+      <figure class="hero-photo">
+        <img src="https://avatars.githubusercontent.com/u/204509993?v=4"
+             alt="Portrait of Mina Fawzy" width="320" height="320"
+             fetchpriority="high" decoding="async">
+      </figure>
+    </div>
+
+    <p class="toolbox">
+      <span class="mono-label">Toolbox</span>
+      3ds Max · Blender · V-Ray · Corona · After Effects · Premiere Pro · Photoshop ·
+      Python · MaxScript · ComfyUI · Git
     </p>
-    <div class="hero-meta">
-      <span class="avail"><span class="dot"></span>Available for freelance &amp; full-time</span>
-      <span class="hero-sep">/</span>
-      <span>Cairo, Egypt</span>
-      <span class="hero-sep">/</span>
-      <span>23 projects · 172 appreciations</span>
-    </div>
-    <div class="hero-links">
-      <a href="https://www.behance.net/mina_fawzy" target="_blank" rel="noopener noreferrer">Behance<i class="bi bi-arrow-up-right"></i></a>
-      <a href="https://github.com/Mina-Fawzy-dev" target="_blank" rel="noopener noreferrer">GitHub<i class="bi bi-arrow-up-right"></i></a>
-      <a href="https://www.linkedin.com/in/minafawzy" target="_blank" rel="noopener noreferrer">LinkedIn<i class="bi bi-arrow-up-right"></i></a>
-      <a href="mailto:mina.fawzy.malak@gmail.com">Email<i class="bi bi-arrow-up-right"></i></a>
-    </div>
   </section>
 
   <!-- Work -->
@@ -104,91 +121,48 @@
     </a>
   </section>
 
-  <!-- About -->
-  <section id="about" class="section split">
-    <div class="split-label"><span>About</span></div>
+  <!-- Pipeline -->
+  <section id="pipeline" class="section split">
+    <div class="split-label"><span>Pipeline</span></div>
     <div class="split-body">
       <p class="body-lg">
-        I'm Mina, a 3D artist and graphic designer based in Cairo. I work across the full
-        production line — modeling and hard-surface detail, look-dev, lighting, rendering,
-        post and art direction — for product visualization, automotive CGI and brand campaigns.
+        I work where the image meets the tooling — the look, the render,
+        and the scripts that get there faster.
       </p>
-      <p>
-        I'm moving into <strong>technical art</strong>: writing Python and MaxScript utilities,
-        automating the repetitive parts of 3D production, and building AI-assisted workflows in
-        ComfyUI. Good art deserves a better pipeline.
-      </p>
-
-      <div class="skill-list">
-        <div class="skill-row">
-          <span class="skill-name">3D &amp; CGI</span>
-          <span class="skill-items">3ds Max · Blender · Hard-surface modeling · Topology · UVs</span>
-        </div>
-        <div class="skill-row">
-          <span class="skill-name">Look-dev</span>
-          <span class="skill-items">V-Ray · Corona · Studio lighting · Shading · Material studies</span>
-        </div>
-        <div class="skill-row">
-          <span class="skill-name">Motion</span>
-          <span class="skill-items">Blender animation · After Effects · Premiere Pro · Simulations</span>
-        </div>
-        <div class="skill-row">
-          <span class="skill-name">Design</span>
-          <span class="skill-items">Photoshop · Illustrator · Poster &amp; social design · Photo manipulation</span>
-        </div>
-        <div class="skill-row">
-          <span class="skill-name">Technical</span>
-          <span class="skill-items">Python · MaxScript · Automation · Git · ComfyUI · Flux · Krea</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services -->
-  <section id="services" class="section split">
-    <div class="split-label"><span>Services</span></div>
-    <div class="split-body">
       <ol class="services">
         <li>
           <span class="num">01</span>
           <div>
-            <h3>3D Product Visualization</h3>
-            <p>Photoreal product renders — modeling, materials, studio lighting and final composite, ready for ads and e-commerce.</p>
+            <h3>Look-dev &amp; Shading</h3>
+            <p>Materials, lighting rigs and render setups that survive production: V-Ray and Corona, studio and HDRI lighting, AOV passes for comp.</p>
           </div>
         </li>
         <li>
           <span class="num">02</span>
           <div>
-            <h3>Automotive &amp; Hard-Surface CGI</h3>
-            <p>Full CGI vehicles and mechanical assets with clean topology, accurate proportions and production-grade shading.</p>
+            <h3>Asset &amp; Scene Prep</h3>
+            <p>Hard-surface models with clean topology, sane UVs, pivots and naming conventions — assets that hand off between people and tools without breaking.</p>
           </div>
         </li>
         <li>
           <span class="num">03</span>
           <div>
-            <h3>Motion &amp; Animation</h3>
-            <p>Product animation in Blender — cinematic camera moves, liquid simulations, particles and physics-based sequences — plus logo animation in After Effects.</p>
+            <h3>Scripting &amp; Automation</h3>
+            <p>Python and MaxScript utilities for batch import, renaming, scene assembly and render submission — the repetitive work removed from the artist's day.</p>
           </div>
         </li>
         <li>
           <span class="num">04</span>
           <div>
-            <h3>Advertising &amp; Campaigns</h3>
-            <p>Key visuals, campaign posters and social media content built on a consistent art direction.</p>
+            <h3>AI-Assisted Workflows</h3>
+            <p>ComfyUI graphs for concept exploration, texture variation and look development, wired into the 3D pipeline instead of sitting next to it.</p>
           </div>
         </li>
         <li>
           <span class="num">05</span>
           <div>
-            <h3>Photo Manipulation &amp; Retouching</h3>
-            <p>Creative compositing, product retouching and color grading for advertising-grade stills.</p>
-          </div>
-        </li>
-        <li>
-          <span class="num">06</span>
-          <div>
-            <h3>Technical Art &amp; Pipeline</h3>
-            <p>Custom Python and MaxScript tools, batch automation and AI-assisted workflows that remove repetitive work from production.</p>
+            <h3>Render &amp; Post</h3>
+            <p>Camera framing, passes, denoising and the final composite — advertising-grade stills and animation, delivered ready to publish.</p>
           </div>
         </li>
       </ol>
@@ -200,6 +174,53 @@
     <div class="split-label"><span>Code</span></div>
     <div class="split-body">
       <div class="repo-list" id="repoList"></div>
+      <p class="code-note">More MaxScript and Python utilities are in progress — the public ones land on GitHub first.</p>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section split">
+    <div class="split-label"><span>About</span></div>
+    <div class="split-body">
+      <p class="body-lg">
+        I'm Mina, a 3D artist based in Cairo who drifted toward the technical side —
+        the part where a good tool saves a week of clicking.
+      </p>
+      <p>
+        I started in graphic design and product visualization, then moved deeper into
+        look-dev and rendering for automotive and product CGI. These days I split my time
+        between producing images and building the <strong>scripts and workflows</strong>
+        behind them: Python and MaxScript for the DCC side, ComfyUI for AI-assisted
+        look development.
+      </p>
+      <p>
+        I'm looking for a <strong>technical artist</strong> role or freelance work where
+        art direction, rendering and tooling meet — on a team that cares about both the
+        pixel and the pipeline.
+      </p>
+
+      <div class="skill-list">
+        <div class="skill-row">
+          <span class="skill-name">DCC</span>
+          <span class="skill-items">3ds Max · Blender · hard-surface modeling · topology · UVs</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">Look-dev</span>
+          <span class="skill-items">V-Ray · Corona · shading · studio &amp; HDRI lighting · AOVs</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">Scripting</span>
+          <span class="skill-items">Python · MaxScript · batch automation · Git</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">Post</span>
+          <span class="skill-items">After Effects · Premiere Pro · Photoshop compositing · retouching</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">AI tools</span>
+          <span class="skill-items">ComfyUI · Flux · Krea · prompt &amp; workflow design</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -207,7 +228,7 @@
   <section id="contact" class="section split">
     <div class="split-label"><span>Contact</span></div>
     <div class="split-body">
-      <p class="body-lg">Have a product, a campaign or a pipeline problem? Tell me about it.</p>
+      <p class="body-lg">A product to render, a pipeline to fix, or a role to fill? Tell me about it.</p>
       <a class="mail-link" href="mailto:mina.fawzy.malak@gmail.com">mina.fawzy.malak@gmail.com<i class="bi bi-arrow-up-right"></i></a>
       <div class="contact-links">
         <a href="https://www.behance.net/mina_fawzy" target="_blank" rel="noopener noreferrer">Behance</a>
