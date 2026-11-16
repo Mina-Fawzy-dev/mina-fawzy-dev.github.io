@@ -65,7 +65,9 @@ const embedUrl = (id) => `https://www.behance.net/embed/project/${id}?ilo0=1`;
 let activeFilter = 'all';
 let showAllProjects = false;
 let justSwiped = false;
-const ALL_LIMIT = 8;
+
+// 3 columns on desktop, 2 below that — keep the capped view at whole rows
+const allLimit = () => (window.innerWidth <= 1024 ? 8 : 9);
 
 const countFor = (key) =>
   key === 'all' ? projects.length : projects.filter(p => p.f === key).length;
@@ -138,11 +140,12 @@ function paintFilters() {
 
 function applyFilter() {
   const cards = [...document.querySelectorAll('#workGrid .project')];
+  const limit = allLimit();
   let shown = 0;
 
   cards.forEach(card => {
     const inFilter = activeFilter === 'all' || card.dataset.f === activeFilter;
-    const capped = activeFilter === 'all' && !showAllProjects && shown >= ALL_LIMIT;
+    const capped = activeFilter === 'all' && !showAllProjects && shown >= limit;
     const show = inFilter && !capped;
     if (show) shown++;
 
@@ -321,6 +324,10 @@ function init() {
   initWorkSwipe();
   renderRepos();
   initScrollUI();
+
+  window.addEventListener('resize', () => {
+    if (activeFilter === 'all' && !showAllProjects) applyFilter();
+  });
 }
 
 document.addEventListener('DOMContentLoaded', init);
