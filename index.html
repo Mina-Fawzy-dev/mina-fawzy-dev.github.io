@@ -113,12 +113,25 @@
   <section id="work" class="section">
     <div class="section-head">
       <h2>Selected Work</h2>
-      <div class="filters" id="filters" role="tablist" aria-label="Filter projects"></div>
+      <div class="filter-bar">
+        <button class="filter-nav" id="filterPrev" type="button" aria-label="Previous category">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="filters" id="filters" role="tablist" aria-label="Filter projects"></div>
+        <button class="filter-nav" id="filterNext" type="button" aria-label="Next category">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
     </div>
     <div class="work-grid" id="workGrid"></div>
-    <a class="more-link" href="https://www.behance.net/mina_fawzy" target="_blank" rel="noopener noreferrer">
-      All 23 projects on Behance<i class="bi bi-arrow-up-right"></i>
-    </a>
+    <div class="work-more">
+      <button class="more-btn" id="showAllBtn" type="button" hidden>
+        <span id="showAllLabel">Show more projects</span><i class="bi bi-arrow-down"></i>
+      </button>
+      <a class="more-link" href="https://www.behance.net/mina_fawzy" target="_blank" rel="noopener noreferrer">
+        All 23 projects on Behance<i class="bi bi-arrow-up-right"></i>
+      </a>
+    </div>
   </section>
 
   <!-- Pipeline -->

@@ -63,19 +63,36 @@ const embedUrl = (id) => `https://www.behance.net/embed/project/${id}?ilo0=1`;
 // Render: work grid + filters
 // ============================================================
 let activeFilter = 'all';
+let showAllProjects = false;
+let justSwiped = false;
+const ALL_LIMIT = 8;
+
+const countFor = (key) =>
+  key === 'all' ? projects.length : projects.filter(p => p.f === key).length;
 
 function renderFilters() {
   const el = document.getElementById('filters');
   if (!el) return;
   el.innerHTML = filters.map(f =>
     `<button class="filter${f.key === 'all' ? ' active' : ''}" data-filter="${f.key}" role="tab"
-      aria-selected="${f.key === 'all'}">${f.label}</button>`
+      aria-selected="${f.key === 'all'}">${f.label}<span class="filter-count">${countFor(f.key)}</span></button>`
   ).join('');
 
   el.addEventListener('click', (e) => {
     const btn = e.target.closest('.filter');
     if (!btn) return;
-    setFilter(btn.dataset.filter);
+    setFilter(btn.dataset.filter, { scroll: true });
+  });
+
+  const prev = document.getElementById('filterPrev');
+  const next = document.getElementById('filterNext');
+  if (prev) prev.addEventListener('click', () => stepFilter(-1));
+  if (next) next.addEventListener('click', () => stepFilter(1));
+
+  const all = document.getElementById('showAllBtn');
+  if (all) all.addEventListener('click', () => {
+    showAllProjects = true;
+    applyFilter();
   });
 }
 
@@ -97,25 +114,90 @@ function renderWork() {
     </a>`).join('');
 }
 
-function setFilter(key) {
+function setFilter(key, opts = {}) {
   activeFilter = key;
+  showAllProjects = false;          // every tab swap starts collapsed again
+  paintFilters();
+  applyFilter();
+  if (opts.scroll) scrollToWorkTop();
+}
 
+function stepFilter(dir) {
+  const i = filters.findIndex(f => f.key === activeFilter);
+  const n = (i + dir + filters.length) % filters.length;
+  setFilter(filters[n].key, { scroll: true });
+}
+
+function paintFilters() {
   document.querySelectorAll('.filter').forEach(b => {
-    const on = b.dataset.filter === key;
+    const on = b.dataset.filter === activeFilter;
     b.classList.toggle('active', on);
     b.setAttribute('aria-selected', String(on));
   });
+}
 
-  document.querySelectorAll('#workGrid .project').forEach(card => {
-    const show = key === 'all' || card.dataset.f === key;
+function applyFilter() {
+  const cards = [...document.querySelectorAll('#workGrid .project')];
+  let shown = 0;
+
+  cards.forEach(card => {
+    const inFilter = activeFilter === 'all' || card.dataset.f === activeFilter;
+    const capped = activeFilter === 'all' && !showAllProjects && shown >= ALL_LIMIT;
+    const show = inFilter && !capped;
+    if (show) shown++;
+
+    const wasHidden = card.hidden;
     card.hidden = !show;
-    if (show) {
-      // restart the entrance animation so filtering feels responsive
+    if (show && wasHidden) {
+      // restart the entrance animation so the swap reads as a change
       card.style.animation = 'none';
       void card.offsetWidth;
       card.style.animation = '';
     }
   });
+
+  const btn = document.getElementById('showAllBtn');
+  if (btn) {
+    const hiddenCount = projects.length - shown;
+    const canExpand = activeFilter === 'all' && !showAllProjects && hiddenCount > 0;
+    btn.hidden = !canExpand;
+    if (canExpand) {
+      const label = document.getElementById('showAllLabel');
+      if (label) label.textContent = `Show ${hiddenCount} more projects`;
+    }
+  }
+}
+
+function scrollToWorkTop() {
+  const work = document.getElementById('work');
+  if (!work) return;
+  const top = work.getBoundingClientRect().top + window.scrollY - 76;
+  if (window.scrollY > top + 40) window.scrollTo({ top, behavior: 'smooth' });
+}
+
+function initWorkSwipe() {
+  const grid = document.getElementById('workGrid');
+  if (!grid) return;
+  let x0 = null, y0 = null;
+
+  grid.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) { x0 = null; return; }
+    x0 = e.touches[0].clientX;
+    y0 = e.touches[0].clientY;
+  }, { passive: true });
+
+  grid.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - x0;
+    const dy = t.clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+      justSwiped = true;
+      setTimeout(() => { justSwiped = false; }, 350);
+      stepFilter(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
 }
 
 // ============================================================
@@ -141,6 +223,7 @@ let lightboxOpen = false;
 
 function projectClick(e, id) {
   e.preventDefault();
+  if (justSwiped) return false;   // a category swipe, not a tap on the card
   openProject(id);
   return false;
 }
@@ -234,6 +317,8 @@ function init() {
   paintThemeIcon();
   renderFilters();
   renderWork();
+  applyFilter();
+  initWorkSwipe();
   renderRepos();
   initScrollUI();
 }
