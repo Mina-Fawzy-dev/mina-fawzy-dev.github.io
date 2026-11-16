@@ -167,7 +167,7 @@ section[id] { scroll-margin-top: 80px; }
    Hero
    ------------------------------------------------------------ */
 .hero {
-  padding: 76px 0 60px;
+  padding: 64px 0 52px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -181,16 +181,16 @@ section[id] { scroll-margin-top: 80px; }
 }
 
 .hero h1 {
-  margin: 0 0 26px;
-  font-size: clamp(42px, 8.4vw, 88px);
+  margin: 0 0 22px;
+  font-size: clamp(38px, 7.2vw, 76px);
   font-weight: 700;
   line-height: 0.94;
   letter-spacing: -0.045em;
 }
 
 .lede {
-  max-width: 620px;
-  margin: 0 0 28px;
+  max-width: 600px;
+  margin: 0 0 24px;
   font-size: clamp(16px, 1.7vw, 19px);
   line-height: 1.55;
   letter-spacing: -0.012em;
@@ -270,8 +270,8 @@ section[id] { scroll-margin-top: 80px; }
 /* Hero with portrait */
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 288px;
-  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) 216px;
+  gap: 48px;
   align-items: center;
 }
 
@@ -281,7 +281,7 @@ section[id] { scroll-margin-top: 80px; }
   margin: 0;
   justify-self: end;
   width: 100%;
-  max-width: 288px;
+  max-width: 216px;
 }
 
 .hero-photo img {
@@ -809,9 +809,9 @@ body.no-scroll { overflow: hidden; }
   .hero h1 { margin-bottom: 22px; }
   .hero-links { gap: 16px; margin-top: 28px; }
 
-  .hero-grid { grid-template-columns: 1fr; gap: 24px; }
-  .hero-photo { order: -1; justify-self: start; max-width: 128px; }
-  .toolbox { margin-top: 32px; font-size: 11px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 20px; }
+  .hero-photo { order: -1; justify-self: start; max-width: 96px; }
+  .toolbox { margin-top: 30px; font-size: 11px; }
 
   .section { padding: 48px 0; }
   .section-head { margin-bottom: 26px; }
