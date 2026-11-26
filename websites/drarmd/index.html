@@ -262,21 +262,87 @@ main > *{min-width:0}
 .offer .fine{position:relative;margin:8px 0 0;font-size:10.5px;color:#7fa9c2;text-align:center}
 
 /* ── طرق الدفع ── */
-.pay-row{display:flex;align-items:center;gap:11px;padding:12px;border-radius:14px;
-  background:linear-gradient(180deg,#fff,#f4fbff);border:1px solid var(--line);
-  text-decoration:none;color:inherit;
+.pay-list{display:grid;gap:8px}
+.pay-row{display:flex;align-items:center;gap:10px;padding:9px;width:100%;text-align:start;
+  font-family:inherit;font-size:inherit;border-radius:14px;
+  background:linear-gradient(180deg,#fff,#f6fbfe);border:1px solid var(--line);
+  text-decoration:none;color:inherit;cursor:pointer;
   transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
 .pay-row:hover{transform:translateY(-1px);border-color:rgba(41,169,224,.42);
   box-shadow:0 14px 26px -20px rgba(8,48,74,.85)}
-.pay-row .ip-ic{width:44px;height:44px;border-radius:12px;background:#f4efff;flex:none;
-  display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(77,39,184,.14)}
-.pay-row .ip-ic svg{width:26px;height:26px;display:block}
-.pay-row .ptx{display:flex;flex-direction:column;line-height:1.35;min-width:0}
-.pay-row .ptx b{font-size:13.5px;color:var(--navy)}
-.pay-row .ptx small{font-size:10.5px;color:var(--muted);margin-top:2px}
-.pay-row > .ph{margin-inline-start:auto;font-size:16px;color:var(--blue);flex:none}
-.pay-note{display:flex;align-items:center;gap:5px;margin:9px 2px 0;font-size:10.5px;color:var(--muted)}
-.pay-note .ph{font-size:13px;color:var(--blue)}
+.pay-row:active{transform:scale(.995)}
+.pay-row:focus-visible,.pay-main:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pay-main{display:flex;align-items:center;gap:11px;flex:1;min-width:0;
+  text-decoration:none;color:inherit;border-radius:11px}
+
+/* أيقونة العلامة */
+.pay-ic{position:relative;overflow:hidden;flex:none;width:46px;height:46px;border-radius:13px;
+  display:grid;place-items:center;
+  box-shadow:0 9px 16px -12px rgba(8,48,74,.75),inset 0 0 0 1px rgba(255,255,255,.2);
+  transition:transform .22s cubic-bezier(.16,1,.3,1)}
+.pay-row:hover .pay-ic{transform:scale(1.05) rotate(-3deg)}
+.pay-ic::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0) 62%)}
+.pay-ic svg{position:relative;z-index:1;display:block;width:28px;height:28px}
+.pay-ic.orange{background:linear-gradient(160deg,#ff9032,#f06800)}
+.pay-ic.vodafone{background:linear-gradient(160deg,#f42a3c,#cd0010)}
+.pay-ic.instapay{background:linear-gradient(160deg,#7d4fe4,#4821a6)}
+
+/* نص الصف */
+.pay-tx{display:flex;flex-direction:column;justify-content:center;gap:3px;flex:1;min-width:0}
+.pay-tx b{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:800;
+  color:var(--navy);line-height:1.35}
+.pay-num{font-size:12.5px;font-weight:700;color:var(--blue-deep);font-variant-numeric:tabular-nums;
+  letter-spacing:.045em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  unicode-bidi:isolate;direction:ltr;text-align:right;line-height:1.5}
+
+/* زر النسخ */
+.pay-copy{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:0;border-radius:11px;
+  border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+  font-size:17px;cursor:pointer;
+  transition:background .18s ease,border-color .18s ease,color .18s ease}
+.pay-copy .lbl{display:none;font-size:11px;font-weight:800;line-height:1}
+@media (min-width:360px){
+  .pay-copy{display:flex;align-items:center;justify-content:center;gap:6px;
+    width:auto;min-width:44px;padding:0 13px;font-size:15px}
+  .pay-copy .lbl{display:inline}
+}
+.pay-row:hover .pay-copy{background:var(--tint);border-color:#a8d9f2}
+.pay-row.is-copied .pay-copy,button.pay-copy.is-copied{background:#e9f9ef;border-color:#a5dfbb;color:#12803f}
+/* صف إنستاباي: فوقه لينك، وتحته زرار «ادفع الآن» + زرار «نسخ» */
+.pay-row.ip{flex-direction:column;align-items:stretch;padding:0;gap:0;
+  background:linear-gradient(180deg,#fbf8ff,#f2ecff);
+  border-color:rgba(109,63,200,.2);cursor:pointer}
+.pay-row.ip .pay-main{padding:10px;border-radius:14px 14px 0 0}
+.pay-row.ip .pay-main:focus-visible{outline-offset:-3px}
+.pay-row.ip:hover{border-color:rgba(109,63,200,.45);box-shadow:0 14px 26px -20px rgba(63,30,158,.9)}
+.pay-row.ip .pay-main:hover .pay-tx b{color:#4b22a8}
+
+/* صف أزرار إنستاباي */
+.pay-acts{display:flex;align-items:center;gap:8px;padding:0 10px 10px}
+.pay-pay{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;
+  padding:0 12px;border-radius:11px;background:#6d3fc8;color:#fff;
+  font-size:12.5px;font-weight:800;text-decoration:none;line-height:1;
+  box-shadow:0 10px 18px -14px rgba(63,30,158,.95);
+  transition:background .18s ease,transform .12s ease}
+.pay-pay:hover{background:#5a30b4}
+.pay-pay:active{transform:scale(.985)}
+.pay-pay:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pay-pay .ph{font-size:14px}
+.pay-acts .pay-copy{height:44px;margin:0;border-color:rgba(109,63,200,.28);
+  background:#fff;color:#5a32b4}
+.pay-acts .pay-copy:hover{background:#f0e9ff;border-color:rgba(109,63,200,.45)}
+
+/* footnote */
+.pay-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  flex-wrap:wrap;margin-top:10px}
+.pay-cash{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.pay-cash .ph{font-size:13px;color:var(--blue)}
+.pay-brand{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:800;
+  letter-spacing:.03em;color:#7b66ad;direction:ltr}
+.pay-brand .ph{font-size:11px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 
 /* 5 · STEPS */
 .steps{display:grid;gap:8px}
@@ -2004,19 +2070,70 @@ z"/></g></svg>
   <section class="card paycard" aria-labelledby="h-pay">
     <div class="section-head">
       <h2 id="h-pay">طرق الدفع</h2>
-      <span class="count">انستا باي · كاش</span>
+      <span class="count">إنستاباي · محافظ · كاش</span>
     </div>
-    <a class="pay-row" id="pay" href="https://wa.me/201205032237" target="_blank" rel="noopener">
-      <span class="ip-ic" aria-hidden="true">
-        <svg viewBox="0 0 40 40"><defs><linearGradient id="ipg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8c62e8"/><stop offset="1" stop-color="#4d27b8"/></linearGradient></defs><path d="M8 13h18l-4-4 3-3 9 9-9 9-3-3 4-4H8z" fill="url(#ipg)"/><path d="M32 27H14l4 4-3 3-9-9 9-9 3 3-4 4h18z" fill="#f28a36" transform="translate(0 1) scale(.92) translate(1.7 1.7)"/></svg>
-      </span>
-      <span class="ptx">
-        <b>انستا باي</b>
-        <small>ادفع بسهولة من تطبيق البنك</small>
-      </span>
-      <i class="ph ph-caret-left" aria-hidden="true"></i>
-    </a>
-    <p class="pay-note"><i class="ph ph-wallet" aria-hidden="true"></i> الدفع كاش في العيادة متاح كمان.</p>
+
+    <div class="pay-list">
+
+      <!-- إنستاباي -->
+      <div class="pay-row ip">
+        <a class="pay-main" data-pay-link href="https://ipn.eg/S/arnsha2/instapay/1GF4R2"
+           target="_blank" rel="noopener">
+          <span class="pay-ic instapay" aria-hidden="true">
+            <svg viewBox="0 0 40 40"><path d="M8 13h18l-4-4 3-3 9 9-9 9-3-3 4-4H8z" fill="#fff"/><path d="M32 27H14l4 4-3 3-9-9 9-9 3 3-4 4h18z" fill="#ffb167"/></svg>
+          </span>
+          <span class="pay-tx">
+            <b>إنستاباي</b>
+            <span class="pay-num" data-pay-num="instapayHandle">arnsha2@instapay</span>
+          </span>
+        </a>
+        <div class="pay-acts">
+          <a class="pay-pay" data-pay-link href="https://ipn.eg/S/arnsha2/instapay/1GF4R2"
+             target="_blank" rel="noopener">
+            <i class="ph ph-arrow-up-right" aria-hidden="true"></i> ادفع الآن
+          </a>
+          <button class="pay-copy" type="button" data-copy-key="instapayHandle"
+                  aria-label="انسخ حساب إنستاباي arnsha2@instapay">
+            <i class="ph ph-copy" aria-hidden="true"></i><span class="lbl">نسخ</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- أورنج كاش -->
+      <button class="pay-row" type="button" data-copy-key="orangeWallet"
+              aria-label="انسخ رقم محفظة أورنج كاش 01205565279">
+        <span class="pay-ic orange" aria-hidden="true">
+          <svg viewBox="0 0 46 46"><text x="23" y="26" text-anchor="middle" style="direction:ltr"
+            font-family="Cairo,Tahoma,Arial,sans-serif" font-size="16" font-weight="900"
+            fill="#fff" textLength="36" lengthAdjust="spacingAndGlyphs">orange</text></svg>
+        </span>
+        <span class="pay-tx">
+          <b>محفظة أورنج كاش</b>
+          <span class="pay-num" data-pay-num="orangeWallet">0120 556 5279</span>
+        </span>
+        <span class="pay-copy" aria-hidden="true"><i class="ph ph-copy"></i><span class="lbl">نسخ</span></span>
+      </button>
+
+      <!-- فودافون كاش -->
+      <button class="pay-row" type="button" data-copy-key="vodafoneCash"
+              aria-label="انسخ رقم فودافون كاش 01024215658">
+        <span class="pay-ic vodafone" aria-hidden="true">
+          <svg viewBox="4.4 0.6 15.2 19.1"><path fill="#fff" d="M16.25 1.12C16.57 1.12 16.9 1.15 17.11 1.22C14.94 1.67 13.21 3.69 13.22 6C13.22 6.05 13.22 6.11 13.23 6.17C16.87 7.06 18.5 9.25 18.5 12.28C18.54 15.31 16.14 18.64 12.09 18.65C8.82 18.66 5.41 15.86 5.39 11.37C5.38 8.4 7 5.54 9.04 3.85C11.04 2.19 13.77 1.13 16.25 1.12Z"/></svg>
+        </span>
+        <span class="pay-tx">
+          <b>فودافون كاش</b>
+          <span class="pay-num" data-pay-num="vodafoneCash">0102 421 5658</span>
+        </span>
+        <span class="pay-copy" aria-hidden="true"><i class="ph ph-copy"></i><span class="lbl">نسخ</span></span>
+      </button>
+
+    </div>
+
+    <div class="pay-foot">
+      <span class="pay-cash"><i class="ph ph-wallet" aria-hidden="true"></i> كاش في العيادة متاح كمان</span>
+      <span class="pay-brand"><i class="ph ph-shield-check" aria-hidden="true"></i> Powered by InstaPay</span>
+    </div>
+    <p class="sr-only" role="status" aria-live="polite" id="copyStatus"></p>
   </section>
 
   <!-- 12 · STEPS -->
@@ -2272,6 +2389,8 @@ z"/></svg>
   },
   "geo":{"@type":"GeoCoordinates","latitude":29.8450328,"longitude":31.3268769},
   "hasMap":"https://maps.app.goo.gl/HcNxgfXLHJfa1SeG7",
+  "paymentAccepted":"كاش، إنستاباي، محفظة أورنج كاش، فودافون كاش",
+  "currenciesAccepted":"EGP",
   "sameAs":[
     "https://www.facebook.com/profile.php?id=100092546386559",
     "https://www.instagram.com/dentivadental",
@@ -2291,9 +2410,16 @@ var SITE = {
   facebook       : "https://www.facebook.com/profile.php?id=100092546386559",
   instagram      : "https://www.instagram.com/dentivadental",
   tiktok         : "https://www.tiktok.com/@dentiva.dental.ca",
-  instapayLink   : "",   /* حط لينك انستا باي هنا — لو فاضي هيفتح واتساب */
-  instapayNumber : ""    /* رقم المحفظة/الحساب (اختياري) */
+  instapayLink   : "https://ipn.eg/S/arnsha2/instapay/1GF4R2",
+  instapayHandle : "arnsha2@instapay",
+  orangeWallet   : "01205565279",  /* محفظة أورنج كاش */
+  vodafoneCash   : "01024215658"   /* فودافون كاش */
 };
+/* أرقام المحافظ بتظهر 4-3-4 والإنجليزي زي ما هو */
+function fmtEG(n){
+  n = String(n).replace(/[^\d+]/g, '');
+  return n.length === 11 ? n.slice(0,4) + ' ' + n.slice(4,7) + ' ' + n.slice(7) : n;
+}
 (function applyConfig(){
   document.querySelectorAll('a[href*="wa.me"]').forEach(function(a){
     a.href = 'https://wa.me/' + SITE.whatsapp;
@@ -2304,16 +2430,70 @@ var SITE = {
   });
   document.querySelectorAll('[data-maps]').forEach(function(a){ a.href = SITE.mapsLink; });
   var fb = document.querySelector('[data-fb]'); if(fb) fb.href = SITE.facebook;
-  var pay = document.getElementById('pay');
-  if(pay){
-    if(SITE.instapayLink){
-      pay.href = SITE.instapayLink;
-    } else {
-      pay.href = 'https://wa.me/' + SITE.whatsapp + '?text=' + encodeURIComponent('عايزة أدفع بانستا باي');
-      var sm = pay.querySelector('small');
-      if(sm) sm.textContent = 'اطلب رابط الدفع على واتساب';
-    }
+
+  /* الدفع: اللينك + الأرقام + الأرقام اللي بتتنسخ */
+  document.querySelectorAll('[data-pay-link]').forEach(function(a){ a.href = SITE.instapayLink; });
+  document.querySelectorAll('[data-pay-num]').forEach(function(el){
+    var key = el.getAttribute('data-pay-num'), v = SITE[key];
+    if(!v) return;
+    el.textContent = key === 'instapayHandle' ? v : fmtEG(v);
+  });
+  document.querySelectorAll('[data-copy-key]').forEach(function(el){
+    var v = SITE[el.getAttribute('data-copy-key')];
+    if(v) el.setAttribute('data-copy', v);
+  });
+})();
+
+/* نسخ أرقام الدفع — بيدعم الموبايل و file:// */
+(function(){
+  function fallbackCopy(text){
+    return new Promise(function(res, rej){
+      var t = document.createElement('textarea');
+      t.value = text; t.setAttribute('readonly', '');
+      t.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0';
+      document.body.appendChild(t);
+      t.select(); t.setSelectionRange(0, text.length);
+      var ok = false;
+      try{ ok = document.execCommand('copy'); }catch(e){ ok = false; }
+      document.body.removeChild(t);
+      ok ? res() : rej(new Error('copy failed'));
+    });
   }
+  function copy(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text).catch(function(){ return fallbackCopy(text); });
+    }
+    return fallbackCopy(text);
+  }
+  document.querySelectorAll('[data-copy]').forEach(function(el){
+    var timer;
+    function mark(icon, label, msg){
+      var row = el.classList.contains('pay-row') ? el : el.closest('.pay-row');
+      var btn = el.classList.contains('pay-copy') ? el : el.querySelector('.pay-copy');
+      var ic  = btn ? btn.querySelector('i') : null;
+      var txt = btn ? btn.querySelector('.lbl') : null;
+      var status = document.getElementById('copyStatus');
+      if(row) row.classList.add('is-copied');
+      if(btn) btn.classList.add('is-copied');
+      if(ic) ic.className = 'ph ' + icon;
+      if(txt) txt.textContent = label;
+      if(status) status.textContent = msg;
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        if(row) row.classList.remove('is-copied');
+        if(btn) btn.classList.remove('is-copied');
+        if(ic) ic.className = 'ph ph-copy';
+        if(txt) txt.textContent = 'نسخ';
+        if(status) status.textContent = '';
+      }, 1900);
+    }
+    el.addEventListener('click', function(){
+      var val = el.getAttribute('data-copy');
+      if(!val) return;
+      copy(val).then(function(){ mark('ph-check', 'تم', 'تم نسخ ' + val); },
+                     function(){ mark('ph-x', 'تعذّر', 'تعذّر النسخ — انسخ الرقم يدويًا'); });
+    });
+  });
 })();
 
 /* splash */
